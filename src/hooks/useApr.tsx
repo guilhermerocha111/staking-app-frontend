@@ -56,6 +56,7 @@ export const useApr = () => {
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     if (!amount0.isZero())
+    console.log('1212')
       setsmcwAPR({
         oneMonth: apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool1Info.totalWeight,pool1TokenPerBlock),
@@ -63,6 +64,8 @@ export const useApr = () => {
         twelveMonth: apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock),
       });
     if (!amount1.isZero())
+    console.log(pool2Info.totalWeight)
+      console.log(pool2TokenPerBlock)
       setlpAPR({
         oneMonth: apr(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),

@@ -81,7 +81,7 @@ export default function IngameStaking1() {
 
   return (
     <Card className="flex-1">
-      <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold">
+      <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold md:flex-col">
         <div className="flex items-center gap-2">
           <div className="card-icon-2">
             <img src="/images/icons/game1.png" alt="" />
@@ -90,7 +90,7 @@ export default function IngameStaking1() {
             Hidden data <br className="lg:hidden" /> (Telemetry of choice)
           </h2>
         </div>
-        <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5">
+        <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 md:mt-2 md:w-full">
           1000SMCW = 1/day
           <br />
           Max: 20/day
@@ -142,8 +142,9 @@ export default function IngameStaking1() {
                 value={stakeAmount}
                 setValue={setStakeAmount}
                 min={1000}
-                max={99999999}
+                max={20000}
                 step={1000}
+                roundTo={1000}
                 decimalpoints={0}
                 required
               />
@@ -152,7 +153,7 @@ export default function IngameStaking1() {
               </p>
 
               {isApproved ? (
-                <Button type="submit" className="gradient-1 button-3 mt-4">
+                <Button type="submit" className={`gradient-1 button-3 mt-4 ${Number(stakeAmount) >= 1000 ? '' : 'opacity-50 pointer-events-none'}`}>
                   Increase / Stake <HiOutlineExternalLink />
                 </Button>
               ) : (
@@ -171,11 +172,13 @@ export default function IngameStaking1() {
                 </Button>
               )}
 
-              <p className="flex items-center text-sm mt-4">
-                <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
-                for the first time the first transaction is only to approve your
-                SMCW, after that you can start staking
-              </p>
+              {!isApproved && (
+                <p className="flex items-center text-sm mt-4">
+                  <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
+                  for the first time the first transaction is only to approve your
+                  SMCW, after that you can start staking
+                </p>
+              )}
             </form>
           ) : (
             <form

@@ -17,7 +17,6 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
   const { swcw, lp,pool1Avarage,pool2Avarage } = useApr();
   const { chainId ,active } = useWeb3React();
 
-
   const pool1 = getStakingPool01(signer);
   const pool2 = getStakingPool02(signer);
 

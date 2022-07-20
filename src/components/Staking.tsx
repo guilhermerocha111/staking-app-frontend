@@ -116,36 +116,38 @@ export default function Staking({
             decimalpoints={1}
             required
           />
-          <Select
-            options={[
-              {
-                label: "Stake (lock) for 1 month",
-                value: "1",
-              },
-              {
-                label: "Stake (lock) for 3 month",
-                value: "3",
-              },
-              {
-                label: "Stake (lock) for 6 month",
-                value: "6",
-              },
-              {
-                label: "Stake (lock) for 1 year",
-                value: "12",
-              },
-            ]}
-            value={stakeLength}
-            onChange={(e) => {
-              setStakeLength(e.target.value);
-              let d = moment()
-                .add(parseInt(e.target.value), "months")
-                .format("dddd, MMMM Do YYYY, h:mm:ss a");
-              setStakeUntill(d);
-            }}
-          />
+          <div className="mt-4">
+            <Select
+              options={[
+                {
+                  label: "Stake (lock) for 1 month",
+                  value: "1",
+                },
+                {
+                  label: "Stake (lock) for 3 month",
+                  value: "3",
+                },
+                {
+                  label: "Stake (lock) for 6 month",
+                  value: "6",
+                },
+                {
+                  label: "Stake (lock) for 1 year",
+                  value: "12",
+                },
+              ]}
+              value={stakeLength}
+              onChange={(e) => {
+                setStakeLength(e.target.value);
+                let d = moment()
+                  .add(parseInt(e.target.value), "months")
+                  .format("dddd, MMMM Do YYYY, h:mm:ss a");
+                setStakeUntill(d);
+              }}
+            />
           </div>
-          <div className="flex items-center gap-2 mt-2">
+          </div>
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
             <button
               type="button"
               className="tag-2"
@@ -179,7 +181,7 @@ export default function Staking({
           {isApproved ? (
             <Button
               onClick={stakeInPool}
-              className="gradient-1 button-3 mt-4"
+              className={`gradient-1 button-3 mt-4 ${Number(stakeAmount.replace('.', '')[0]) >= 1 ? '' : 'opacity-50 pointer-events-none'}`}
               disabled={loading}
             >
                {loading ? "Staking..." : "Stake"} <HiOutlineExternalLink />
@@ -200,11 +202,13 @@ export default function Staking({
             </Button>
           )}
         </div>
-        <p className="flex items-center text-sm mt-4">
-          <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake for the
-          first time the first transaction is only to approve your SMCW, after
-          that you can start staking
-        </p>
+        {!isApproved && (
+          <p className="flex items-center text-sm mt-4">
+            <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake for the
+            first time the first transaction is only to approve your SMCW, after
+            that you can start staking
+          </p>
+        )}
         <div className="gradient-2 button-3 border border-design-blue mt-2">
           Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
         </div>
@@ -258,7 +262,7 @@ export default function Staking({
           <p className="text-sm">
             Stake as many times as you like <br /> you can stake or withdraw
             rewards at any time (after vesting period ends) at{" "}
-            <a href="/" target="_blank" className="external-link">
+            <a href="/vesting" className="external-link">
               Vesting LOG <HiOutlineExternalLink />
             </a>
           </p>

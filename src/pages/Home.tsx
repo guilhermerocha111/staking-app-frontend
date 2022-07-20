@@ -8,7 +8,7 @@ interface RefreshProps {
 
 export default function Home({ refresh, setRefresh }: RefreshProps) {
   return (
-    <main className="p-4 lg:p-8 !pt-40">
+    <main className="p-4 lg:p-8 !pt-40 min-h-screen">
       <Info refresh={refresh} setRefresh={setRefresh}  />
       <div className="mt-8">
         <Outlet />
