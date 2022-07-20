@@ -28,16 +28,16 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const { pathname } = useLocation();
   const { locked } = useVestingPanel();
   const tokenInfo: TokenInfo = usePrice();
-  const lpBalance = useTokenBalance("lp");
-  const smcwBalance = useTokenBalance("smcw");
-  const { chainId ,active } = useWeb3React();
+  const lpBalance = useTokenBalance("lp",refresh);
+  const smcwBalance = useTokenBalance("smcw",refresh);
+  const { chainId, active,account } = useWeb3React();
   const [isInfoOpen, setInfoOpen] = useState(true);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();
   const { smcw_staked, lp_staked, total_staked } = useStaked();
   const [isTotalRewardsOpen, setTotalRewardsOpen] = useState(true);
   const { days, hours, minutes, seconds } = useTimeDiff(
-    locked.length ? locked[locked.length - 1][2] : BigNumber.from("0")
+    locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -46,7 +46,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         setInfoOpen(true);
       }
     });
-    if (days < 7) {
+    if (days > 0 || hours > 0 || minutes > 0 || seconds > 0) {
       setShowLocked(true);
     }
     return () => {
@@ -57,7 +57,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         }
       });
     };
-  }, [refresh, locked, days,chainId]);
+  }, [refresh, locked, days, chainId,account]);
 
   const vest = async () => {
     try {
@@ -99,7 +99,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               className="button-pools opacity-50 pointer-events-none"
             >
               <img src="/images/handshake.png" alt="" />
-              PARTNER (soon)
+              PARTNER
             </Link>
             <Link
               to="/"
@@ -121,7 +121,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         {/* SMCW Rewards */}
 
         <Card className="flex-1">
-          {(!active ||DEFAULT_CHAINID !== toHex(chainId)) && (
+          {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
           <Button
@@ -214,7 +214,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             {showLocked ? (
               <Button className="gradient-1 button-3 mt-3 cursor-not-allowed">
                 <BiLock className="text-xl" /> Locked: {days}d {hours}h{" "}
-                {minutes}m {seconds}s (Locked since)
+                {minutes}m {seconds}s (Remaining Time)
               </Button>
             ) : (
               <Button onClick={vest} className="gradient-1 button-3 mt-3">
@@ -253,7 +253,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     maxWidth: "68%",
                   }}
                 >
-                  {contracts[DEFAULT_CHAINID].smcw}
+                  {tokenInfo.platform.token_address}
                 </span>
                 <button
                   className="min-w-fit ml-3"
@@ -280,7 +280,10 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
                     {total_staked}
                     <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
-                      $ {(parseFloat(total_staked) * tokenInfo.quote?.USD?.price).toFixed(4)}
+                      ${" "}
+                      {(
+                        parseFloat(total_staked) * tokenInfo.quote?.USD?.price
+                      ).toFixed(4)}
                     </span>
                   </p>
                 </div>
@@ -293,7 +296,9 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     alt=""
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
-                  <p className="flex items-end leading-5">{tokenInfo.max_supply}</p>
+                  <p className="flex items-end leading-5">
+                    {tokenInfo.max_supply}
+                  </p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-1">
@@ -304,7 +309,9 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     alt=""
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
-                  <p className="flex items-end leading-5">{tokenInfo.max_supply}</p>
+                  <p className="flex items-end leading-5">
+                    {tokenInfo.max_supply}
+                  </p>
                 </div>
               </div>
             </div>

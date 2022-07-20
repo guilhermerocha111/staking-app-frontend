@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import {  Signer,utils } from "ethers";
 import { getIngamePool, getStakingPool01, getStakingPool02 } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
-const {formatUnits} = utils
+import { useWeb3React } from "@web3-react/core";
+const {formatUnits} = utils;
 export const usePendings = () => {
+  const { account } = useWeb3React();
   const [lp_rewards, setlpRewards] = useState("0");
   const [total_rewards, setTotalRewards] = useState("0");
   const [smcw_Rewards, setsmcwRewards] = useState("0");
@@ -14,8 +16,8 @@ export const usePendings = () => {
     const signer: Signer = await getSigner();
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
-    let amount0 = await pool1.pendingReward(await signer.getAddress());
-    let amount1 = await pool2.pendingReward(await signer.getAddress());
+    let amount0 = await pool1.pendingRewards(await signer.getAddress());
+    let amount1 = await pool2.pendingRewards(await signer.getAddress());
     setsmcwRewards(
       ToFixed(formatUnits(amount0.toString(),"ether"))
     );
@@ -27,20 +29,25 @@ export const usePendings = () => {
       )
 
     }, 15000);
-  }, [total_rewards,]);
+  }, [total_rewards,account]);
   return {smcw_Rewards,lp_rewards,total:total_rewards};
 };
 
 
 export const useNFTPendings = () => {
-  const [nft_Rewards, setRewards] = useState("0");
+  const { account } = useWeb3React();
+  const [estimated, setEstimated] = useState("0");
+  const [pendings, setPendings] = useState("0");
   useMemo(async () => {
     const signer: Signer = await getSigner();
     const pool = getIngamePool(signer);
-    const amount = await pool.calculateRewards(await signer.getAddress())
-    setRewards(amount.toString())
+    
+    const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
+    const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
+    setEstimated(_estimated.toString())
+    setPendings(_pendings.toString())
   }, []);
-  return {rewards: nft_Rewards};
+  return {estimated,pendings,account};
 };
 
 

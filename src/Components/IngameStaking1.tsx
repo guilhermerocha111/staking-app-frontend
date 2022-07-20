@@ -10,7 +10,6 @@ import { contracts, DEFAULT_CHAINID } from "../utils/constants";
 import { useApprove } from "../hooks/useApprove";
 import { useTokenBalance } from "../hooks/useTokenBalance";
 import {
-  useClaim,
   useIngameUserInfo,
   useStake,
   useUnstake,
@@ -29,16 +28,16 @@ export default function IngameStaking1() {
   const [isLoading, setIsLoading] = useState(false);
 
   const stake = useStake();
-  const claim = useClaim();
   const unstake = useUnstake();
 
-  const { rewards } = useNFTPendings();
+  const { pendings,estimated } = useNFTPendings();
   const userInfo = useIngameUserInfo();
   const approve = useApprove(stakingType);
-  const smcwBalance = useTokenBalance(stakingType);
+  const smcwBalance = useTokenBalance(stakingType,isLoading);
   const isApproved = useAllowance(
     stakingType,
-    contracts[DEFAULT_CHAINID].nftStaking
+    contracts[DEFAULT_CHAINID].nftStaking,
+    isLoading
   );
 
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -92,7 +91,7 @@ export default function IngameStaking1() {
           </h2>
         </div>
         <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5">
-          100SMCW = 1/day
+          1000SMCW = 1/day
           <br />
           Max: 20/day
         </div>
@@ -239,16 +238,17 @@ export default function IngameStaking1() {
                 alt=""
                 className="w-5 h-5 object-contain object-center mr-1"
               />
-              {userInfo.userRewards}
+              {pendings}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
             <h5 className="text-design-grey">Estimated Rewards</h5>
-            <p className="flex items-center gap-2">{rewards}</p>
+            <p className="flex items-center gap-2">{estimated}</p>
           </div>
         </div>
         <div className="input">
           <input
+          disabled={parseInt(pendings) > 0 ? false :true }
             value={enjinAddress}
             onChange={(e) => setEnjinAddress(e.target.value)}
             type="text"
@@ -289,6 +289,7 @@ export default function IngameStaking1() {
           />
           <Button
             type="submit"
+            disabled={parseInt(pendings) > 0 ? false :true }
             className="gradient-2 button-3 mt-4 border border-design-blue"
           >
             Claim Rewards <FiDownload />

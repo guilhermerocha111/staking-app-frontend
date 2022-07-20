@@ -207,20 +207,20 @@ export class Locker extends BaseContract {
       overrides?: CallOverrides
     ): Promise<
       [
-        ([BigNumber, string, BigNumber, BigNumber, boolean] & {
+        ([boolean, BigNumber, string, BigNumber, BigNumber] & {
+          isClaimed: boolean;
           amount: BigNumber;
           recipient: string;
           vestingTime: BigNumber;
           vestingDuration: BigNumber;
-          isClaimed: boolean;
         })[]
       ] & {
-        _claims: ([BigNumber, string, BigNumber, BigNumber, boolean] & {
+        _claims: ([boolean, BigNumber, string, BigNumber, BigNumber] & {
+          isClaimed: boolean;
           amount: BigNumber;
           recipient: string;
           vestingTime: BigNumber;
           vestingDuration: BigNumber;
-          isClaimed: boolean;
         })[];
       }
     >;
@@ -271,12 +271,12 @@ export class Locker extends BaseContract {
     user: string,
     overrides?: CallOverrides
   ): Promise<
-    ([BigNumber, string, BigNumber, BigNumber, boolean] & {
+    ([boolean, BigNumber, string, BigNumber, BigNumber] & {
+      isClaimed: boolean;
       amount: BigNumber;
       recipient: string;
       vestingTime: BigNumber;
       vestingDuration: BigNumber;
-      isClaimed: boolean;
     })[]
   >;
 
@@ -323,12 +323,12 @@ export class Locker extends BaseContract {
       user: string,
       overrides?: CallOverrides
     ): Promise<
-      ([BigNumber, string, BigNumber, BigNumber, boolean] & {
+      ([boolean, BigNumber, string, BigNumber, BigNumber] & {
+        isClaimed: boolean;
         amount: BigNumber;
         recipient: string;
         vestingTime: BigNumber;
         vestingDuration: BigNumber;
-        isClaimed: boolean;
       })[]
     >;
 

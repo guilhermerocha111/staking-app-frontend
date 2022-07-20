@@ -2,10 +2,12 @@ import { useMemo, useState } from "react";
 import { ethers, Signer } from "ethers";
 import { getIngamePool, getStakingPool01, getStakingPool02 } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
+import { useWeb3React } from "@web3-react/core";
 
 export const useStaked = () => {
-  const [smcw_staked, setsmceStaked] = useState("0");
+  const { account } = useWeb3React();
   const [lp_staked, setlpStaked] = useState("0");
+  const [smcw_staked, setsmceStaked] = useState("0");
   const [total_staked, setTotalStaked] = useState("0");
 
   useMemo(async () => {
@@ -27,6 +29,6 @@ export const useStaked = () => {
     setTotalStaked(
       ethers.utils.formatUnits(amount0.add(amount1).add(amount3).toString(),"ether")
     )
-  }, []);
+  }, [account]);
   return {smcw_staked,lp_staked,total_staked};
 };

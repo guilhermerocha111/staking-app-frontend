@@ -69,17 +69,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.RewardingToken__factory>;
     getContractFactory(
-      name: "StakingRewards",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.StakingRewards__factory>;
-    getContractFactory(
       name: "StakingToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.StakingToken__factory>;
-    getContractFactory(
-      name: "Supply",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Supply__factory>;
     getContractFactory(
       name: "IPool",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -160,20 +152,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.RewardingToken>;
     getContractAt(
-      name: "StakingRewards",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.StakingRewards>;
-    getContractAt(
       name: "StakingToken",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.StakingToken>;
-    getContractAt(
-      name: "Supply",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Supply>;
     getContractAt(
       name: "IPool",
       address: string,

@@ -14,7 +14,7 @@ interface RefreshProps {
 
 export default function SMCW({ refresh, setRefresh }: RefreshProps) {
   const signer = useSigner();
-  const { swcw, lp } = useApr();
+  const { swcw, lp,pool1Avarage,pool2Avarage } = useApr();
   const { chainId ,active } = useWeb3React();
 
 
@@ -60,6 +60,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
           setRefresh={setRefresh}
           apr={swcw}
           pool={pool1}
+          avarage={pool1Avarage}
           poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
           title="SMCW Staking"
           defaultAmount="0.0"
@@ -70,6 +71,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
           setRefresh={setRefresh}
           apr={lp}
           pool={pool2}
+          avarage={pool2Avarage}
           poolAddress={contracts[DEFAULT_CHAINID].lpTosmcw}
           title="BUSD/SMCW LP"
           defaultAmount="0.0"

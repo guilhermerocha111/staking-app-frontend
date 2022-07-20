@@ -8,17 +8,19 @@ import { NumberInput } from "./Input";
 import { IAPR } from "../hooks/useApr";
 import { FiInfo } from "react-icons/fi";
 import { MasterChef } from "../typechain";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { parseEther } from "ethers/lib/utils";
 import { useApprove } from "../hooks/useApprove";
 import { useAllowance } from "../hooks/useAllowance";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
+import Overlay from "./Overlay";
 
 interface StakingProps {
   title: string;
   apr: IAPR;
   pool: MasterChef;
+  avarage:string;
   poolAddress: string;
   defaultAmount?: string;
   //this is to implement different type of function here in this component for diffrent staking methods
@@ -32,6 +34,7 @@ export default function Staking({
   pool,
   apr,
   poolAddress,
+  avarage,
   defaultAmount,
   stakingType,
   refresh,
@@ -43,8 +46,8 @@ export default function Staking({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const isApproved = useAllowance(stakingType, poolAddress);
-  const smcwBalance = useTokenBalance(stakingType);
+  const isApproved = useAllowance(stakingType, poolAddress,loading);
+  const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
 
 
@@ -64,7 +67,6 @@ export default function Staking({
       await tx.wait();
       toast.success(`Successfully staked ${stakeAmount} SMCW`);
       setLoading(false);
-      window.location.reload();
       setRefresh(!refresh);
     } catch (error: any) {
       toast.error(error.reason);
@@ -101,6 +103,9 @@ export default function Staking({
               <span className="text-white">{smcwBalance}</span>
             </p>
           </div>
+         
+          <div>
+        
           <NumberInput
             placeholder="0.0"
             value={stakeAmount}
@@ -139,6 +144,7 @@ export default function Staking({
               setStakeUntill(d);
             }}
           />
+          </div>
           <div className="flex items-center gap-2 mt-2">
             <button
               type="button"
@@ -176,7 +182,7 @@ export default function Staking({
               className="gradient-1 button-3 mt-4"
               disabled={loading}
             >
-              Stake <HiOutlineExternalLink />
+               {loading ? "Staking..." : "Stake"} <HiOutlineExternalLink />
             </Button>
           ) : (
             <Button
@@ -200,7 +206,7 @@ export default function Staking({
           that you can start staking
         </p>
         <div className="gradient-2 button-3 border border-design-blue mt-2">
-          Daily Rewards: <img src="/images/coin.png" alt="" /> 5000.00
+          Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
         </div>
         <div className="w-full mt-4 overflow-x-auto overflow-y-hidden">
           <div

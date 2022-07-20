@@ -91,7 +91,7 @@ export default function Nav() {
           <button
             onClick={() => {
               window.navigator.clipboard.writeText(
-                contracts[DEFAULT_CHAINID].smcw
+                tokenInfo.platform.token_address
               );
               toast.success("Copied to clipboard");
             }}
