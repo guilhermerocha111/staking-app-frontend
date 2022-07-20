@@ -22,6 +22,7 @@ interface NumberInputProps {
   decimalpoints?: number;
   required?: boolean;
   className?: string;
+  roundTo?: number;
 }
 
 export default function Input({ ...props }: InputProps) {
@@ -35,11 +36,24 @@ export function NumberInput({ ...props }: NumberInputProps) {
         type="number"
         placeholder={props.placeholder}
         value={props.value}
-        onChange={(e) => props.setValue(e.target.value)}
+        onChange={(e) => {
+          props.setValue(e.target.value.replace('-', ''))
+        }}
         onBlur={(e) =>
-          props.setValue(
-            parseFloat(e.target.value).toFixed(props.decimalpoints || 0)
-          )
+          {
+            let targetValue = (props.max && Number(e.target.value) > props.max) ? String(props.max) : e.target.value
+            if (props.roundTo) {
+              let parsedValue = String(Math.trunc(Number(targetValue)/props.roundTo) * props.roundTo)
+              props.setValue(
+                parseFloat(parsedValue).toFixed(props.decimalpoints || 0)
+              )
+            } else {
+              props.setValue(
+                parseFloat(targetValue).toFixed(props.decimalpoints || 0)
+              )
+            }
+            
+          }
         }
         min={props.min}
         max={props.max}
@@ -61,11 +75,16 @@ export function NumberInput({ ...props }: NumberInputProps) {
         <button
           type="button"
           onClick={() =>
-            props.setValue(
-              `${(parseFloat(props.value) - props.step).toFixed(
-                props.decimalpoints
-              )}`
-            )
+            {
+              if (Number(props.value.split('.')[0]) === 0) {
+                return
+              }
+              props.setValue(
+                `${(parseFloat(props.value) - props.step).toFixed(
+                  props.decimalpoints
+                )}`
+              )
+            }
           }
         >
           <FiChevronDown />

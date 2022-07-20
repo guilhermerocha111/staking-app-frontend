@@ -91,7 +91,7 @@ export default function Nav() {
           <button
             onClick={() => {
               window.navigator.clipboard.writeText(
-                contracts[DEFAULT_CHAINID].smcw
+                tokenInfo.platform.token_address
               );
               toast.success("Copied to clipboard");
             }}
@@ -313,10 +313,25 @@ export default function Nav() {
                 <img src="/images/WalletConnect.png" alt="" />
                 WalletConnect
               </Button>
-              <Button className="button-1 !px-3 !py-2.5">
-                <img src="/images/Metamask.png" alt="" />
-                Connect to Metamask
-              </Button>
+              {!active && (
+                  <Button
+                    className="button-1 !px-3 !py-2.5"
+                    onClick={() => connect("metamask")}
+                  >
+                    <img src="/images/Metamask.png" alt="" />
+                    Connect to Metamask
+                  </Button>
+              )}
+              
+              {active && (
+                <Button
+                  className="button-1 !px-3 !py-2.5"
+                  onClick={() => disconnect()}
+                >
+                  <img src="/images/Metamask.png" alt="" />
+                  Disconnect
+                </Button>
+              )}
               <Button className="flex gradient-1 button-3 font-semibold">
                 Play Now
               </Button>

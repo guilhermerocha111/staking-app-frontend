@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Signer, utils } from "ethers";
 import { getIngamePool } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
-import { parseEther } from "ethers/lib/utils";
+import { useWeb3React } from "@web3-react/core";
 const { formatUnits } = utils;
 
 
@@ -34,15 +34,16 @@ export const useClaim = () => {
 };
 
 export const useIngameUserInfo = () => {
+  const { account } = useWeb3React();
   const [userRewards, setRewards] = useState("0");
   const [stakedAmount, setStakedAmount] = useState("0");
 
   useMemo(async () => {
     const signer: Signer = await getSigner();
     const pool = getIngamePool(signer);
-    let [amount,rewards] =await pool.poolStakers(await signer.getAddress())
+    let {amount,rewards} = await pool.poolStakers(await signer.getAddress())
     setRewards(rewards.toString())
     setStakedAmount(formatUnits(amount.toString(),"ether"))
-  }, [userRewards,stakedAmount]);
+  }, [userRewards,stakedAmount,account]);
   return { stakedAmount,userRewards };
 };

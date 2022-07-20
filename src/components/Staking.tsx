@@ -8,17 +8,19 @@ import { NumberInput } from "./Input";
 import { IAPR } from "../hooks/useApr";
 import { FiInfo } from "react-icons/fi";
 import { MasterChef } from "../typechain";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { parseEther } from "ethers/lib/utils";
 import { useApprove } from "../hooks/useApprove";
 import { useAllowance } from "../hooks/useAllowance";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
+import Overlay from "./Overlay";
 
 interface StakingProps {
   title: string;
   apr: IAPR;
   pool: MasterChef;
+  avarage:string;
   poolAddress: string;
   defaultAmount?: string;
   //this is to implement different type of function here in this component for diffrent staking methods
@@ -32,6 +34,7 @@ export default function Staking({
   pool,
   apr,
   poolAddress,
+  avarage,
   defaultAmount,
   stakingType,
   refresh,
@@ -43,8 +46,8 @@ export default function Staking({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const isApproved = useAllowance(stakingType, poolAddress);
-  const smcwBalance = useTokenBalance(stakingType);
+  const isApproved = useAllowance(stakingType, poolAddress,loading);
+  const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
 
 
@@ -64,7 +67,6 @@ export default function Staking({
       await tx.wait();
       toast.success(`Successfully staked ${stakeAmount} SMCW`);
       setLoading(false);
-      window.location.reload();
       setRefresh(!refresh);
     } catch (error: any) {
       toast.error(error.reason);
@@ -101,6 +103,9 @@ export default function Staking({
               <span className="text-white">{smcwBalance}</span>
             </p>
           </div>
+         
+          <div>
+        
           <NumberInput
             placeholder="0.0"
             value={stakeAmount}
@@ -111,35 +116,38 @@ export default function Staking({
             decimalpoints={1}
             required
           />
-          <Select
-            options={[
-              {
-                label: "Stake (lock) for 1 month",
-                value: "1",
-              },
-              {
-                label: "Stake (lock) for 3 month",
-                value: "3",
-              },
-              {
-                label: "Stake (lock) for 6 month",
-                value: "6",
-              },
-              {
-                label: "Stake (lock) for 1 year",
-                value: "12",
-              },
-            ]}
-            value={stakeLength}
-            onChange={(e) => {
-              setStakeLength(e.target.value);
-              let d = moment()
-                .add(parseInt(e.target.value), "months")
-                .format("dddd, MMMM Do YYYY, h:mm:ss a");
-              setStakeUntill(d);
-            }}
-          />
-          <div className="flex items-center gap-2 mt-2">
+          <div className="mt-4">
+            <Select
+              options={[
+                {
+                  label: "Stake (lock) for 1 month",
+                  value: "1",
+                },
+                {
+                  label: "Stake (lock) for 3 month",
+                  value: "3",
+                },
+                {
+                  label: "Stake (lock) for 6 month",
+                  value: "6",
+                },
+                {
+                  label: "Stake (lock) for 1 year",
+                  value: "12",
+                },
+              ]}
+              value={stakeLength}
+              onChange={(e) => {
+                setStakeLength(e.target.value);
+                let d = moment()
+                  .add(parseInt(e.target.value), "months")
+                  .format("dddd, MMMM Do YYYY, h:mm:ss a");
+                setStakeUntill(d);
+              }}
+            />
+          </div>
+          </div>
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
             <button
               type="button"
               className="tag-2"
@@ -173,10 +181,10 @@ export default function Staking({
           {isApproved ? (
             <Button
               onClick={stakeInPool}
-              className="gradient-1 button-3 mt-4"
+              className={`gradient-1 button-3 mt-4 ${Number(stakeAmount.replace('.', '')[0]) >= 1 ? '' : 'opacity-50 pointer-events-none'}`}
               disabled={loading}
             >
-              Stake <HiOutlineExternalLink />
+               {loading ? "Staking..." : "Stake"} <HiOutlineExternalLink />
             </Button>
           ) : (
             <Button
@@ -194,13 +202,15 @@ export default function Staking({
             </Button>
           )}
         </div>
-        <p className="flex items-center text-sm mt-4">
-          <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake for the
-          first time the first transaction is only to approve your SMCW, after
-          that you can start staking
-        </p>
+        {!isApproved && (
+          <p className="flex items-center text-sm mt-4">
+            <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake for the
+            first time the first transaction is only to approve your SMCW, after
+            that you can start staking
+          </p>
+        )}
         <div className="gradient-2 button-3 border border-design-blue mt-2">
-          Daily Rewards: <img src="/images/coin.png" alt="" /> 5000.00
+          Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
         </div>
         <div className="w-full mt-4 overflow-x-auto overflow-y-hidden">
           <div
@@ -252,7 +262,7 @@ export default function Staking({
           <p className="text-sm">
             Stake as many times as you like <br /> you can stake or withdraw
             rewards at any time (after vesting period ends) at{" "}
-            <a href="/" target="_blank" className="external-link">
+            <a href="/vesting" className="external-link">
               Vesting LOG <HiOutlineExternalLink />
             </a>
           </p>

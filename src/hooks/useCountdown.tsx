@@ -40,22 +40,21 @@ const useCountdown = (target: number) => {
 
 export default useCountdown;
 
-
-export const useTimeDiff = (target: BigNumber) => {
+export const useTimeDiff = (target: BigNumber = BigNumber.from(0)) => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 10,
+    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
 
   useMemo(() => {
-    if(target.eq(0))
-      return;
     setInterval(() => {
-      let targetDate = target.toNumber() * 1000;
+      if(target.eq(0)) return
+      const secondsInWeek = 60 * 60 * 24 * 7 * 1000;
+      let targetDate = target.toNumber() * 1000 + secondsInWeek;
       let nowDate = Date.now();
-      let dateDifference = nowDate -  targetDate;
+      let dateDifference = targetDate - nowDate;
 
       let days = Math.floor(dateDifference / (1000 * 60 * 60 * 24));
       let hours = Math.floor(

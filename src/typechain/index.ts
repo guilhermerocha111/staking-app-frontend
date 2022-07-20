@@ -15,9 +15,7 @@ export type { LPToken } from "./LPToken";
 export type { MasterChef } from "./MasterChef";
 export type { NFTRewards } from "./NFTRewards";
 export type { RewardingToken } from "./RewardingToken";
-export type { StakingRewards } from "./StakingRewards";
 export type { StakingToken } from "./StakingToken";
-export type { Supply } from "./Supply";
 export type { IPool } from "./IPool";
 export type { Locker } from "./Locker";
 
@@ -35,8 +33,6 @@ export { LPToken__factory } from "./factories/LPToken__factory";
 export { MasterChef__factory } from "./factories/MasterChef__factory";
 export { NFTRewards__factory } from "./factories/NFTRewards__factory";
 export { RewardingToken__factory } from "./factories/RewardingToken__factory";
-export { StakingRewards__factory } from "./factories/StakingRewards__factory";
 export { StakingToken__factory } from "./factories/StakingToken__factory";
-export { Supply__factory } from "./factories/Supply__factory";
 export { IPool__factory } from "./factories/IPool__factory";
 export { Locker__factory } from "./factories/Locker__factory";

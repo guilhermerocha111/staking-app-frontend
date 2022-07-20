@@ -26,7 +26,7 @@ export default function App() {
     if(chainId !== undefined && toHex(chainId) !== DEFAULT_CHAINID){
      switchNetwork().then()
     }
-  })
+  },[chainId])
 
   const switchNetwork = async () => {
     try {

@@ -24,6 +24,7 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
     "calculateRewards(address)": FunctionFragment;
     "claim(uint256)": FunctionFragment;
     "currentStaked()": FunctionFragment;
+    "estimatedRewards(address)": FunctionFragment;
     "getCurrentStaked()": FunctionFragment;
     "numberOfStakes(address)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -47,6 +48,10 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "currentStaked",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "estimatedRewards",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentStaked",
@@ -90,6 +95,10 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "currentStaked",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "estimatedRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -226,6 +235,11 @@ export class NFTRewards extends BaseContract {
 
     currentStaked(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    estimatedRewards(
+      _staker: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { rewards: BigNumber }>;
+
     getCurrentStaked(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     numberOfStakes(
@@ -241,11 +255,22 @@ export class NFTRewards extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         amount: BigNumber;
+        lastStakeAmount: BigNumber;
         rewards: BigNumber;
         stakeTime: BigNumber;
+        lastStakeTime: BigNumber;
         claimed: BigNumber;
+        lastClaim: BigNumber;
       }
     >;
 
@@ -297,6 +322,11 @@ export class NFTRewards extends BaseContract {
 
   currentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
+  estimatedRewards(
+    _staker: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getCurrentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
   numberOfStakes(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -309,11 +339,22 @@ export class NFTRewards extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber] & {
+    [
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
       amount: BigNumber;
+      lastStakeAmount: BigNumber;
       rewards: BigNumber;
       stakeTime: BigNumber;
+      lastStakeTime: BigNumber;
       claimed: BigNumber;
+      lastClaim: BigNumber;
     }
   >;
 
@@ -362,6 +403,11 @@ export class NFTRewards extends BaseContract {
 
     currentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
+    estimatedRewards(
+      _staker: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getCurrentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
     numberOfStakes(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -374,11 +420,22 @@ export class NFTRewards extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         amount: BigNumber;
+        lastStakeAmount: BigNumber;
         rewards: BigNumber;
         stakeTime: BigNumber;
+        lastStakeTime: BigNumber;
         claimed: BigNumber;
+        lastClaim: BigNumber;
       }
     >;
 
@@ -513,6 +570,11 @@ export class NFTRewards extends BaseContract {
 
     currentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
+    estimatedRewards(
+      _staker: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getCurrentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
     numberOfStakes(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -571,6 +633,11 @@ export class NFTRewards extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     currentStaked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    estimatedRewards(
+      _staker: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCurrentStaked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

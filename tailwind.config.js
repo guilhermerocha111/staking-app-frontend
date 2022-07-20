@@ -40,6 +40,10 @@ module.exports = {
       },
       screens: {
         "3xl": "1600px",
+        'xl': '1279px',
+        'lg': '1023px',
+        'md': '767px',
+        'sm': '639px',
       },
     },
   },

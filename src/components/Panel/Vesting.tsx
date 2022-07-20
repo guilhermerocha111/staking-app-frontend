@@ -1,6 +1,7 @@
 import Card from "../Card";
 import Button from "../Button";
 import Select from "../Select";
+import Overlay from "../Overlay";
 import { useState } from "react";
 import { parseEther } from "ethers/lib/utils";
 import { HiOutlineExternalLink } from "react-icons/hi";
@@ -83,8 +84,12 @@ export default function Vesting() {
           />
         </div>
       </div>
-      <div className="mt-6">
-        <Card className="card-1 !pb-2 overflow-auto w-full">
+      <div className="mt-6 flex-1">
+        <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
+        {PoolStakes.length === 0 &&(
+            <Overlay>You don't have any vesting period 
+            available.</Overlay>
+          )}
           <table
             className="text-sm grid grid-cols-1 vesting-table"
             style={{
