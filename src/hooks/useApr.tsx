@@ -37,6 +37,10 @@ export const useApr = () => {
     let pool1Info = await pool1.poolInfo();
     let pool2Info = await pool2.poolInfo();
 
+    console.log(amount0);
+    console.log(pool1TokenPerBlock);
+    console.log(pool1Info)
+
     setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
     setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
 
@@ -55,17 +59,14 @@ export const useApr = () => {
     }
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
-    if (!amount0.isZero())
-    console.log('1212')
+    // if (!amount0.isZero())
       setsmcwAPR({
         oneMonth: apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool1Info.totalWeight,pool1TokenPerBlock),
         sixMonth: apr(parseEther("6"), pool1Info.totalWeight,pool1TokenPerBlock),
         twelveMonth: apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock),
       });
-    if (!amount1.isZero())
-    console.log(pool2Info.totalWeight)
-      console.log(pool2TokenPerBlock)
+    // if (!amount1.isZero())
       setlpAPR({
         oneMonth: apr(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),

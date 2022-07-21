@@ -15,16 +15,18 @@ import { chains, connectors } from "../utils/connectors";
 import { TokenInfo, usePrice } from "../hooks/usePrice";
 import { contracts, DEFAULT_CHAINID } from "../utils/constants";
 
+import { Context } from '../contextStore';
+import { useContext } from 'react'; 
+
 export default function Nav() {
   const tokenInfo: TokenInfo = usePrice();
   const [isOpen, setIsOpen] = useState(false);
   const [defaultChainId] = useState("0x3");
   const { activate, deactivate, active, library, connector } = useWeb3React();
- 
+  const [{tx_loader}] = useContext(Context);
   useEffect(() => {
     if (localStorage.getItem("isConnected") == "true")
       connect(localStorage.getItem("connector"));
-
     return () => {};
   }, []);
 
@@ -133,6 +135,17 @@ export default function Nav() {
               Connect to Metamask
             </Button>
           )}
+
+
+          {tx_loader && (
+            <div
+              className="button-1 !rounded-md"
+              onClick={() => disconnect()}
+            >
+              Pending Tx...
+            </div>
+          )}
+          
 
           {active && (
             <Button
