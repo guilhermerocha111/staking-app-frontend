@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@mixin gradientAnimation( $start, $end, $transTime ){
+  background-size: 100%;
+  background-image: linear-gradient(to right, $start, $end);
+  position: relative;
+  z-index: 100;
+  &:before {
+      background-image: linear-gradient(to right, $end, $start);
+      content: "";
+      display: block;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      width: 100%;
+      z-index: -100;
+      transition: opacity $transTime;
+  }
+  &:hover {
+      &:before {
+          opacity: 1;
+      }
+  }
+}
+
 * {
   font-family: 'Titillium Web', sans-serif;
   transition: all 0.2s ease-in-out;
@@ -38,6 +62,7 @@ svg{
 
 .gradient-2 {
   @apply bg-gradient-to-r from-design-gradientBlue to-design-gradientDarkBlue;
+  @include gradientAnimation(#15244C,#2559D5,  .9s)
 }
 
 .gradient-3 {

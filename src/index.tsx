@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Web3ReactProvider } from '@web3-react/core'
 import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
+import {ContextProvider} from "./contextStore";
 // import reportWebVitals from './reportWebVitals';
 
 
@@ -23,7 +24,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
     <Web3ReactProvider getLibrary={getLibrary}>
-      <App />
+      <ContextProvider>
+        <App />
+      </ContextProvider>
     </Web3ReactProvider>
     </BrowserRouter>
   </React.StrictMode>

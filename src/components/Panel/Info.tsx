@@ -4,7 +4,7 @@ import Overlay from "../Overlay";
 import { BigNumber } from "ethers";
 import toast from "react-hot-toast";
 import { BiLock } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { useWeb3React } from "@web3-react/core";
 import { useStaked } from "../../hooks/useStaked";
@@ -17,6 +17,7 @@ import { usePrice, TokenInfo } from "../../hooks/usePrice";
 import { useVestingPanel } from "../../hooks/useVestingPanel";
 import { contracts, DEFAULT_CHAINID, toHex } from "../../utils/constants";
 import { useTokenBalance } from "../../hooks/useTokenBalance";
+import { Context } from '../../contextStore';
 
 interface RefreshProps {
   refresh: boolean;
@@ -39,6 +40,8 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const { days, hours, minutes, seconds } = useTimeDiff(
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
+  const [, ACTION] = useContext(Context);
+
   useEffect(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 1280) {
@@ -60,11 +63,15 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   }, [refresh, locked, days, chainId,account]);
 
   const vest = async () => {
+    ACTION.SET_TX_LOADER(true);
     try {
       await vestRewards();
+      ACTION.SET_TX_LOADER(false);
       window.location.reload();
     } catch (error: any) {
-      toast.error(error.reason);
+      ACTION.SET_TX_LOADER(false);
+      console.log(error);
+      toast.error(error.reason || error.message);
     }
   };
 

@@ -1,6 +1,6 @@
 import Card from "./Card";
 import  { NumberInput } from "./Input";
-import {  useState } from "react";
+import {  useState, useContext } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import Button from "./Button";
@@ -16,6 +16,8 @@ import {
 } from "../hooks/useIngame";
 import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
+import { Context } from '../contextStore';
+import ApiClient from "../api/ApiClient";
 
 
 export default function IngameStaking1() {
@@ -26,6 +28,7 @@ export default function IngameStaking1() {
   const [claimAmount, setClaimAmount] = useState<string>("0");
   const [type, setType] = useState<"stake" | "unstake">("stake");
   const [isLoading, setIsLoading] = useState(false);
+  const [, ACTION] = useContext(Context);
 
   const stake = useStake();
   const unstake = useUnstake();
@@ -42,55 +45,63 @@ export default function IngameStaking1() {
 
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await stake(parseEther(stakeAmount).toString());
-    toast.success(`Stake Amount: ${stakeAmount}`);
-    window.location.reload();
+    ACTION.SET_TX_LOADER(true);
+    try {
+      await stake(parseEther(stakeAmount).toString());
+      ACTION.SET_TX_LOADER(false);
+      toast.success(`Stake Amount: ${stakeAmount}`);
+      window.location.reload();
+    } catch (err) {
+      ACTION.SET_TX_LOADER(false);
+      console.log(err);
+    }
   };
 
   const handleUnstake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await unstake(parseEther(unstakeAmount).toString());
-    toast.success(`Unstake Amount: ${unstakeAmount}`);
-    window.location.reload();
+    ACTION.SET_TX_LOADER(true);
+    try {
+      await unstake(parseEther(unstakeAmount).toString());
+      ACTION.SET_TX_LOADER(false);
+      toast.success(`Unstake Amount: ${unstakeAmount}`);
+      window.location.reload();
+    } catch (err) {
+      ACTION.SET_TX_LOADER(false);
+      console.log(err);
+    }
+    
   };
 
   const handleClaim = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // @note integrate enjin apis and then execute claim transaction
+    ACTION.SET_TX_LOADER(true);
     try {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
       }
-      console.log(process.env.REACT_APP_SERVER_URL)
-      // await claim(claimAmount);
-      const result = await fetch(
-        `${
-          process.env.REACT_APP_SERVER_URL
-        }/mint?walletId=${enjinAddress}&value=${claimAmount}`
-      );
-      if (result.status == 200) {
-        const tx = await result.json();
-        toast.success(`Claimed successfully with Transaction Id ${tx.id}`);
-        // window.location.reload();
-      }
+      const tx = await new ApiClient().mint(enjinAddress, claimAmount);
+      toast.success(`Claimed successfully with Transaction Id ${tx.id}`);
+      ACTION.SET_TX_LOADER(false);
     } catch (error) {
       console.log(error)
+      ACTION.SET_TX_LOADER(false);
       toast.error("Please stake before claim");
     }
   };
 
   return (
     <Card className="flex-1">
-      <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold md:flex-col">
+      <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold sm:flex-col">
         <div className="flex items-center gap-2">
           <div className="card-icon-2">
             <img src="/images/icons/game1.png" alt="" />
           </div>
           <h2 className="text-base lg:text-2xl">
-            Hidden data <br className="lg:hidden" /> (Telemetry of choice)
+            Hidden data <br className="lg:hidden" /> (Random Telemetry)
           </h2>
         </div>
-        <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 md:mt-2 md:w-full">
+        <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 sm:mt-2 sm:w-full">
           1000SMCW = 1/day
           <br />
           Max: 20/day
@@ -251,7 +262,7 @@ export default function IngameStaking1() {
         </div>
         <div className="input">
           <input
-          disabled={parseInt(pendings) > 0 ? false :true }
+            disabled={parseInt(pendings) > 0 ? false :true }
             value={enjinAddress}
             onChange={(e) => setEnjinAddress(e.target.value)}
             type="text"
@@ -284,7 +295,7 @@ export default function IngameStaking1() {
             placeholder="Amount of rewards to claim"
             value={claimAmount}
             setValue={setClaimAmount}
-            min={0}
+            min={1}
             max={99999999}
             step={1}
             decimalpoints={0}
@@ -293,9 +304,11 @@ export default function IngameStaking1() {
           <Button
             type="submit"
             disabled={parseInt(pendings) > 0 ? false :true }
-            className="gradient-2 button-3 mt-4 border border-design-blue"
+            className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
+              ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
+            `}
           >
-            Claim Rewards <FiDownload />
+            Claim Rewards<FiDownload />
           </Button>
         </form>
       </div>

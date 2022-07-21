@@ -2,11 +2,13 @@ import Card from "../Card";
 import Button from "../Button";
 import Select from "../Select";
 import Overlay from "../Overlay";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { parseEther } from "ethers/lib/utils";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useVestingPanel } from "../../hooks/useVestingPanel";
 import { Locker, MasterChef, NFTRewards } from "../../typechain";
+import { Context } from '../../contextStore';
+
 
 interface VestingTypes {
   icon: string;
@@ -28,12 +30,14 @@ export default function Vesting() {
   const [filter, setFilter] = useState<string>("");
   const [sort, setSort] = useState<string>("");
   const { PoolStakes } = useVestingPanel();
+  const [, ACTION] = useContext(Context);
 
   const handleClaim = async (
     amount: string,
     type: string,
     poolInstance: Locker | MasterChef
   ) => {
+    ACTION.SET_TX_LOADER(true);
     if (type == "stake"){
       let tx = await (poolInstance as MasterChef).claim(parseEther(amount));
       await tx.wait()
@@ -42,6 +46,7 @@ export default function Vesting() {
       let tx = await (poolInstance as Locker).claimVestedTokens(parseEther(amount))
       await tx.wait()
     }
+    ACTION.SET_TX_LOADER(false);
     window.location.reload();
   };
 

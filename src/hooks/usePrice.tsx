@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import ApiClient from "../api/ApiClient";
 
 interface Platform {
   id: number;
@@ -97,9 +98,8 @@ export const usePrice = (): TokenInfo => {
   const [price, setPrice] = useState<TokenInfo>(DEFAULT_VALUE);
   useMemo(async () => {
     try {
-        const res = await fetch(new URL("/price/", process.env.REACT_APP_SERVER_URL));
-        const data:TokenInfo = await res.json();
-        setPrice({...data});
+        const res: TokenInfo = await new ApiClient().getPriceSMCW();
+        setPrice({...res});
     } catch (error) {
         
     }

@@ -8,12 +8,13 @@ import { NumberInput } from "./Input";
 import { IAPR } from "../hooks/useApr";
 import { FiInfo } from "react-icons/fi";
 import { MasterChef } from "../typechain";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { parseEther } from "ethers/lib/utils";
 import { useApprove } from "../hooks/useApprove";
 import { useAllowance } from "../hooks/useAllowance";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
+import { Context } from '../contextStore';
 import Overlay from "./Overlay";
 
 interface StakingProps {
@@ -46,6 +47,8 @@ export default function Staking({
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [, ACTION] = useContext(Context);
+
   const isApproved = useAllowance(stakingType, poolAddress,loading);
   const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
@@ -59,6 +62,7 @@ export default function Staking({
 
   const stakeInPool = async () => {
     try {
+      ACTION.SET_TX_LOADER(true);
       setLoading(true);
       const tx = await pool.deposit(
         parseEther(stakeAmount),
@@ -67,10 +71,12 @@ export default function Staking({
       await tx.wait();
       toast.success(`Successfully staked ${stakeAmount} SMCW`);
       setLoading(false);
+      ACTION.SET_TX_LOADER(false);
       setRefresh(!refresh);
     } catch (error: any) {
       toast.error(error.reason);
       setLoading(false);
+      ACTION.SET_TX_LOADER(false);
     }
   };
 
@@ -90,7 +96,16 @@ export default function Staking({
         <h2>{title}</h2>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-2">
-        <div className="grid grid-cols-1 gap-2">
+        <div className="relative grid grid-cols-1 gap-2">
+          {!isApproved && (
+            <div className="absolute z-10 h-5/6 w-full flex items-start justify-center pt-12">
+              <div className="flex flex-col items-center justify-center">
+                <img src="images/icons/locked.svg" alt="" />
+                <p className="text-lg mt-4">Approve your wallet first</p>
+                <p className="text-sm italic">(Click on the “Approve” button below)</p>
+              </div>
+            </div>
+          )}
           <div className="flex items-center justify-between gap-4">
             <h3>Stake Amount</h3>
             <p className="text-sm flex items-center text-design-grey">
@@ -103,8 +118,7 @@ export default function Staking({
               <span className="text-white">{smcwBalance}</span>
             </p>
           </div>
-         
-          <div>
+          <div className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
         
           <NumberInput
             placeholder="0.0"
@@ -147,7 +161,7 @@ export default function Staking({
             />
           </div>
           </div>
-          <div className="flex items-center gap-2 mt-2 flex-wrap">
+          <div className={`flex items-center gap-2 mt-2 flex-wrap ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
             <button
               type="button"
               className="tag-2"

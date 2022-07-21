@@ -43,7 +43,7 @@ module.exports = {
         'xl': '1279px',
         'lg': '1023px',
         'md': '767px',
-        'sm': '639px',
+        'sm': {'max': '639px'},
       },
     },
   },
