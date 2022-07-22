@@ -18,6 +18,7 @@ import { useVestingPanel } from "../../hooks/useVestingPanel";
 import { contracts, DEFAULT_CHAINID, toHex } from "../../utils/constants";
 import { useTokenBalance } from "../../hooks/useTokenBalance";
 import { Context } from '../../contextStore';
+import useCommon from '../../hooks/useCommon';
 
 interface RefreshProps {
   refresh: boolean;
@@ -40,6 +41,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const { days, hours, minutes, seconds } = useTimeDiff(
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
+  const { addCommasToNumber } = useCommon();
   const [, ACTION] = useContext(Context);
 
   useEffect(() => {
@@ -285,7 +287,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
                   />
                   <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
-                    {total_staked}
+                    {addCommasToNumber(Number(total_staked), 4)}
                     <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
                       ${" "}
                       {(
@@ -304,7 +306,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {tokenInfo.max_supply}
+                    {addCommasToNumber(tokenInfo.max_supply)}
                   </p>
                 </div>
               </div>
@@ -317,7 +319,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {tokenInfo.max_supply}
+                    {addCommasToNumber(tokenInfo.max_supply)}
                   </p>
                 </div>
               </div>

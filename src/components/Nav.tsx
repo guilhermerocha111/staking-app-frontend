@@ -24,6 +24,7 @@ export default function Nav() {
   const [defaultChainId] = useState("0x3");
   const { activate, deactivate, active, library, connector } = useWeb3React();
   const [{tx_loader}] = useContext(Context);
+
   useEffect(() => {
     if (localStorage.getItem("isConnected") == "true")
       connect(localStorage.getItem("connector"));

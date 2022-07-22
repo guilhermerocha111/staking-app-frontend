@@ -1,4 +1,5 @@
 import Card from "./Card";
+import Overlay from "./Overlay";
 import  { NumberInput } from "./Input";
 import {  useState, useContext } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
@@ -6,7 +7,7 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import Button from "./Button";
 import toast from "react-hot-toast";
 import { useAllowance } from "../hooks/useAllowance";
-import { contracts, DEFAULT_CHAINID } from "../utils/constants";
+import { contracts, DEFAULT_CHAINID, toHex } from "../utils/constants";
 import { useApprove } from "../hooks/useApprove";
 import { useTokenBalance } from "../hooks/useTokenBalance";
 import {
@@ -14,6 +15,7 @@ import {
   useStake,
   useUnstake,
 } from "../hooks/useIngame";
+import { useWeb3React } from "@web3-react/core";
 import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
@@ -29,6 +31,7 @@ export default function IngameStaking1() {
   const [type, setType] = useState<"stake" | "unstake">("stake");
   const [isLoading, setIsLoading] = useState(false);
   const [, ACTION] = useContext(Context);
+  const { chainId, active } = useWeb3React();
 
   const stake = useStake();
   const unstake = useUnstake();
@@ -92,6 +95,9 @@ export default function IngameStaking1() {
 
   return (
     <Card className="flex-1">
+      {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
+            <Overlay>Connect your wallet to access this panel.</Overlay>
+      )}
       <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold sm:flex-col">
         <div className="flex items-center gap-2">
           <div className="card-icon-2">
@@ -108,8 +114,17 @@ export default function IngameStaking1() {
         </div>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-4">
-        <div className="border border-design-darkBlue rounded-xl overflow-hidden">
-          <div className="flex gap-6 bg-design-darkBlue px-4 pt-1">
+        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden">
+          {!isApproved && (
+                <div className="absolute z-10 h-5/6 w-full flex items-start justify-center pt-4">
+                  <div className="flex flex-col items-center justify-center">
+                    <img src="images/icons/locked.svg" alt="" />
+                    <p className="text-lg mt-4">Approve your wallet first</p>
+                    <p className="text-sm italic">(Click on the “Approve” button below)</p>
+                  </div>
+                </div>
+          )}
+          <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
             <button
               className={`font-semibold py-3 ${
                 type === "stake"
@@ -134,34 +149,36 @@ export default function IngameStaking1() {
           {type === "stake" ? (
             <form
               onSubmit={(e) => handleStake(e)}
-              className="grid grid-cols-1 gap-2 p-4"
+              className={`grid grid-cols-1 gap-2 p-4`}
             >
-              <div className="flex items-center justify-between gap-4">
-                <h3>Stake Amount</h3>
-                <p className="text-sm flex items-center text-design-grey">
-                  Wallet Balance:
-                  <img
-                    src="/images/coin.png"
-                    alt=""
-                    className="w-4 h-4 object-contain object-center ml-2 mr-1"
-                  />
-                  <span className="text-white">{smcwBalance}</span>
+              <div className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+                <div className="flex items-center justify-between gap-4">
+                  <h3>Stake Amount</h3>
+                  <p className="text-sm flex items-center text-design-grey">
+                    Wallet Balance:
+                    <img
+                      src="/images/coin.png"
+                      alt=""
+                      className="w-4 h-4 object-contain object-center ml-2 mr-1"
+                    />
+                    <span className="text-white">{smcwBalance}</span>
+                  </p>
+                </div>
+                <NumberInput
+                  placeholder="1000 (min) 20000 (max)"
+                  value={stakeAmount}
+                  setValue={setStakeAmount}
+                  min={1000}
+                  max={20000}
+                  step={1000}
+                  roundTo={1000}
+                  decimalpoints={0}
+                  required
+                />
+                <p className="flex items-center text-sm text-design-darkBlue2">
+                  <FiInfo className=" mr-2" /> Only multiples of 1000
                 </p>
               </div>
-              <NumberInput
-                placeholder="1000 (min) 20000 (max)"
-                value={stakeAmount}
-                setValue={setStakeAmount}
-                min={1000}
-                max={20000}
-                step={1000}
-                roundTo={1000}
-                decimalpoints={0}
-                required
-              />
-              <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 1000
-              </p>
 
               {isApproved ? (
                 <Button type="submit" className={`gradient-1 button-3 mt-4 ${Number(stakeAmount) >= 1000 ? '' : 'opacity-50 pointer-events-none'}`}>
@@ -182,7 +199,6 @@ export default function IngameStaking1() {
                   {isLoading ? "Approving..." : "Approve"}
                 </Button>
               )}
-
               {!isApproved && (
                 <p className="flex items-center text-sm mt-4">
                   <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
@@ -194,7 +210,7 @@ export default function IngameStaking1() {
           ) : (
             <form
               onSubmit={(e) => handleUnstake(e)}
-              className="grid grid-cols-1 gap-2 p-4"
+              className={`grid grid-cols-1 gap-2 p-4 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}
             >
               <div className="flex items-center justify-between gap-4">
                 <h3>Unstake Amount</h3>
@@ -232,7 +248,7 @@ export default function IngameStaking1() {
             </form>
           )}
         </div>
-        <div className="card-3 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-1">
+        <div className={`card-3 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
             <h5 className="text-design-grey">Your Pool Staked SMCW</h5>
             <p className="flex items-center gap-2">
@@ -260,7 +276,7 @@ export default function IngameStaking1() {
             <p className="flex items-center gap-2">{estimated}</p>
           </div>
         </div>
-        <div className="input">
+        <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <input
             disabled={parseInt(pendings) > 0 ? false :true }
             value={enjinAddress}
@@ -269,7 +285,7 @@ export default function IngameStaking1() {
             placeholder="Put your Enjin Wallet Address Here"
           />
         </div>
-        <form onSubmit={(e) => handleClaim(e)}>
+        <form onSubmit={(e) => handleClaim(e)} className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           {/* <Select
             options={[
               {
@@ -301,15 +317,17 @@ export default function IngameStaking1() {
             decimalpoints={0}
             required
           />
-          <Button
-            type="submit"
-            disabled={parseInt(pendings) > 0 ? false :true }
-            className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
-              ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
-            `}
-          >
-            Claim Rewards<FiDownload />
-          </Button>
+          {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
+            <Button
+              type="submit"
+              disabled={parseInt(pendings) > 0 ? false :true }
+              className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
+                ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
+              `}
+            >
+              Claim Rewards<FiDownload />
+            </Button>
+          )}
         </form>
       </div>
     </Card>
