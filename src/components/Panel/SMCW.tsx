@@ -31,7 +31,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
           BSC <img src="/images/Binance.png" alt="" />
         </button>
       </p>
-      <div className="relative flex gap-6 mt-9 flex-col lg:flex-row">
+      <div className="relative flex gap-6 mt-9 flex-col lg:flex-row" style={{minHeight: '400px'}}>
         {(!active ||DEFAULT_CHAINID !== toHex(chainId)) && (
           <Overlay>
             <div className="flex flex-col justify-center items-center gap-4">
@@ -54,28 +54,32 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
             </div>
           </Overlay>
         )}
-        <Staking
-          refresh={refresh}
-          setRefresh={setRefresh}
-          apr={swcw}
-          pool={pool1}
-          avarage={pool1Avarage}
-          poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
-          title="SMCW Staking"
-          defaultAmount="0.0"
-          stakingType="smcw"
-        />
-        <Staking
-          refresh={refresh}
-          setRefresh={setRefresh}
-          apr={lp}
-          pool={pool2}
-          avarage={pool2Avarage}
-          poolAddress={contracts[DEFAULT_CHAINID].lpTosmcw}
-          title="BUSD/SMCW LP"
-          defaultAmount="0.0"
-          stakingType="lp"
-        />
+        {active && (
+          <>
+            <Staking
+              refresh={refresh}
+              setRefresh={setRefresh}
+              apr={swcw}
+              pool={pool1}
+              avarage={pool1Avarage}
+              poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
+              title="SMCW Staking"
+              defaultAmount="0.0"
+              stakingType="smcw"
+            />
+            <Staking
+              refresh={refresh}
+              setRefresh={setRefresh}
+              apr={lp}
+              pool={pool2}
+              avarage={pool2Avarage}
+              poolAddress={contracts[DEFAULT_CHAINID].lpTosmcw}
+              title="BUSD/SMCW LP"
+              defaultAmount="0.0"
+              stakingType="lp"
+            />
+          </>
+        )}
       </div>
     </section>
   );

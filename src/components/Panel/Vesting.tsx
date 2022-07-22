@@ -8,6 +8,9 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import { useVestingPanel } from "../../hooks/useVestingPanel";
 import { Locker, MasterChef, NFTRewards } from "../../typechain";
 import { Context } from '../../contextStore';
+import {
+  useNavigate,
+} from "react-router-dom";
 
 
 interface VestingTypes {
@@ -31,6 +34,7 @@ export default function Vesting() {
   const [sort, setSort] = useState<string>("");
   const { PoolStakes } = useVestingPanel();
   const [, ACTION] = useContext(Context);
+  const navigate = useNavigate();
 
   const handleClaim = async (
     amount: string,
@@ -51,7 +55,7 @@ export default function Vesting() {
   };
 
   return (
-    <section>
+    <section className="max-w-screen-2xl mx-auto">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
         <div>
           <h1 className="section-heading-1">
@@ -87,6 +91,9 @@ export default function Vesting() {
             value={sort}
             onChange={(e) => setSort(e.target.value)}
           />
+          <button className="button-1 rounded-md" onClick={() => navigate('/')}>
+            Close <span style={{position: 'relative', top: '2px', color: '#e919b6'}}>&#x2715;</span>
+          </button>
         </div>
       </div>
       <div className="mt-6 flex-1">
