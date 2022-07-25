@@ -15,7 +15,6 @@ import { useAllowance } from "../hooks/useAllowance";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
 import { Context } from '../contextStore';
-import Overlay from "./Overlay";
 
 interface StakingProps {
   title: string;
@@ -42,7 +41,7 @@ export default function Staking({
   setRefresh,
 }: StakingProps) {
   const [stakeAmount, setStakeAmount] = useState<string>("0.0");
-  const [stakeLength, setStakeLength] = useState<string>("1");
+  const [stakeLength, setStakeLength] = useState<string>("30");
   const [stakeUntill, setStakeUntill] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,7 +55,7 @@ export default function Staking({
 
   useEffect(() => {
     setStakeUntill(
-      moment().add(1, "months").format("dddd, MMMM Do YYYY, h:mm:ss a")
+      moment().add(30, "days").format("dddd, MMMM Do YYYY, h:mm:ss a")
     );
   }, [isApproved, loading, refresh]);
 
@@ -64,6 +63,7 @@ export default function Staking({
     try {
       ACTION.SET_TX_LOADER(true);
       setLoading(true);
+      console.log(BigNumber.from(stakeLength))
       const tx = await pool.deposit(
         parseEther(stakeAmount),
         BigNumber.from(stakeLength)
@@ -134,27 +134,27 @@ export default function Staking({
             <Select
               options={[
                 {
-                  label: "Stake (lock) for 1 month",
-                  value: "1",
+                  label: "Stake (lock) for 30 days",
+                  value: "30",
                 },
                 {
-                  label: "Stake (lock) for 3 month",
-                  value: "3",
+                  label: "Stake (lock) for 90 days",
+                  value: "90",
                 },
                 {
-                  label: "Stake (lock) for 6 month",
-                  value: "6",
+                  label: "Stake (lock) for 180 days",
+                  value: "180",
                 },
                 {
-                  label: "Stake (lock) for 1 year",
-                  value: "12",
+                  label: "Stake (lock) for 360 days",
+                  value: "360",
                 },
               ]}
               value={stakeLength}
               onChange={(e) => {
                 setStakeLength(e.target.value);
                 let d = moment()
-                  .add(parseInt(e.target.value), "months")
+                  .add(parseInt(e.target.value), "days")
                   .format("dddd, MMMM Do YYYY, h:mm:ss a");
                 setStakeUntill(d);
               }}
@@ -245,22 +245,22 @@ export default function Staking({
               </thead>
               <tbody className="grid grid-cols-1">
                 <tr>
-                  <td>1 month</td>
+                  <td>30 days</td>
                   <td>0.33X</td>
                   <td>{apr.oneMonth}% APR*</td>
                 </tr>
                 <tr>
-                  <td>3 months</td>
+                  <td>90 days</td>
                   <td>1X</td>
                   <td>{apr.threeMonth}% APR*</td>
                 </tr>
                 <tr>
-                  <td>6 months</td>
+                  <td>180 days</td>
                   <td>2X</td>
                   <td>{apr.sixMonth}% APR*</td>
                 </tr>
                 <tr>
-                  <td>12 months</td>
+                  <td>360 days</td>
                   <td>4X</td>
                   <td>{apr.twelveMonth}% APR*</td>
                 </tr>

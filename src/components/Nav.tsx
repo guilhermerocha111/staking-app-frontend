@@ -77,7 +77,7 @@ export default function Nav() {
   };
 
   return (
-    <nav className="bg-design-background4 bg-opacity-20 text-design-white fixed top-0 left-0 w-full backdrop-blur-md z-40">
+    <nav className="bg-design-background4 bg-opacity-20 text-design-white fixed top-0 left-0 w-full blurred-container z-40">
       <div className="hidden lg:flex bg-design-backgroundBlack text-xs font-semibold py-2 px-4 items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <p className="flex items-center">
