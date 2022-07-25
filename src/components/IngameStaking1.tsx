@@ -273,7 +273,7 @@ export default function IngameStaking1() {
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
             <h5 className="text-design-grey">Estimated Rewards</h5>
-            <p className="flex items-center gap-2">{estimated}</p>
+            <p className="flex items-center gap-2">{estimated} / day</p>
           </div>
         </div>
         <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
