@@ -54,6 +54,10 @@ export default function Vesting() {
     window.location.reload();
   };
 
+  const formatWeight = (amount: number) => {
+    return `${parseFloat((Number(amount)/10000).toFixed(8))}x`;
+  }
+
   return (
     <section className="max-w-screen-2xl mx-auto">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
@@ -126,7 +130,7 @@ export default function Vesting() {
                     <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
                   </td>
                   <td>{item.amount}</td>
-                  <td>{item.weight}</td>
+                  <td>{formatWeight(item.weight)}</td>
                   <td>{item.reward}</td>
                   <td>{item.timestamp}</td>
                   {item.percentage < 100 ? (

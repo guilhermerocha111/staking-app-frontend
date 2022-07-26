@@ -32,31 +32,34 @@ export const useApr = () => {
     const pool2 = getStakingPool02(signer);
     let pool1TokenPerBlock = await pool1.tokenPerBlock();
     let pool2TokenPerBlock = await pool2.tokenPerBlock();
-    let amount0 = await pool1.getCurrentStaked(await signer.getAddress());
-    let amount1 = await pool2.getCurrentStaked(await signer.getAddress());
+    // let amount0 = await pool1.getCurrentStaked(await signer.getAddress());
+    // let amount1 = await pool2.getCurrentStaked(await signer.getAddress());
     let pool1Info = await pool1.poolInfo();
     let pool2Info = await pool2.poolInfo();
-
-    console.log(amount0);
-    console.log(pool1TokenPerBlock);
-    console.log(pool1Info)
 
     setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
     setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
 
+    console.log(pool1Info.totalWeight)
+
     function apr(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
+      let totalWeightUpdated;
+      formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
       return parseFloat(
         formatUnits(
           pool1TokenPerBlock
             .mul(TOTAL_BLOCK_PER_YEAR)
             .mul(Weight)
             .mul(PERCENT)
-            .div(totalWeight)
+            .div(totalWeightUpdated)
             .toString(),
           "ether"
         )
       ).toFixed(2);
     }
+
+    console.log('---')
+    console.log(apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock))
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     // if (!amount0.isZero())

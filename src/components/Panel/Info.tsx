@@ -36,7 +36,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const [isInfoOpen, setInfoOpen] = useState(true);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();
-  const { smcw_staked, lp_staked, total_staked } = useStaked();
+  const { smcw_staked, lp_staked, total_staked } = useStaked(refresh);
   const [isTotalRewardsOpen, setTotalRewardsOpen] = useState(true);
   const { days, hours, minutes, seconds } = useTimeDiff(
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")

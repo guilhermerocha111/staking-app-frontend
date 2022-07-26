@@ -4,7 +4,7 @@ import { getIngamePool, getStakingPool01, getStakingPool02 } from "../utils/cont
 import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
 
-export const useStaked = () => {
+export const useStaked = (refresh: boolean) => {
   const { account } = useWeb3React();
   const [lp_staked, setlpStaked] = useState("0");
   const [smcw_staked, setsmceStaked] = useState("0");
@@ -29,6 +29,6 @@ export const useStaked = () => {
     setTotalStaked(
       ethers.utils.formatUnits(amount0.add(amount1).add(amount3).toString(),"ether")
     )
-  }, [account]);
+  }, [account, refresh]);
   return {smcw_staked,lp_staked,total_staked};
 };
