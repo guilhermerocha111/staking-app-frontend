@@ -34,7 +34,7 @@ export const usePendings = () => {
 };
 
 
-export const useNFTPendings = () => {
+export const useNFTPendings = (isLoading: boolean) => {
   const { account } = useWeb3React();
   const [estimated, setEstimated] = useState("0");
   const [pendings, setPendings] = useState("0");
@@ -46,7 +46,7 @@ export const useNFTPendings = () => {
     const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
     setEstimated(_estimated.toString())
     setPendings(_pendings.toString())
-  }, []);
+  }, [isLoading]);
   return {estimated,pendings,account};
 };
 

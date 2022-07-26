@@ -31,7 +31,7 @@ export default function Input({ ...props }: InputProps) {
 
 export function NumberInput({ ...props }: NumberInputProps) {
   return (
-    <div className={`counter ${props.className}`}>
+    <div className={`counter ${props.className ? props.className : ''}`}>
       <input
         type="number"
         placeholder={props.placeholder}
@@ -62,12 +62,22 @@ export function NumberInput({ ...props }: NumberInputProps) {
       <div>
         <button
           type="button"
-          onClick={() =>
-            props.setValue(
-              `${(parseFloat(props.value) + props.step).toFixed(
-                props.decimalpoints
-              )}`
-            )
+          onClick={() => {
+              if (parseFloat(props.value) + props.step > (props.max || 9999999999)) {
+                props.setValue(
+                  `${(parseFloat(props.value)).toFixed(
+                    props.decimalpoints
+                  )}`
+                )
+              } else {
+                props.setValue(
+                  `${(parseFloat(props.value) + props.step).toFixed(
+                    props.decimalpoints
+                  )}`
+                )
+              }
+              
+            }
           }
         >
           <FiChevronUp />
@@ -78,6 +88,19 @@ export function NumberInput({ ...props }: NumberInputProps) {
             {
               if (Number(props.value.split('.')[0]) === 0) {
                 return
+              }
+              if (parseFloat(props.value) - props.step < (props.min || 1)) {
+                props.setValue(
+                  `${(parseFloat(props.value)).toFixed(
+                    props.decimalpoints
+                  )}`
+                )
+              } else {
+                props.setValue(
+                  `${(parseFloat(props.value) - props.step).toFixed(
+                    props.decimalpoints
+                  )}`
+                )
               }
               props.setValue(
                 `${(parseFloat(props.value) - props.step).toFixed(

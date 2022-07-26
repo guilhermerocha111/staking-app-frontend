@@ -33,17 +33,20 @@ export const useClaim = () => {
   }, []);
 };
 
-export const useIngameUserInfo = () => {
+export const useIngameUserInfo = (refresh: boolean) => {
   const { account } = useWeb3React();
   const [userRewards, setRewards] = useState("0");
   const [stakedAmount, setStakedAmount] = useState("0");
-
+  const [lastAmount, setLastAmount] = useState("0");
+  console.log(refresh);
   useMemo(async () => {
     const signer: Signer = await getSigner();
     const pool = getIngamePool(signer);
-    let {amount,rewards} = await pool.poolStakers(await signer.getAddress())
+    let {amount,rewards, lastStakeAmount} = await pool.poolStakers(await signer.getAddress())
+    console.log(formatUnits(amount.toString(),"ether"))
     setRewards(rewards.toString())
-    setStakedAmount(formatUnits(amount.toString(),"ether"))
-  }, [userRewards,stakedAmount,account]);
-  return { stakedAmount,userRewards };
+    setStakedAmount(String(parseFloat(formatUnits(amount.toString(),"ether"))))
+    setLastAmount(String(parseFloat(formatUnits(lastStakeAmount.toString(),"ether"))))
+  }, [userRewards,stakedAmount,account, refresh]);
+  return { stakedAmount,userRewards, lastAmount };
 };

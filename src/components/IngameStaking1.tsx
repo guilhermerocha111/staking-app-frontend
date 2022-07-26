@@ -36,8 +36,8 @@ export default function IngameStaking1() {
   const stake = useStake();
   const unstake = useUnstake();
 
-  const { pendings,estimated } = useNFTPendings();
-  const userInfo = useIngameUserInfo();
+  const { pendings,estimated } = useNFTPendings(isLoading);
+  const userInfo = useIngameUserInfo(isLoading);
   const approve = useApprove(stakingType);
   const smcwBalance = useTokenBalance(stakingType,isLoading);
   const isApproved = useAllowance(
@@ -49,13 +49,16 @@ export default function IngameStaking1() {
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     ACTION.SET_TX_LOADER(true);
+    setIsLoading(true);
     try {
       await stake(parseEther(stakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Stake Amount: ${stakeAmount}`);
-      window.location.reload();
+      setIsLoading(false);
+      // window.location.reload();
     } catch (err) {
       ACTION.SET_TX_LOADER(false);
+      setIsLoading(false);
       console.log(err);
     }
   };
@@ -79,6 +82,7 @@ export default function IngameStaking1() {
     e.preventDefault();
     // @note integrate enjin apis and then execute claim transaction
     ACTION.SET_TX_LOADER(true);
+    setIsLoading(true);
     try {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
@@ -86,9 +90,11 @@ export default function IngameStaking1() {
       const tx = await new ApiClient().mint(enjinAddress, claimAmount);
       toast.success(`Claimed successfully with Transaction Id ${tx.id}`);
       ACTION.SET_TX_LOADER(false);
+      setIsLoading(false);
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
+      setIsLoading(false);
       toast.error("Please stake before claim");
     }
   };
@@ -116,7 +122,7 @@ export default function IngameStaking1() {
       <div className="mt-6 grid grid-cols-1 gap-4">
         <div className="relative border border-design-darkBlue rounded-xl overflow-hidden">
           {!isApproved && (
-                <div className="absolute z-10 h-5/6 w-full flex items-start justify-center pt-4">
+                <div className="absolute z-10 h-4/6 w-full flex items-start justify-center pt-4">
                   <div className="flex flex-col items-center justify-center">
                     <img src="images/icons/locked.svg" alt="" />
                     <p className="text-lg mt-4">Approve your wallet first</p>
@@ -169,24 +175,27 @@ export default function IngameStaking1() {
                   value={stakeAmount}
                   setValue={setStakeAmount}
                   min={1000}
-                  max={20000}
+                  max={
+                    20000 - Number(userInfo.stakedAmount) - Number(userInfo.lastAmount)
+                  }
                   step={1000}
                   roundTo={1000}
                   decimalpoints={0}
+                  className={'mt-2'}
                   required
                 />
-                <p className="flex items-center text-sm text-design-darkBlue2">
+                <p className="flex items-center text-sm mt-2 text-design-darkBlue2">
                   <FiInfo className=" mr-2" /> Only multiples of 1000
                 </p>
               </div>
 
               {isApproved ? (
-                <Button type="submit" className={`gradient-1 button-3 mt-4 ${Number(stakeAmount) >= 1000 ? '' : 'opacity-50 pointer-events-none'}`}>
-                  Increase / Stake <HiOutlineExternalLink />
+                <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 1000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
+                  {isLoading ? 'Staking...' : 'Increase / Stake'} <HiOutlineExternalLink />
                 </Button>
               ) : (
                 <Button
-                  className={`gradient-1 button-3 mt-4 ${
+                  className={`gradient-1 button-3 mt-2 cursor-pointer z-10 ${
                     isLoading ? "opacity-50 pointer-events-none" : ""
                   }`}
                   type="button"
@@ -225,26 +234,28 @@ export default function IngameStaking1() {
                 </p>
               </div>
               <NumberInput
-                placeholder="100 (min) 2000 (max)"
+                placeholder="1000 (min) 20000 (max)"
                 value={unstakeAmount}
                 setValue={setUnstakeAmount}
-                min={100}
-                max={99999999}
-                step={100}
+                min={1000}
+                max={Number(userInfo.stakedAmount)}
+                step={1000}
                 decimalpoints={0}
                 required
               />
               <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 100
+                <FiInfo className=" mr-2" /> Only multiples of 1000
               </p>
               <Button type="submit" className="gradient-1 button-3 mt-2">
                 Decrease / Unstake <HiOutlineExternalLink />
               </Button>
-              <p className="flex items-center text-sm mt-4">
-                <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
-                for the first time the first transaction is only to approve your
-                SMCW, after that you can start staking
-              </p>
+              {!isApproved && (
+                <p className="flex items-center text-sm mt-4">
+                  <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
+                  for the first time the first transaction is only to approve your
+                  SMCW, after that you can start staking
+                </p>
+              )}
             </form>
           )}
         </div>
@@ -257,7 +268,7 @@ export default function IngameStaking1() {
                 alt=""
                 className="w-5 h-5 object-contain object-center mr-1"
               />
-              {userInfo.stakedAmount}
+              {`${userInfo.stakedAmount}${userInfo.lastAmount !== "0" ? `(+${userInfo.lastAmount})` : ''}`}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">

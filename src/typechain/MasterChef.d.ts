@@ -23,7 +23,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
   functions: {
     "approveForVesting()": FunctionFragment;
     "claim(uint256)": FunctionFragment;
-    "deposit(uint256,uint8)": FunctionFragment;
+    "deposit(uint256,uint256)": FunctionFragment;
     "getCurrentClaimed(address)": FunctionFragment;
     "getCurrentStaked(address)": FunctionFragment;
     "getCurrentUnstaked(address)": FunctionFragment;
@@ -317,20 +317,20 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<
       [
-        ([BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+        ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
           amount: BigNumber;
           weight: BigNumber;
           timestamp: BigNumber;
           stakeUntill: BigNumber;
-          stakeFor: number;
+          stakeFor: BigNumber;
         })[]
       ] & {
-        stakes: ([BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+        stakes: ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
           amount: BigNumber;
           weight: BigNumber;
           timestamp: BigNumber;
           stakeUntill: BigNumber;
-          stakeFor: number;
+          stakeFor: BigNumber;
         })[];
       }
     >;
@@ -413,12 +413,12 @@ export class MasterChef extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
-        stakeFor: number;
+        stakeFor: BigNumber;
       }
     >;
 
@@ -461,12 +461,12 @@ export class MasterChef extends BaseContract {
     _user: string,
     overrides?: CallOverrides
   ): Promise<
-    ([BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+    ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       weight: BigNumber;
       timestamp: BigNumber;
       stakeUntill: BigNumber;
-      stakeFor: number;
+      stakeFor: BigNumber;
     })[]
   >;
 
@@ -545,12 +545,12 @@ export class MasterChef extends BaseContract {
     arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       weight: BigNumber;
       timestamp: BigNumber;
       stakeUntill: BigNumber;
-      stakeFor: number;
+      stakeFor: BigNumber;
     }
   >;
 
@@ -591,12 +591,12 @@ export class MasterChef extends BaseContract {
       _user: string,
       overrides?: CallOverrides
     ): Promise<
-      ([BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+      ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
-        stakeFor: number;
+        stakeFor: BigNumber;
       })[]
     >;
 
@@ -666,12 +666,12 @@ export class MasterChef extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, number] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
-        stakeFor: number;
+        stakeFor: BigNumber;
       }
     >;
 
