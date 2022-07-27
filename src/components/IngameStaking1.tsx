@@ -10,6 +10,7 @@ import { useAllowance } from "../hooks/useAllowance";
 import { contracts, DEFAULT_CHAINID, toHex } from "../utils/constants";
 import { useApprove } from "../hooks/useApprove";
 import { useTokenBalance } from "../hooks/useTokenBalance";
+import Timer from "./Timer";
 import {
   useIngameUserInfo,
   useStake,
@@ -65,14 +66,17 @@ export default function IngameStaking1() {
 
   const handleUnstake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     ACTION.SET_TX_LOADER(true);
     try {
       await unstake(parseEther(unstakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Unstake Amount: ${unstakeAmount}`);
-      window.location.reload();
+      setIsLoading(false);
+      // window.location.reload();
     } catch (err) {
       ACTION.SET_TX_LOADER(false);
+      setIsLoading(false);
       console.log(err);
     }
     
@@ -238,8 +242,9 @@ export default function IngameStaking1() {
                 value={unstakeAmount}
                 setValue={setUnstakeAmount}
                 min={1000}
-                max={Number(userInfo.stakedAmount)}
+                max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
                 step={1000}
+                roundTo={1000}
                 decimalpoints={0}
                 required
               />
@@ -259,6 +264,23 @@ export default function IngameStaking1() {
             </form>
           )}
         </div>
+        {/* {userInfo.lastAmount && (
+          <div className="card-3 grid grid-cols-1 gap-1.5 lg:gap-1">
+              <h5 className="text-design-grey">Sync will be available in {userInfo.lockedTo !== null && (
+                <Timer targetDate={Number(userInfo.lockedTo)} />
+              )}. To sync your SMCW you need to claim rewards.
+              </h5>
+              <p className="flex items-center gap-2">
+                Pending SMCW:
+                <img
+                  src="/images/coin.png"
+                  alt=""
+                  className="w-5 h-5 object-contain object-center mr-1"
+                />
+                {`${userInfo.lastAmount !== "0" ? userInfo.lastAmount : ''}`}
+              </p>
+          </div>
+        )} */}
         <div className={`card-3 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
             <h5 className="text-design-grey">Your Pool Staked SMCW</h5>
@@ -268,7 +290,7 @@ export default function IngameStaking1() {
                 alt=""
                 className="w-5 h-5 object-contain object-center mr-1"
               />
-              {`${userInfo.stakedAmount}${userInfo.lastAmount !== "0" ? `(+${userInfo.lastAmount})` : ''}`}
+              {Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">

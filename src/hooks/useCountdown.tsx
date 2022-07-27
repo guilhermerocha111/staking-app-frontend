@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 //Input Format: "Sep 3, 2022 00:00:00 GMT+0600"
 const useCountdown = (target: number) => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+
+  console.log(target)
 
   useEffect(() => {
     setInterval(() => {
@@ -17,9 +18,8 @@ const useCountdown = (target: number) => {
       let nowDate = new Date().getTime();
       let dateDifference = targetDate - nowDate;
 
-      let days = Math.floor(dateDifference / (1000 * 60 * 60 * 24));
       let hours = Math.floor(
-        (dateDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (dateDifference) / (1000 * 60 * 60)
       );
       let minutes = Math.floor(
         (dateDifference % (1000 * 60 * 60)) / (1000 * 60)
@@ -27,7 +27,6 @@ const useCountdown = (target: number) => {
       let seconds = Math.floor((dateDifference % (1000 * 60)) / 1000);
 
       setTimeLeft({
-        days,
         hours,
         minutes,
         seconds,
