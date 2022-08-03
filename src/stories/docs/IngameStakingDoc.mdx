@@ -1,0 +1,83 @@
+<!-- IngameStakingDoc.mdx -->
+
+import { Source } from '@storybook/addon-docs';
+
+<style>
+    {`
+        img {
+            display: inline;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        .tip {
+            margin-top: 10px;
+            display: inline-block;
+            border-radius: 1em;
+            font-size: 14px;
+            font-weight: 700;
+            background: #E7FDD8;
+            color: #66BF3C;
+            padding: 12px;
+            margin-right: 10px;
+            vertical-align: top;
+        }
+    `}
+</style>
+
+# Ingame Staking Form
+
+# Contract Addresses
+
+INGAME_STAKING=<a href={`https://ropsten.etherscan.io/address/${process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_ROPSTEN}#readContract`} target="_blank" children={`${process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_ROPSTEN}`} />
+
+# Description
+
+These Ingame pools are for us to gamify the SMCW staking and reward NFTs/FTs instead of SMCW. Always “on-chain” NFT/FT rewards (not ingame).
+
+# Usage
+
+Stake `SMCW` and earn `Virtual Hidden Data`, then use Virtual Hidden Data to claim random `ERC-1155` (Telemetry)
+
+# Hidden Data explanation:
+
+This is just a virtual placeholder, Hidden Data is not ERC1155, is not a token, just a virtual representation of pending rewards.
+
+User will use these Hidden Data virtual representation rewards to claim “Random ERC-1155” Telemetry rewards.
+
+# Rewards Claim
+
+Users will add the amount of rewards they want to withdraw.
+
+Users will then use the “Claim Rewards” button to receive the selected amount, which will be sent to their wallets as a “random” ERC-1155 (Telemetry)
+
+<pre>
+    {`
+    uint256 private constant MAX_PER_DAY = 1000 ether;
+    
+    function calculateRewards(address _staker)
+        public
+        view
+        returns (uint256 rewards)
+    {
+        Staker memory staker = poolStakers[_staker];
+        uint256 pendingdifference;
+        uint256 amount = staker.amount.add(staker.lastStakeAmount);
+        if (staker.amount == 0) return rewards;
+
+        if (block.timestamp > staker.stakeTime) {
+            pendingdifference = BokkyPooBahsDateTimeLibrary.diffDays(
+                staker.lastStakeTime,
+                block.timestamp
+            );
+            if(pendingdifference > 0){
+            // ( (Amount * Staked Days) / 1000 ) 
+            rewards = amount.mul(pendingdifference).div(MAX_PER_DAY);
+            }
+        }
+    }`
+    }
+</pre>
+

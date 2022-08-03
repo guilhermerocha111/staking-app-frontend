@@ -47,7 +47,6 @@ export default function Staking({
   const [loading, setLoading] = useState<boolean>(false);
 
   const [, ACTION] = useContext(Context);
-
   const isApproved = useAllowance(stakingType, poolAddress,loading);
   const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
