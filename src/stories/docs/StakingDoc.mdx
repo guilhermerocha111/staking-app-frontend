@@ -1,0 +1,82 @@
+<!-- StakingDoc.mdx -->
+
+<style>
+    {`
+        img {
+            display: inline;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        .tip {
+            margin-top: 10px;
+            display: inline-block;
+            border-radius: 1em;
+            font-size: 14px;
+            font-weight: 700;
+            background: #E7FDD8;
+            color: #66BF3C;
+            padding: 12px;
+            margin-right: 10px;
+            vertical-align: top;
+        }
+    `}
+</style>
+
+# Staking Form
+
+# Contract Addresses
+
+SMCW_ROPSTEN=<a href={`https://ropsten.etherscan.io/address/${process.env.REACT_APP_SMCW_CONTRACT_ADDRESS_ROPSTEN}#readContract`} target="_blank" children={`${process.env.REACT_APP_SMCW_CONTRACT_ADDRESS_ROPSTEN}`} />
+
+LP_ROPSTEN=<a href={`https://ropsten.etherscan.io/address/${process.env.REACT_APP_LP_CONTRACT_ADDRESS_ROPSTEN}#readContract`} target="_blank"  children={`${process.env.REACT_APP_LP_CONTRACT_ADDRESS_ROPSTEN}`} />
+
+# Usage
+
+Stake `SMCW` and earn `SMCW`
+
+Stake `LP` and earn `SMCW`
+
+# Description
+
+User is free to stake `SMCW` or `LP` using <img src="images/Binance.png" /> BSC Network.
+
+Rewards generated per block
+
+# Stake Amount
+
+“Free to choose”, each stake entry will create a Vesting panel locked period and rewards are calculated for that specific staked amount.
+
+# Stake Lock Periods - Token Weight - Yield
+
+<ul>
+    <li>1 month - 0.33X - (Rewards Per Year / Total Weight of all Staked Tokens) x 0.33 x100</li>
+    <li>3 month - 1.0X - (Rewards Per Year / Total Weight of all Staked Tokens) x 100</li>
+    <li>6 month - 2.0X -  (Rewards Per Year / Total Weight of all Staked Tokens) x 2 x 100 </li>
+    <li>12 month - 4.0X - (Rewards Per Year / Total Weight of all Staked Tokens) x 4 x 100</li>
+</ul>
+
+<a href="https://docs.google.com/spreadsheets/d/1oLOEcXMWoc8biZkCS8kMiaC3hIgYfIrAR-ERD64ELKs/edit#gid=788558087" target="_blank">See example here</a>
+
+`Yield per Block per token staked = (Rewards generated per block / total weight of all staked SMCW tokens) * token weight`
+
+`APR = (Token Rewards per Year / Total Weight of all Staked Tokens) * Token Weight * 100`
+
+# How it works:
+
+Every time a user stakes, choosing a lock period is needed.
+Depending on the selected period, the rewards earned are different, the more time you lock up for the more you earn (stated at the weighted rewards document above).
+
+After SMCW stake, the remaining lock period will be represented at the Vesting panel with its own countdown and timestamp as well as the other info.
+
+After the lock period expires, the Vesting panel will show a button with “Unstake”
+
+After the unstake, the tokens are automatically sent to the user wallet.
+The entry updates showing the “claimed” and “View Transaction”.
+
+<span>Claiming Rewards:</span> Users rewards are shown accumulating in the Info Panel. Users must click the “VEST” button, at which point the rewards will vest for 1 month before they are claimable. 
+
+<span className="tip">Users can only “VEST” once per week. Every time they VEST they can not do it again for 7 days. A countdown will be displayed under the VEST button.</span>
+

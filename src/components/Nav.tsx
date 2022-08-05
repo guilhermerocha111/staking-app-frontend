@@ -23,7 +23,7 @@ export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultChainId] = useState("0x3");
   const { activate, deactivate, active, library, connector } = useWeb3React();
-  const [{tx_loader}] = useContext(Context);
+  const [{tx_loader, max_apr}] = useContext(Context);
 
   useEffect(() => {
     if (localStorage.getItem("isConnected") == "true")
@@ -107,15 +107,17 @@ export default function Nav() {
             />
             Copy Contract
           </button>
-          <p className="flex items-center">
-            <img
-              src="/images/coin.png"
-              alt=""
-              className="h-4 w-4 object-contain object-center mr-1.5"
-            />
-            Staking APY
-            <span className="gradient-3 clip-text ml-2">Up to 3625%</span>
-          </p>
+          {max_apr && (
+            <p className="flex items-center">
+              <img
+                src="/images/coin.png"
+                alt=""
+                className="h-4 w-4 object-contain object-center mr-1.5"
+              />
+              Staking APY
+              <span className="gradient-3 clip-text ml-2">Up to {max_apr.toFixed(0)}%</span>
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {/* {!active && (
@@ -168,7 +170,7 @@ export default function Nav() {
 
           <p className="ml-4 flex items-center gap-3">
             <a
-              href="https://discord.gg/JvHWFRWqNd"
+              href="https://discord.gg/spacemisfits"
               target="_blank"
               rel="noreferrer"
               className=" bg-white rounded-button-1"

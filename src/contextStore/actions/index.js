@@ -9,6 +9,14 @@ const actions = {
                     payload: value,
                 })
     },
+    [types.SET_MAX_APR]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_MAX_APR,
+                    payload: value,
+                })
+    },
 }
 
 export default actions;
