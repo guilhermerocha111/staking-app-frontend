@@ -265,10 +265,10 @@ export default function Staking({
                 </tr>
               </tbody>
             </table>
-            <p className="mt-2 text-sm text-design-darkBlue2">
+            {/* <p className="mt-2 text-sm text-design-darkBlue2">
               Staking rewards are changing every second. The number above are
               approximate representation and are updated every 24 hours.
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="card-2 mt-6">

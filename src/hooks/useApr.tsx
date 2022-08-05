@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
 import { BigNumber, Signer, utils } from "ethers";
 import { getStakingPool01, getStakingPool02 } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
 import { ETH_DECIMAL, PERCENT, TOTAL_BLOCK_PER_YEAR } from "../utils/constants";
 import { formatUnits, parseEther } from "ethers/lib/utils";
 import { useWeb3React } from "@web3-react/core";
+import { Context } from '../contextStore';
 
 export interface IAPR {
   oneMonth: string;
@@ -25,6 +26,7 @@ export const useApr = () => {
   const [lp_APR, setlpAPR] = useState<IAPR>(APRDefaults);
   const [pool1Avarage, setPool1Average] = useState<string>("0");
   const [pool2Avarage, setPool2Average] = useState<string>("0");
+  const [, ACTION] = useContext(Context);
 
   useMemo(async () => {
     const signer: Signer = await getSigner();
@@ -40,11 +42,10 @@ export const useApr = () => {
     setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
     setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
 
-    console.log(pool1Info.totalWeight)
-
     function apr(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
       let totalWeightUpdated;
       formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
+
       return parseFloat(
         formatUnits(
           pool1TokenPerBlock
@@ -58,23 +59,26 @@ export const useApr = () => {
       ).toFixed(2);
     }
 
-    console.log('---')
-    console.log(apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock))
+    ACTION.SET_MAX_APR(
+      Number(apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock)) > Number(apr(parseEther("12"), pool2Info.totalWeight,pool2TokenPerBlock)) ?
+      Number(apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock)) :
+      Number(apr(parseEther("12"), pool2Info.totalWeight,pool2TokenPerBlock))
+    );
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     // if (!amount0.isZero())
       setsmcwAPR({
         oneMonth: apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool1Info.totalWeight,pool1TokenPerBlock),
-        sixMonth: apr(parseEther("6"), pool1Info.totalWeight,pool1TokenPerBlock),
-        twelveMonth: apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock),
+        sixMonth: apr(parseEther("2"), pool1Info.totalWeight,pool1TokenPerBlock),
+        twelveMonth: apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock),
       });
     // if (!amount1.isZero())
       setlpAPR({
         oneMonth: apr(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
         threeMonth: apr(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),
-        sixMonth: apr(parseEther("6"), pool2Info.totalWeight,pool2TokenPerBlock),
-        twelveMonth: apr(parseEther("12"), pool2Info.totalWeight,pool2TokenPerBlock),
+        sixMonth: apr(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
+        twelveMonth: apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
       });
   }, [account]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };
