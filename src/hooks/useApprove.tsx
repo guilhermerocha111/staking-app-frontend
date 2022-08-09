@@ -4,15 +4,17 @@ import {  tokens } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
 import { Signer } from "ethers";
 import { ERC20 } from "../typechain";
+import { useWeb3React } from "@web3-react/core";
 
 import { Context } from '../contextStore';
 
 export const useApprove = (name:string) => {
   const [txResponse , setResponse] = useState<any>(null)
   const [, ACTION] = useContext(Context);
+  const { library } = useWeb3React();
   return useCallback(
     async ( to: string): Promise<void> => {
-      const signer:Signer = await getSigner();
+      const signer:Signer = await getSigner(library);
       let token: ERC20 = tokens[name](signer);
       try {
         ACTION.SET_TX_LOADER(true);

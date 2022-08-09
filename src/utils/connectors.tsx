@@ -9,7 +9,7 @@ const injected = new InjectedConnector({
 const walletconnect = new WalletConnectConnector({
   qrcode: true,
   bridge: "https://bridge.walletconnect.org",
-  rpc: { 1: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}` },
+  rpc: { 3: `https://ropsten.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
 });
 
 export const connectors = {
@@ -17,10 +17,20 @@ export const connectors = {
   walletConnect: walletconnect,
 };
 
-export const getSigner = async (): Promise<Signer> => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  return provider.getSigner();
+export const getSigner = async (library: any): Promise<Signer> => {
+  // let connector = localStorage.getItem("connector")
+  // if (connector === 'metamask') {
+    // const provider = new ethers.providers.Web3Provider(library);
+    // await provider.send("eth_requestAccounts", []);
+      return await library.getSigner();
+  // } else {
+  //   const walletProvider = new WalletConnectProvider({
+  //     infuraId: process.env.INFURA_KEY,
+  //   });
+  //   const provider = new ethers.providers.Web3Provider(walletProvider);
+  //   return provider.getSigner();
+  // }
+  
 };
 
 

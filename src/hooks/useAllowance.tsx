@@ -7,9 +7,9 @@ import { useWeb3React } from "@web3-react/core";
 
 export const useAllowance = (stakingToken:string,pool:string,loading:boolean) => {
   const [isApproved, setIsApproved] = useState(false);
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   useMemo(async () => {
-    const signer:Signer = await getSigner();
+    const signer:Signer = await getSigner(library);
     const token: ERC20 = tokens[stakingToken](signer);
     const allowance = await token.allowance(
       await signer.getAddress(),

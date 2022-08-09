@@ -15,13 +15,13 @@ function ToFixed(amount: string) {
 }
 
 export const useVestingPanel = () => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [Locked, setAllLocked] = useState<any[]>([]);
   const [PoolStakes, setAllStakes] = useState<any[]>([]);
   const [InGameLocks, setInGameLocker] = useState<any[]>([]);
 
   useMemo(async () => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const vesting = getVesting(signer);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);

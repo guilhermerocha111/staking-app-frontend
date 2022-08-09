@@ -5,13 +5,13 @@ import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
 
 export const useStaked = (refresh: boolean) => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [lp_staked, setlpStaked] = useState("0");
   const [smcw_staked, setsmceStaked] = useState("0");
   const [total_staked, setTotalStaked] = useState("0");
 
   useMemo(async () => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     const pool3 = getIngamePool(signer);

@@ -5,15 +5,13 @@ import { DEFAULT_CHAINID } from "../utils/constants";
 
 export const useSigner = () => {
   const [signer, setSigner] = useState<any>();
-
+  const { library } = useWeb3React();
   useMemo(async () => {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      setSigner(provider.getSigner());
+      setSigner(library.getSigner());
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [library]);
   return signer;
 };

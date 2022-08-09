@@ -5,7 +5,7 @@ import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
 const {formatUnits} = utils;
 export const usePendings = () => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [lp_rewards, setlpRewards] = useState("0");
   const [total_rewards, setTotalRewards] = useState("0");
   const [smcw_Rewards, setsmcwRewards] = useState("0");
@@ -13,7 +13,8 @@ export const usePendings = () => {
   useMemo( () => {
 
     setInterval(async() => {
-    const signer: Signer = await getSigner();
+      console.log(library)
+    const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let amount0 = await pool1.pendingRewards(await signer.getAddress());
@@ -35,11 +36,11 @@ export const usePendings = () => {
 
 
 export const useNFTPendings = (isLoading: boolean) => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [estimated, setEstimated] = useState("0");
   const [pendings, setPendings] = useState("0");
   useMemo(async () => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
     
     const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
