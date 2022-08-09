@@ -21,7 +21,7 @@ const APRDefaults: IAPR = {
   twelveMonth: "0",
 };
 export const useApr = () => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [smcw_APR, setsmcwAPR] = useState<IAPR>(APRDefaults);
   const [lp_APR, setlpAPR] = useState<IAPR>(APRDefaults);
   const [pool1Avarage, setPool1Average] = useState<string>("0");
@@ -29,7 +29,7 @@ export const useApr = () => {
   const [, ACTION] = useContext(Context);
 
   useMemo(async () => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let pool1TokenPerBlock = await pool1.tokenPerBlock();

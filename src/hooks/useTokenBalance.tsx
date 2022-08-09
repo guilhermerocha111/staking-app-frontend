@@ -7,9 +7,9 @@ import { useWeb3React } from "@web3-react/core";
 
 export const useTokenBalance = (name: string,isLoading:boolean) => {
   const [balance, setBalance] = useState("");
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   useMemo(async () => {
-    const signer:Signer = await getSigner();
+    const signer:Signer = await getSigner(library);
     let token: ERC20 = tokens[name](signer);
     let b = await token.balanceOf(await signer.getAddress())
     setBalance(ethers.utils.formatUnits(b,"ether"));
@@ -20,8 +20,10 @@ export const useTokenBalance = (name: string,isLoading:boolean) => {
 
 export const useTokenSupply = (name: string) => {
   const [supply, setSupply] = useState("");
+  const { library } = useWeb3React();
+
   useMemo(async () => {
-    const signer:Signer = await getSigner();
+    const signer:Signer = await getSigner(library);
     let token: ERC20 = tokens[name](signer);
     let b = await token.totalSupply()
     setSupply(ethers.utils.formatUnits(b,"ether"));

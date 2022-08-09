@@ -7,8 +7,10 @@ const { formatUnits } = utils;
 
 
 export const useStake = () => {
+  const { library } = useWeb3React();
+
   return useCallback(async (claimAmount: string) => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
     const tx = await pool.stake(claimAmount);
     await tx.wait()
@@ -16,8 +18,9 @@ export const useStake = () => {
 };
 
 export const useUnstake = () => {
+  const { library } = useWeb3React();
   return useCallback(async (claimAmount: string) => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
     const tx = await pool.unstake(claimAmount);
     await tx.wait()
@@ -25,8 +28,9 @@ export const useUnstake = () => {
 };
 
 export const useClaim = () => {
+  const { library } = useWeb3React();
   return useCallback(async (claimAmount: string) => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
     const tx = await pool.claim(claimAmount);
     await tx.wait()
@@ -34,13 +38,13 @@ export const useClaim = () => {
 };
 
 export const useIngameUserInfo = (refresh: boolean) => {
-  const { account } = useWeb3React();
+  const { account, library } = useWeb3React();
   const [userRewards, setRewards] = useState("0");
   const [stakedAmount, setStakedAmount] = useState("0");
   const [lastAmount, setLastAmount] = useState("0");
   const [lockedTo, setLockedTo] = useState<number|null>(null);
   useMemo(async () => {
-    const signer: Signer = await getSigner();
+    const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
     let {amount,rewards, lastStakeAmount, stakeTime} = await pool.poolStakers(await signer.getAddress())
     setRewards(rewards.toString())

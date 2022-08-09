@@ -32,7 +32,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const tokenInfo: TokenInfo = usePrice();
   const lpBalance = useTokenBalance("lp",refresh);
   const smcwBalance = useTokenBalance("smcw",refresh);
-  const { chainId, active,account } = useWeb3React();
+  const { chainId, active, account } = useWeb3React();
   const [isInfoOpen, setInfoOpen] = useState(true);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();

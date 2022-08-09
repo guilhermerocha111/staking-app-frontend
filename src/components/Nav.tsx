@@ -17,12 +17,16 @@ import { contracts, DEFAULT_CHAINID } from "../utils/constants";
 
 import { Context } from '../contextStore';
 import { useContext } from 'react'; 
+import { Buffer } from 'buffer';
+
+// @ts-ignore
+window.Buffer = Buffer;
 
 export default function Nav() {
   const tokenInfo: TokenInfo = usePrice();
   const [isOpen, setIsOpen] = useState(false);
   const [defaultChainId] = useState("0x3");
-  const { activate, deactivate, active, library, connector } = useWeb3React();
+  const { activate, deactivate, active, library, connector, account } = useWeb3React();
   const [{tx_loader, max_apr}] = useContext(Context);
 
   useEffect(() => {
@@ -31,15 +35,26 @@ export default function Nav() {
     return () => {};
   }, []);
 
+  // useEffect(() => {
+  //   // console.log("new account ", account);
+  //   console.log(localStorage.getItem("connector"))
+  //   console.log(active)
+  //   // if (account) {
+  //   //   library
+  //   //     .getSigner(account)
+  //   //     .signMessage("👋")
+  //   // }
+  // }, [active]);
+
   const connect = async (type: string | null) => {
     switch (type) {
       case "metamask":
-        activate(connectors.injected);
+        await activate(connectors.injected);
         localStorage.setItem("isConnected", "true");
         localStorage.setItem("connector", "metamask");
         break;
       case "walletconnect":
-        activate(connectors.injected);
+        await activate(connectors.walletConnect);
         localStorage.setItem("isConnected", "true");
         localStorage.setItem("connector", "walletconnect");
         break;
@@ -120,7 +135,7 @@ export default function Nav() {
           )}
         </div>
         <div className="flex items-center gap-2">
-          {/* {!active && (
+          {!active && (
             <Button
               className="button-1 !rounded-md"
               onClick={() => connect("walletconnect")}
@@ -128,7 +143,7 @@ export default function Nav() {
               <img src="/images/WalletConnect.png" alt="" />
               WalletConnect
             </Button>
-          )} */}
+          )}
           {!active && (
             <Button
               className="button-1 !rounded-md"
