@@ -18,7 +18,6 @@ export const usePendings = () => {
     const pool2 = getStakingPool02(signer);
     let amount0 = await pool1.pendingRewards(await signer.getAddress());
     let amount1 = await pool2.pendingRewards(await signer.getAddress());
-    console.log(amount0)
     setsmcwRewards(
       ToFixed(formatUnits(amount0.toString(),"ether"))
     );
@@ -40,13 +39,17 @@ export const useNFTPendings = (isLoading: boolean) => {
   const [estimated, setEstimated] = useState("0");
   const [pendings, setPendings] = useState("0");
   useMemo(async () => {
-    const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer);
+    setInterval(async() => {
+      const signer: Signer = await getSigner(library);
+      const pool = getIngamePool(signer);
+      
+      const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
+      console.log(_pendings)
+      const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
+      setEstimated(_estimated.toString())
+      setPendings(_pendings.toString())
+    }, 30000)
     
-    const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
-    const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
-    setEstimated(_estimated.toString())
-    setPendings(_pendings.toString())
   }, [isLoading]);
   return {estimated,pendings,account};
 };
