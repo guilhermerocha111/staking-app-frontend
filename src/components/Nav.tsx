@@ -14,6 +14,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { chains, connectors } from "../utils/connectors";
 import { TokenInfo, usePrice } from "../hooks/usePrice";
 import { contracts, DEFAULT_CHAINID } from "../utils/constants";
+import {
+  URI_AVAILABLE,
+} from "@web3-react/walletconnect-connector";
 
 import { Context } from '../contextStore';
 import { useContext } from 'react'; 
@@ -26,42 +29,55 @@ export default function Nav() {
   const tokenInfo: TokenInfo = usePrice();
   const [isOpen, setIsOpen] = useState(false);
   const [defaultChainId] = useState("0x3");
-  const { activate, deactivate, active, library, connector, account } = useWeb3React();
+  const { activate, deactivate, active, library, connector, error } = useWeb3React();
   const [{tx_loader, max_apr}] = useContext(Context);
 
   useEffect(() => {
-    if (localStorage.getItem("isConnected") == "true")
-      connect(localStorage.getItem("connector"));
-    return () => {};
+    const handleConnectOnLoad = async () => {
+      if (localStorage.getItem("isConnected") == "true") {
+        await connect(localStorage.getItem("connector"), false);
+      }
+    }
+
+    handleConnectOnLoad();
   }, []);
 
-  // useEffect(() => {
-  //   // console.log("new account ", account);
-  //   console.log(localStorage.getItem("connector"))
-  //   console.log(active)
-  //   // if (account) {
-  //   //   library
-  //   //     .getSigner(account)
-  //   //     .signMessage("👋")
-  //   // }
-  // }, [active]);
-
-  const connect = async (type: string | null) => {
-    switch (type) {
-      case "metamask":
-        await activate(connectors.injected);
-        localStorage.setItem("isConnected", "true");
-        localStorage.setItem("connector", "metamask");
-        break;
-      case "walletconnect":
-        await activate(connectors.walletConnect);
-        localStorage.setItem("isConnected", "true");
-        localStorage.setItem("connector", "walletconnect");
-        break;
-      default:
-        break;
+  useEffect(() => {
+    let closeBtn = document.querySelector('.walletconnect-modal__close__wrapper')
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        deactivate();
+        localStorage.removeItem("isConnected");
+        localStorage.removeItem("connector");
+      })
+      
     }
-    await connector?.activate();
+  }, [document.querySelector('.walletconnect-modal__close__wrapper')])
+
+
+
+  const connect = async (type: string | null, reload: boolean = true) => {
+        await switchNetwork()
+        switch (type) {
+          case "metamask":
+            await activate(connectors.injected);
+            localStorage.setItem("isConnected", "true");
+            localStorage.setItem("connector", "metamask");
+         
+            await connector?.activate();
+
+            break;
+          case "walletconnect":
+            await activate(connectors.walletConnect, (error) => {console.log(error)}, true)
+            localStorage.setItem("isConnected", "true");
+            localStorage.setItem("connector", "walletconnect");
+            if (reload) {
+              window.location.reload();
+            }
+            break;
+          default:
+            break;
+        }
   };
 
   const disconnect = () => {
@@ -86,6 +102,7 @@ export default function Nav() {
           });
         } catch (error) {
           console.error(error);
+          toast.error("Chain is not supported in your wallet")
         }
       }
     }

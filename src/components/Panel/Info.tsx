@@ -154,21 +154,21 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 <h4 className="card-heading-4">Available in Wallet</h4>
                 <p className="balance-1">
                   <img src="/images/coin.png" alt="" />
-                  {smcwBalance}
+                  {addCommasToNumber(Number(smcwBalance), 4)}
                 </p>
               </div>
               <div className="balance-item">
                 <h4 className="card-heading-4">Staked Tokens</h4>
                 <p className="balance-1">
                   <img src="/images/coin.png" alt="" />
-                  {smcw_staked}
+                  {addCommasToNumber(Number(smcw_staked), 4)}
                 </p>
               </div>
               <div className="balance-item">
                 <h4 className="card-heading-4">Pending Rewards</h4>
                 <p className="balance-1">
                   <img src="/images/coin.png" alt="" />
-                  {smcw_Rewards}
+                  {addCommasToNumber(Number(smcw_Rewards), 4)}
                 </p>
               </div>
             </div>
@@ -184,21 +184,21 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     <h4 className="card-heading-4">Available in Wallet</h4>
                     <p className="balance-1">
                       <img src="/images/lp.png" alt="" />
-                      {lpBalance}
+                      {addCommasToNumber(Number(lpBalance), 4)}
                     </p>
                   </div>
                   <div className="balance-item">
                     <h4 className="card-heading-4">Staked Tokens</h4>
                     <p className="balance-1">
                       <img src="/images/lp.png" alt="" />
-                      {lp_staked}
+                      {addCommasToNumber(Number(lp_staked), 4)}
                     </p>
                   </div>
                   <div className="balance-item">
                     <h4 className="card-heading-4">Pending Rewards</h4>
                     <p className="balance-1">
                       <img src="/images/coin.png" alt="" />
-                      {lp_rewards}
+                      {addCommasToNumber(Number(lp_rewards), 4)}
                     </p>
                   </div>
                 </div>
@@ -210,7 +210,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </h4>
               <p className="balance-1 justify-end">
                 <img src="/images/coin.png" alt="" />
-                {parseFloat(total)}
+                {addCommasToNumber(Number(total), 4)}
               </p>
             </div>
             <p className="mt-4 text-center lg:text-left">

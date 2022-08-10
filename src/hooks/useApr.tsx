@@ -1,8 +1,8 @@
 import { useMemo, useState, useContext } from "react";
-import { BigNumber, Signer, utils } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { getStakingPool01, getStakingPool02 } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
-import { ETH_DECIMAL, PERCENT, TOTAL_BLOCK_PER_YEAR } from "../utils/constants";
+import { PERCENT, TOTAL_BLOCK_PER_YEAR } from "../utils/constants";
 import { formatUnits, parseEther } from "ethers/lib/utils";
 import { useWeb3React } from "@web3-react/core";
 import { Context } from '../contextStore';
@@ -29,7 +29,8 @@ export const useApr = () => {
   const [, ACTION] = useContext(Context);
 
   useMemo(async () => {
-    const signer: Signer = await getSigner(library);
+    setInterval(async() => {
+      const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let pool1TokenPerBlock = await pool1.tokenPerBlock();
@@ -48,7 +49,7 @@ export const useApr = () => {
 
       return parseFloat(
         formatUnits(
-          pool1TokenPerBlock
+          tokenPerBlock
             .mul(TOTAL_BLOCK_PER_YEAR)
             .mul(Weight)
             .mul(PERCENT)
@@ -60,9 +61,9 @@ export const useApr = () => {
     }
 
     ACTION.SET_MAX_APR(
-      Number(apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock)) > Number(apr(parseEther("12"), pool2Info.totalWeight,pool2TokenPerBlock)) ?
-      Number(apr(parseEther("12"), pool1Info.totalWeight,pool1TokenPerBlock)) :
-      Number(apr(parseEther("12"), pool2Info.totalWeight,pool2TokenPerBlock))
+      Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) > Number(apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock)) ?
+      Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) :
+      Number(apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))
     );
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
@@ -80,6 +81,7 @@ export const useApr = () => {
         sixMonth: apr(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
         twelveMonth: apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
       });
+    }, 2000)
   }, [account]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };
 };
