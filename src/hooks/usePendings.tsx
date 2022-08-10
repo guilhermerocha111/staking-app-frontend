@@ -13,12 +13,12 @@ export const usePendings = () => {
   useMemo( () => {
 
     setInterval(async() => {
-      console.log(library)
     const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let amount0 = await pool1.pendingRewards(await signer.getAddress());
     let amount1 = await pool2.pendingRewards(await signer.getAddress());
+    console.log(amount0)
     setsmcwRewards(
       ToFixed(formatUnits(amount0.toString(),"ether"))
     );
@@ -29,7 +29,7 @@ export const usePendings = () => {
       ToFixed(formatUnits(amount0.add(amount1).toString(),"ether"))
       )
 
-    }, 15000);
+    }, 2000);
   }, [total_rewards,account]);
   return {smcw_Rewards,lp_rewards,total:total_rewards};
 };

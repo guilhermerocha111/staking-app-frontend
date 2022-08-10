@@ -1,6 +1,6 @@
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { ethers, Signer } from "ethers";
+import { Signer } from "ethers";
 
 const injected = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 80001, 57, 97],
@@ -18,19 +18,7 @@ export const connectors = {
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
-  // let connector = localStorage.getItem("connector")
-  // if (connector === 'metamask') {
-    // const provider = new ethers.providers.Web3Provider(library);
-    // await provider.send("eth_requestAccounts", []);
       return await library.getSigner();
-  // } else {
-  //   const walletProvider = new WalletConnectProvider({
-  //     infuraId: process.env.INFURA_KEY,
-  //   });
-  //   const provider = new ethers.providers.Web3Provider(walletProvider);
-  //   return provider.getSigner();
-  // }
-  
 };
 
 
