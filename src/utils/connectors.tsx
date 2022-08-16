@@ -1,6 +1,6 @@
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { Signer } from "ethers";
+import { ethers, Signer } from "ethers";
 
 const injected = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 80001, 57, 97],
@@ -18,7 +18,11 @@ export const connectors = {
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
-      return await library.getSigner();
+   if (!library) {
+     return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
+   } else {
+    return library.getSigner();
+   }
 };
 
 

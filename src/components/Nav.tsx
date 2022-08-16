@@ -14,9 +14,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { chains, connectors } from "../utils/connectors";
 import { TokenInfo, usePrice } from "../hooks/usePrice";
 import { contracts, DEFAULT_CHAINID } from "../utils/constants";
-import {
-  URI_AVAILABLE,
-} from "@web3-react/walletconnect-connector";
 
 import { Context } from '../contextStore';
 import { useContext } from 'react'; 
@@ -33,13 +30,9 @@ export default function Nav() {
   const [{tx_loader, max_apr}] = useContext(Context);
 
   useEffect(() => {
-    const handleConnectOnLoad = async () => {
       if (localStorage.getItem("isConnected") == "true") {
-        await connect(localStorage.getItem("connector"), false);
+        connect(localStorage.getItem("connector"), false);
       }
-    }
-
-    handleConnectOnLoad();
   }, []);
 
   useEffect(() => {
@@ -60,10 +53,12 @@ export default function Nav() {
         await switchNetwork()
         switch (type) {
           case "metamask":
+            console.log(await connectors.injected.getAccount())
             await activate(connectors.injected);
             localStorage.setItem("isConnected", "true");
             localStorage.setItem("connector", "metamask");
-         
+            console.log(connector)
+
             await connector?.activate();
 
             break;

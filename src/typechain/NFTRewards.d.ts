@@ -22,7 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface NFTRewardsInterface extends ethers.utils.Interface {
   functions: {
     "calculateRewards(address)": FunctionFragment;
-    "claim(uint256)": FunctionFragment;
+    "claim(uint256,address)": FunctionFragment;
     "currentStaked()": FunctionFragment;
     "estimatedRewards(address)": FunctionFragment;
     "getCurrentStaked()": FunctionFragment;
@@ -44,7 +44,10 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
     functionFragment: "calculateRewards",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "claim", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "claim",
+    values: [BigNumberish, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "currentStaked",
     values?: undefined
@@ -137,7 +140,7 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "unstake", data: BytesLike): Result;
 
   events: {
-    "Claimed(address,uint256)": EventFragment;
+    "Claimed(address,uint256,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "Recovered(address,uint256)": EventFragment;
@@ -156,7 +159,11 @@ interface NFTRewardsInterface extends ethers.utils.Interface {
 }
 
 export type ClaimedEvent = TypedEvent<
-  [string, BigNumber] & { user: string; claimed: BigNumber }
+  [string, BigNumber, string] & {
+    user: string;
+    claimed: BigNumber;
+    enjinAddress: string;
+  }
 >;
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -230,6 +237,7 @@ export class NFTRewards extends BaseContract {
 
     claim(
       _amount: BigNumberish,
+      enjinAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -317,6 +325,7 @@ export class NFTRewards extends BaseContract {
 
   claim(
     _amount: BigNumberish,
+    enjinAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -399,7 +408,11 @@ export class NFTRewards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    claim(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    claim(
+      _amount: BigNumberish,
+      enjinAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     currentStaked(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -464,20 +477,22 @@ export class NFTRewards extends BaseContract {
   };
 
   filters: {
-    "Claimed(address,uint256)"(
+    "Claimed(address,uint256,address)"(
       user?: string | null,
-      claimed?: null
+      claimed?: null,
+      enjinAddress?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { user: string; claimed: BigNumber }
+      [string, BigNumber, string],
+      { user: string; claimed: BigNumber; enjinAddress: string }
     >;
 
     Claimed(
       user?: string | null,
-      claimed?: null
+      claimed?: null,
+      enjinAddress?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { user: string; claimed: BigNumber }
+      [string, BigNumber, string],
+      { user: string; claimed: BigNumber; enjinAddress: string }
     >;
 
     "OwnershipTransferred(address,address)"(
@@ -565,6 +580,7 @@ export class NFTRewards extends BaseContract {
 
     claim(
       _amount: BigNumberish,
+      enjinAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -629,6 +645,7 @@ export class NFTRewards extends BaseContract {
 
     claim(
       _amount: BigNumberish,
+      enjinAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

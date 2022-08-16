@@ -15,12 +15,14 @@ import {
   useIngameUserInfo,
   useStake,
   useUnstake,
+  useClaim
 } from "../hooks/useIngame";
 import { useWeb3React } from "@web3-react/core";
 import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
 import ApiClient from "../api/ApiClient";
+import { number } from "prop-types";
 
 
 export default function IngameStaking1() {
@@ -36,6 +38,7 @@ export default function IngameStaking1() {
 
   const stake = useStake();
   const unstake = useUnstake();
+  const claim = useClaim();
 
   const { pendings,estimated } = useNFTPendings(isLoading);
   const userInfo = useIngameUserInfo(isLoading);
@@ -91,15 +94,15 @@ export default function IngameStaking1() {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
       }
-      const tx = await new ApiClient().mint(enjinAddress, claimAmount);
-      toast.success(`Claimed successfully with Transaction Id ${tx.id}`);
+      await claim(claimAmount, enjinAddress)
+      toast.success(`Claimed successfully`);
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
-      toast.error("Please stake before claim");
+      toast.error("Something went wrong");
     }
   };
 
@@ -301,7 +304,7 @@ export default function IngameStaking1() {
                 alt=""
                 className="w-5 h-5 object-contain object-center mr-1"
               />
-              {pendings}
+              {Number(pendings) + Number(userInfo.userRewards)}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
@@ -311,7 +314,7 @@ export default function IngameStaking1() {
         </div>
         <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <input
-            disabled={parseInt(pendings) > 0 ? false :true }
+            disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
             value={enjinAddress}
             onChange={(e) => setEnjinAddress(e.target.value)}
             type="text"
@@ -345,7 +348,7 @@ export default function IngameStaking1() {
             value={claimAmount}
             setValue={setClaimAmount}
             min={1}
-            max={99999999}
+            max={Number(pendings) + Number(userInfo.userRewards)}
             step={1}
             decimalpoints={0}
             required
@@ -353,7 +356,7 @@ export default function IngameStaking1() {
           {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Button
               type="submit"
-              disabled={parseInt(pendings) > 0 ? false :true }
+              disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
               className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
                 ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
               `}

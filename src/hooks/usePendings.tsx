@@ -40,15 +40,15 @@ export const useNFTPendings = (isLoading: boolean) => {
   const [pendings, setPendings] = useState("0");
   useMemo(async () => {
     setInterval(async() => {
+      console.log(library)
       const signer: Signer = await getSigner(library);
       const pool = getIngamePool(signer);
       
       const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
-      console.log(_pendings)
       const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
       setEstimated(_estimated.toString())
       setPendings(_pendings.toString())
-    }, 30000)
+    }, 2000)
     
   }, [isLoading]);
   return {estimated,pendings,account};

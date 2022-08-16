@@ -29,10 +29,10 @@ export const useUnstake = () => {
 
 export const useClaim = () => {
   const { library } = useWeb3React();
-  return useCallback(async (claimAmount: string) => {
+  return useCallback(async (claimAmount: string, enjinAddress: string) => {
     const signer: Signer = await getSigner(library);
     const pool = getIngamePool(signer);
-    const tx = await pool.claim(claimAmount);
+    const tx = await pool.claim(claimAmount, enjinAddress);
     await tx.wait()
   }, []);
 };
