@@ -9,10 +9,36 @@ import Vesting from "./components/Panel/Vesting";
 import { useWeb3React } from "@web3-react/core";
 import {  DEFAULT_CHAINID, toHex } from "./utils/constants";
 import { chains } from "./utils/connectors";
+import { wsClient } from './api/wsClient';
+import Modal from "react-modal";
+import { TELEMETRY_ASSETS } from "./utils/constants";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
-  const {active ,chainId , library } = useWeb3React();
+  const {active ,chainId , library, account } = useWeb3React();
+  const [showRewardModal, setShowRewardModal] = useState(false);
+  const [mintRewards, setMintRewards] = useState<any[]>([]);
+
+  const modalStyles = 
+        {
+            content: {
+                maxWidth: mintRewards.length === 1 ? '565px' : '743px',
+                maxHeight: mintRewards.length === 1 ? '326px' : '420px',
+                overflow: 'hidden',
+                background: '#11172C',
+                borderColor: '#11172C',
+                padding: '24px',
+                borderRadius: '24px'
+            }
+        }
+
+  const onCloseModal = () => {
+    setShowRewardModal(false);
+  }
+
+  const getTelemetryInfo = (id: any) => {
+    return TELEMETRY_ASSETS.find(telemetry => telemetry.id === id)
+  }
 
   if(active){
     library.on('chainChanged',async (chainId:string|number)=>{
@@ -21,6 +47,26 @@ export default function App() {
       }
     })
   }
+
+  useEffect(() => {
+    wsClient.onmessage = (message) => {
+      const response = JSON.parse(String(message?.data))
+      if (response.isMint && response.wallet === account) {
+        const mintRewards: any[] = []
+        response.rewards.forEach((id: string)=> {
+            if (!mintRewards.some(e => e.id === id)) {
+                console.log(id)
+                mintRewards.push({id: id, quantity: 1})
+            } else {
+                let index = mintRewards.findIndex(el => el.id === id)
+                mintRewards[index].quantity +=1
+            }
+        })
+        setMintRewards(mintRewards);
+        setShowRewardModal(true);
+      }
+    };
+  }, [account])
     
   useEffect(()=>{
     if(chainId !== undefined && toHex(chainId) !== DEFAULT_CHAINID){
@@ -67,6 +113,22 @@ export default function App() {
           },
         }}
       />
+      <Modal isOpen={showRewardModal} onRequestClose={onCloseModal} style={modalStyles}> 
+          <div className="modal-title"><img src="/images/icons/congrat.svg"/>Congratulations!  Here are your rewards:</div>
+          <div className={`rewardsList ${mintRewards.length === 1 ? 'single' : ''}`} style={{justifyContent: mintRewards.length < 3 ? 'flex-start' : 'space-between'}}>
+            {mintRewards.length > 0 && mintRewards.map((reward) => 
+              (
+                <div className={`telemetryCard ${mintRewards.length === 1 ? 'single' : ''}`} style={{marginRight: mintRewards.length < 3 ? '46px' : '0'}}>
+                    <div className={'rewardImgWrapper'}>
+                      <img src={getTelemetryInfo(reward.id)?.image} />
+                      <div className={'rewardQuantity'}>x{reward.quantity}</div>
+                    </div>
+                    <div>{getTelemetryInfo(reward.id)?.label}</div>
+                </div>
+              )
+            )}
+          </div>
+      </Modal>
     </div>
   );
 }

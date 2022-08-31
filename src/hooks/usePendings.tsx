@@ -40,7 +40,6 @@ export const useNFTPendings = (isLoading: boolean) => {
   const [pendings, setPendings] = useState("0");
   useMemo(async () => {
     setInterval(async() => {
-      console.log(library)
       const signer: Signer = await getSigner(library);
       const pool = getIngamePool(signer);
       

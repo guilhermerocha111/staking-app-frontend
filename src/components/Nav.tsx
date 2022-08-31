@@ -82,8 +82,9 @@ export default function Nav() {
   };
 
   const switchNetwork = async () => {
+    const provider = library ? library.provider : window.ethereum
     try {
-      await library.provider.request({
+      await provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: defaultChainId }],
       });
@@ -91,7 +92,7 @@ export default function Nav() {
       // 4902 error code indicates the chain is missing on the wallet
       if (switchError.code === 4902) {
         try {
-          await library.provider.request({
+          await provider.request({
             method: "wallet_addEthereumChain",
             params: [chains[defaultChainId]],
           });

@@ -1,6 +1,11 @@
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
+import Telemetry1Img from '../static/telemetry1.png';
+import Telemetry2Img from '../static/telemetry2.png';
+import Telemetry3Img from '../static/telemetry3.png';
+
+
 interface Addresses {
   [key:string]:{
     smcw:string,
@@ -43,7 +48,33 @@ export const TOTAL_BLOCK_PER_YEAR =BigNumber.from("2370675");
 
 export const DEFAULT_CHAINID = "0x3" ;
 
-
+export const TELEMETRY_ASSETS = [
+  {
+    id: "3040000000000c3f",
+    label: "Testing Telemetry #5",
+    image: Telemetry1Img
+  },
+  {
+    id: "3040000000000c3e",
+    label: "Testing Telemetry #4",
+    image: Telemetry2Img
+  },
+  {
+    id: "3040000000000c3d",
+    label: "Testing Telemetry #3",
+    image: Telemetry3Img
+  },
+  {
+    id: "3040000000000c3c",
+    label: "Testing Telemetry #2",
+    image: Telemetry1Img
+  },
+  {
+    id: "3040000000000c3b",
+    label: "Testing Telemetry #1",
+    image: Telemetry2Img
+  }
+]
 
 export const toHex = function(chainId:number|undefined):string {
   return "0x".concat(chainId?.toString(16) || "3")
