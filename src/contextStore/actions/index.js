@@ -17,6 +17,14 @@ const actions = {
                     payload: value,
                 })
     },
+    [types.SET_TELEMETRY_REWARDS]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_TELEMETRY_REWARDS,
+                    payload: value,
+                })
+    },
 }
 
 export default actions;

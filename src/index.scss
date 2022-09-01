@@ -402,6 +402,29 @@ tr{
   }
 }
 
+.rewards-table{
+  thead{
+    tr{
+      @apply p-0 pb-2;
+    }
+  }
+  th{
+    @apply text-design-darkBlue2;
+  }
+  tr{
+    @apply grid grid-cols-6 gap-1;
+    img{
+      @apply h-4 w-4 object-contain object-center;
+    }
+  }
+  td{
+    @apply flex items-center gap-2;
+  }
+  button{
+    @apply text-sm;
+  }
+}
+
 .progress-wrapper{
   @apply relative;
     svg {

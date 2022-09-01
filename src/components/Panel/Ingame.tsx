@@ -1,5 +1,6 @@
 import IngameStaking1 from "../IngameStaking1";
 import IngameStaking2 from "../IngameStaking2";
+import IngameRewards from "../Panel/IngameRewards";
 
 export default function Ingame() {
   return (
@@ -27,6 +28,7 @@ export default function Ingame() {
           locked
         /> */}
       </div>
+      <IngameRewards />
     </section>
   );
 }

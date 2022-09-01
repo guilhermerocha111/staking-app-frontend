@@ -10,7 +10,7 @@ import { useAllowance } from "../hooks/useAllowance";
 import { contracts, DEFAULT_CHAINID, toHex } from "../utils/constants";
 import { useApprove } from "../hooks/useApprove";
 import { useTokenBalance } from "../hooks/useTokenBalance";
-import Timer from "./Timer";
+// import Timer from "./Timer";
 import {
   useIngameUserInfo,
   useStake,
@@ -21,9 +21,6 @@ import { useWeb3React } from "@web3-react/core";
 import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
-import ApiClient from "../api/ApiClient";
-import { number } from "prop-types";
-
 
 export default function IngameStaking1() {
   const stakingType = "smcw";

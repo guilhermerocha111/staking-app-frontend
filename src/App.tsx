@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
@@ -12,12 +12,15 @@ import { chains } from "./utils/connectors";
 import { wsClient } from './api/wsClient';
 import Modal from "react-modal";
 import { TELEMETRY_ASSETS } from "./utils/constants";
+import ApiClient from "./api/ApiClient";
+import {Context} from "./contextStore";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
+  const [, ACTION] = useContext(Context);
 
   const modalStyles = 
         {
@@ -49,7 +52,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    wsClient.onmessage = (message) => {
+    wsClient.onmessage = async (message) => {
       const response = JSON.parse(String(message?.data))
       if (response.isMint && response.wallet === account) {
         const mintRewards: any[] = []
@@ -62,6 +65,10 @@ export default function App() {
                 mintRewards[index].quantity +=1
             }
         })
+        if (account) {
+          const rewardsResponse = await new ApiClient().getTelemetryRewards(account)
+          ACTION.SET_TELEMETRY_REWARDS(rewardsResponse)
+        }
         setMintRewards(mintRewards);
         setShowRewardModal(true);
       }
