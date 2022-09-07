@@ -19,6 +19,7 @@ import { contracts, DEFAULT_CHAINID, toHex } from "../../utils/constants";
 import { useTokenBalance } from "../../hooks/useTokenBalance";
 import { Context } from '../../contextStore';
 import useCommon from '../../hooks/useCommon';
+import { HashLink } from 'react-router-hash-link';
 
 interface RefreshProps {
   refresh: boolean;
@@ -33,11 +34,11 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const lpBalance = useTokenBalance("lp",refresh);
   const smcwBalance = useTokenBalance("smcw",refresh);
   const { chainId, active, account } = useWeb3React();
-  const [isInfoOpen, setInfoOpen] = useState(true);
+  const [isInfoOpen, setInfoOpen] = useState(false);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();
   const { smcw_staked, lp_staked, total_staked } = useStaked(refresh);
-  const [isTotalRewardsOpen, setTotalRewardsOpen] = useState(true);
+  const [isTotalRewardsOpen, setTotalRewardsOpen] = useState(false);
   const { days, hours, minutes, seconds } = useTimeDiff(
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
@@ -82,67 +83,39 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
       {/* Staking Pools */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <h1 className="section-heading-1">Info Panel</h1>
-        <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
-          <p className="text-design-grey whitespace-nowrap">Staking pools:</p>
-          <div className="w-full overflow-auto card-1 !bg-transparent !border-0 lg:!border lg:!bg-design-background2 !rounded-none lg:!rounded-3xl !p-0 lg:!p-1 flex items-center gap-3 lg:gap-0">
+        <div className="flex">
+          <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <Link
-              to="/"
-              className={
-                pathname === "/" ? "button-pools-active" : "button-pools"
-              }
+              to="/vesting"
+              className="gradient-1 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6"
             >
-              <img src="/images/coin.png" alt="" />
-              SMCW
-            </Link>
-            <Link
-              to="/ingame"
-              className={
-                pathname === "/ingame" ? "button-pools-active" : "button-pools"
-              }
-            >
-              <img src="/images/logo.png" alt="" />
-              INGAME
-            </Link>
-            <Link
-              to="/"
-              className="button-pools opacity-50 pointer-events-none"
-            >
-              <img src="/images/handshake.png" alt="" />
-              PARTNER
-            </Link>
-            <Link
-              to="/"
-              className="button-pools opacity-50 pointer-events-none"
-            >
-              <img src="/images/star.png" alt="" />
-              EVENTS
+              CLAIM / VESTING PANEL <HiOutlineExternalLink />
             </Link>
           </div>
-          <Link
-            to="/vesting"
-            className="gradient-1 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6"
-          >
-            CLAIM / VESTING PANEL <HiOutlineExternalLink />
-          </Link>
+          <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
+            <HashLink
+              to="/ingame#log"
+              className="gradient-2 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6"
+            >
+              INGAME REWARDS LOG <HiOutlineExternalLink />
+            </HashLink>
+          </div>
         </div>
       </div>
       <div className="flex justify-between flex-col xl:flex-row gap-8 mt-6">
         {/* SMCW Rewards */}
 
-        <Card className="flex-1">
+        <Card className="flex-1" styles={{height: 'fit-content'}}>
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
           <Button
             onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
-            className="text-xl flex xl:hidden justify-between items-center gap-4 w-full"
+            className="text-xl flex justify-between items-center gap-4 w-full"
           >
             <h3 className="card-heading-1">Total SMCW Rewards</h3>
             <FiChevronDown />
           </Button>
-          <h3 className="card-heading-1 !hidden xl:!block">
-            Total SMCW Rewards
-          </h3>
           <div
             className="overflow-hidden"
             style={{
@@ -235,15 +208,14 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
         {/* SMCW Info */}
 
-        <Card className="flex-1">
+        <Card className="flex-1" styles={{height: 'fit-content'}}>
           <Button
             onClick={() => setInfoOpen(!isInfoOpen)}
-            className="text-xl flex xl:hidden justify-between items-center gap-4 w-full"
+            className="text-xl flex justify-between items-center gap-4 w-full"
           >
             <h3 className="card-heading-1">SMCW Info</h3>
             <FiChevronDown />
           </Button>
-          <h3 className="card-heading-1 !hidden xl:!block">SMCW Info</h3>
           <div
             className="overflow-hidden"
             style={{
@@ -406,6 +378,43 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             </div>
           </div>
         </Card>
+      </div>
+      <div className="flex-column">
+          <p className="text-design-grey whitespace-nowrap text-[24px] mt-12 mb-4">Staking pools</p>
+          <div className="w-auto inline-flex overflow-auto card-1 !bg-transparent !border-0 lg:!border lg:!bg-design-background2 !rounded-none lg:!rounded-3xl !p-0 lg:!p-1 items-center gap-3 lg:gap-0">
+            <Link
+              to="/"
+              className={
+                pathname === "/" ? "button-pools-active" : "button-pools"
+              }
+            >
+              <img src="/images/coin.png" alt="" />
+              SMCW
+            </Link>
+            <Link
+              to="/ingame"
+              className={
+                pathname === "/ingame" ? "button-pools-active" : "button-pools"
+              }
+            >
+              <img src="/images/logo.png" alt="" />
+              INGAME
+            </Link>
+            <Link
+              to="/"
+              className="button-pools opacity-50 pointer-events-none"
+            >
+              <img src="/images/handshake.png" alt="" />
+              PARTNER
+            </Link>
+            <Link
+              to="/"
+              className="button-pools opacity-50 pointer-events-none"
+            >
+              <img src="/images/star.png" alt="" />
+              EVENTS
+            </Link>
+          </div>
       </div>
     </section>
   );

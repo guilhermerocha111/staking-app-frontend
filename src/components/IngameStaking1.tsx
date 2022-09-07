@@ -124,8 +124,8 @@ export default function IngameStaking1() {
         </div>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-4">
-        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden">
-          {!isApproved && (
+        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden z-1">
+          {(!isApproved && active) && (
                 <div className="absolute z-10 h-4/6 w-full flex items-start justify-center pt-4">
                   <div className="flex flex-col items-center justify-center">
                     <img src="images/icons/locked.svg" alt="" />
@@ -199,7 +199,7 @@ export default function IngameStaking1() {
                 </Button>
               ) : (
                 <Button
-                  className={`gradient-1 button-3 mt-2 cursor-pointer z-10 ${
+                  className={`gradient-1 button-3 mt-2 cursor-pointer z-1 ${
                     isLoading ? "opacity-50 pointer-events-none" : ""
                   }`}
                   type="button"
