@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+main {
+  .bgwrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 40%;
+    z-index: 1;
+    background-repeat: no-repeat;
+    display: block;
+
+    img {
+      height: 100%;
+      width: 100%;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 50%) 0%, transparent 100%);
+    }
+  }
+}
+
 .ReactModal__Overlay {
   background-color: rgba(0, 0, 0, 0.75) !important;
   z-index: 50;
@@ -89,6 +108,7 @@
   background-image: linear-gradient(to right, $start, $end);
   position: relative;
   z-index: 100;
+
   &:before {
       background-image: linear-gradient(to right, $end, $start);
       content: "";
@@ -100,6 +120,8 @@
       width: 100%;
       z-index: -100;
       transition: opacity $transTime;
+      border-radius: 8px;
+
   }
   &:hover {
       &:before {
@@ -151,6 +173,10 @@ body{
 
 svg{
   min-width: 1rem;
+}
+
+.gradient-5 {
+  background: rgba(9, 11, 22, 0.84) !important;
 }
 
 .gradient-1 {

@@ -5,7 +5,7 @@ import { BigNumber } from "ethers";
 import toast from "react-hot-toast";
 import { BiLock } from "react-icons/bi";
 import { useEffect, useState, useContext } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useWeb3React } from "@web3-react/core";
 import { useStaked } from "../../hooks/useStaked";
 import { useVesting } from "../../hooks/useVesting";
@@ -82,12 +82,12 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
     <section className="max-w-screen-2xl mx-auto">
       {/* Staking Pools */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-        <h1 className="section-heading-1">Info Panel</h1>
+        <h1 className="section-heading-1 z-10">Info Panel</h1>
         <div className="flex">
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <Link
               to="/vesting"
-              className="gradient-1 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6"
+              className="gradient-1 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
             >
               CLAIM / VESTING PANEL <HiOutlineExternalLink />
             </Link>
@@ -95,7 +95,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <HashLink
               to="/ingame#log"
-              className="gradient-2 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6"
+              className="gradient-2 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-1"
             >
               INGAME REWARDS LOG <HiOutlineExternalLink />
             </HashLink>
@@ -109,20 +109,8 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
-          <Button
-            onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
-            className="text-xl flex justify-between items-center gap-4 w-full"
-          >
-            <h3 className="card-heading-1">Total SMCW Rewards</h3>
-            <FiChevronDown />
-          </Button>
-          <div
-            className="overflow-hidden"
-            style={{
-              maxHeight: isTotalRewardsOpen ? "2000px" : "0px",
-            }}
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mt-6">
+          <h3 className="card-heading-1">Total SMCW Rewards</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mt-6">
               <div className="balance-item">
                 <h4 className="card-heading-4">Available in Wallet</h4>
                 <p className="balance-1">
@@ -145,6 +133,24 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 </p>
               </div>
             </div>
+          {
+            !isTotalRewardsOpen && (
+              <Button
+                onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
+                className="gradient-1 button-3 mt-3"
+              >
+                Vest SMCW REWARDS
+                <FiChevronDown />
+              </Button>
+            )
+          }
+          
+          <div
+            className="overflow-hidden"
+            style={{
+              maxHeight: isTotalRewardsOpen ? "2000px" : "0px",
+            }}
+          >
             {/* LP Rewards */}
             <div className="gradient-1 p-px rounded-2xl lg:rounded-lg mt-4">
               <div className="bg-design-background5 py-3 px-3 rounded-2xl lg:rounded-lg">
@@ -204,25 +210,23 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </Button>
             )}
           </div>
+          {
+            isTotalRewardsOpen && (
+              <Button
+                onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
+                className="gradient-5 button-3 mt-3"
+              >
+                <FiChevronUp />
+              </Button>
+            )
+          }
         </Card>
 
         {/* SMCW Info */}
 
         <Card className="flex-1" styles={{height: 'fit-content'}}>
-          <Button
-            onClick={() => setInfoOpen(!isInfoOpen)}
-            className="text-xl flex justify-between items-center gap-4 w-full"
-          >
-            <h3 className="card-heading-1">SMCW Info</h3>
-            <FiChevronDown />
-          </Button>
-          <div
-            className="overflow-hidden"
-            style={{
-              maxHeight: isInfoOpen ? "2000px" : "0px",
-            }}
-          >
-            <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
+          <h3 className="card-heading-1">SMCW Info</h3>
+          <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
               <p className="tag-1">
                 BSC <img src="/images/Binance.png" alt="" />
               </p>
@@ -249,6 +253,21 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 </button>
               </p>
             </div>
+            {!isInfoOpen && (
+              <Button
+                onClick={() => setInfoOpen(!isInfoOpen)}
+                className="gradient-2 button-3 mt-3"
+              >
+                Buy SMCW
+                <FiChevronDown />
+              </Button>
+            )}
+          <div
+            className="overflow-hidden"
+            style={{
+              maxHeight: isInfoOpen ? "2000px" : "0px",
+            }}
+          >
             <div className="mt-8 grid grid-cols-1 gap-3">
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Staked in DApp</p>
@@ -377,6 +396,14 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
             </div>
           </div>
+          {isInfoOpen && (
+              <Button
+                onClick={() => setInfoOpen(!isInfoOpen)}
+                className="gradient-5 button-3 mt-6"
+              >
+                <FiChevronUp />
+              </Button>
+            )}
         </Card>
       </div>
       <div className="flex-column">

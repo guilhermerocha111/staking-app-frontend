@@ -13,6 +13,9 @@ export default function Home({ refresh, setRefresh }: RefreshProps) {
       <div className="mt-8">
         <Outlet />
       </div>
+      <div className="bgwrapper">
+        <img src="/images/bgwrapper.jpg" />
+      </div>
     </main>
   );
 }
