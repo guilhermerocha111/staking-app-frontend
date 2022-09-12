@@ -158,7 +158,7 @@ export default function IngameRewards() {
             <Overlay>You don't have any telemetry rewards</Overlay>
           )}
           <table
-            className="text-sm grid grid-cols-1 rewards-table"
+            className="text-sm grid grid-cols-1 telemetry-rewards-table"
             style={{
               minWidth: "1200px",
             }}

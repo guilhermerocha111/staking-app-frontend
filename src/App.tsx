@@ -14,6 +14,7 @@ import Modal from "react-modal";
 import { TELEMETRY_ASSETS } from "./utils/constants";
 import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
+import IngameRewards from './components/Panel/IngameRewards'
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
@@ -109,6 +110,7 @@ export default function App() {
           <Route path="/" element={<SMCW refresh={refresh} setRefresh={setRefresh} />} />
           <Route path="/ingame" element={<Ingame  />} />
           <Route path="/vesting" element={<Vesting/>} />
+          <Route path="/rewards" element={<IngameRewards />} />
         </Route>
       </Routes>
       <Toaster

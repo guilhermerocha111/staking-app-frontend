@@ -37,8 +37,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "rewardingToken()": FunctionFragment;
     "rewardsInfo(address)": FunctionFragment;
+    "rewardsPerWallet(address)": FunctionFragment;
     "setTokenPerBlock(uint256)": FunctionFragment;
     "setTokenPerBlockMaxCap(uint256)": FunctionFragment;
+    "stakers(uint256)": FunctionFragment;
     "token()": FunctionFragment;
     "tokenPerBlock()": FunctionFragment;
     "tokenPerBlockMaxCap()": FunctionFragment;
@@ -90,11 +92,19 @@ interface MasterChefInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "rewardsInfo", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "rewardsPerWallet",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setTokenPerBlock",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setTokenPerBlockMaxCap",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stakers",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
@@ -162,6 +172,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "rewardsPerWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setTokenPerBlock",
     data: BytesLike
   ): Result;
@@ -169,6 +183,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     functionFragment: "setTokenPerBlockMaxCap",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "stakers", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenPerBlock",
@@ -317,20 +332,29 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<
       [
-        ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+        ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
           amount: BigNumber;
           weight: BigNumber;
           timestamp: BigNumber;
           stakeUntill: BigNumber;
           stakeFor: BigNumber;
+          stakedBlock: BigNumber;
         })[]
       ] & {
-        stakes: ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+        stakes: ([
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
           amount: BigNumber;
           weight: BigNumber;
           timestamp: BigNumber;
           stakeUntill: BigNumber;
           stakeFor: BigNumber;
+          stakedBlock: BigNumber;
         })[];
       }
     >;
@@ -383,6 +407,11 @@ export class MasterChef extends BaseContract {
       }
     >;
 
+    rewardsPerWallet(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     setTokenPerBlock(
       _tokenPerBlock: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -392,6 +421,8 @@ export class MasterChef extends BaseContract {
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
 
@@ -413,12 +444,13 @@ export class MasterChef extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
         stakeFor: BigNumber;
+        stakedBlock: BigNumber;
       }
     >;
 
@@ -461,12 +493,13 @@ export class MasterChef extends BaseContract {
     _user: string,
     overrides?: CallOverrides
   ): Promise<
-    ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       weight: BigNumber;
       timestamp: BigNumber;
       stakeUntill: BigNumber;
       stakeFor: BigNumber;
+      stakedBlock: BigNumber;
     })[]
   >;
 
@@ -515,6 +548,8 @@ export class MasterChef extends BaseContract {
     }
   >;
 
+  rewardsPerWallet(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   setTokenPerBlock(
     _tokenPerBlock: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -524,6 +559,8 @@ export class MasterChef extends BaseContract {
     _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   token(overrides?: CallOverrides): Promise<string>;
 
@@ -545,12 +582,13 @@ export class MasterChef extends BaseContract {
     arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       weight: BigNumber;
       timestamp: BigNumber;
       stakeUntill: BigNumber;
       stakeFor: BigNumber;
+      stakedBlock: BigNumber;
     }
   >;
 
@@ -591,12 +629,13 @@ export class MasterChef extends BaseContract {
       _user: string,
       overrides?: CallOverrides
     ): Promise<
-      ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
         stakeFor: BigNumber;
+        stakedBlock: BigNumber;
       })[]
     >;
 
@@ -638,6 +677,11 @@ export class MasterChef extends BaseContract {
       }
     >;
 
+    rewardsPerWallet(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     setTokenPerBlock(
       _tokenPerBlock: BigNumberish,
       overrides?: CallOverrides
@@ -647,6 +691,8 @@ export class MasterChef extends BaseContract {
       _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     token(overrides?: CallOverrides): Promise<string>;
 
@@ -666,12 +712,13 @@ export class MasterChef extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
         stakeFor: BigNumber;
+        stakedBlock: BigNumber;
       }
     >;
 
@@ -823,6 +870,11 @@ export class MasterChef extends BaseContract {
 
     rewardsInfo(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    rewardsPerWallet(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     setTokenPerBlock(
       _tokenPerBlock: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -832,6 +884,8 @@ export class MasterChef extends BaseContract {
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -929,6 +983,11 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    rewardsPerWallet(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     setTokenPerBlock(
       _tokenPerBlock: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -937,6 +996,11 @@ export class MasterChef extends BaseContract {
     setTokenPerBlockMaxCap(
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    stakers(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;

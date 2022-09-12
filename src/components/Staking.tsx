@@ -6,6 +6,7 @@ import { BigNumber } from "ethers";
 import toast from "react-hot-toast";
 import { NumberInput } from "./Input";
 import { IAPR } from "../hooks/useApr";
+import useCommon from '../hooks/useCommon';
 import { FiInfo } from "react-icons/fi";
 import { MasterChef } from "../typechain";
 import React, { useEffect, useState, useContext } from "react";
@@ -50,7 +51,7 @@ export default function Staking({
   const isApproved = useAllowance(stakingType, poolAddress,loading);
   const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
-
+  const { addCommasToNumber } = useCommon();
 
   useEffect(() => {
     setStakeUntill(
@@ -246,22 +247,22 @@ export default function Staking({
                 <tr>
                   <td>30 days</td>
                   <td>0.33X</td>
-                  <td>{apr.oneMonth}% APR*</td>
+                  <td>{addCommasToNumber(Number(apr.oneMonth), 4)}% APR*</td>
                 </tr>
                 <tr>
                   <td>90 days</td>
                   <td>1X</td>
-                  <td>{apr.threeMonth}% APR*</td>
+                  <td>{addCommasToNumber(Number(apr.threeMonth), 4)}% APR*</td>
                 </tr>
                 <tr>
                   <td>180 days</td>
                   <td>2X</td>
-                  <td>{apr.sixMonth}% APR*</td>
+                  <td>{addCommasToNumber(Number(apr.sixMonth), 4)}% APR*</td>
                 </tr>
                 <tr>
                   <td>360 days</td>
                   <td>4X</td>
-                  <td>{apr.twelveMonth}% APR*</td>
+                  <td>{addCommasToNumber(Number(apr.twelveMonth), 4)}% APR*</td>
                 </tr>
               </tbody>
             </table>

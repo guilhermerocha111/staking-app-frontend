@@ -21,6 +21,22 @@ main {
   }
 }
 
+.custom-border {
+  border: 1px solid #263673 !important;
+}
+
+.navLink {
+  font-family: "Titillium Web";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding: 9px 16px 9px 12px !important;
+  border-radius: 18px !important;
+  cursor: pointer;
+}
+
 .ReactModal__Overlay {
   background-color: rgba(0, 0, 0, 0.75) !important;
   z-index: 50;
@@ -428,7 +444,7 @@ tr{
   }
 }
 
-.rewards-table{
+.telemetry-rewards-table{
   thead{
     tr{
       @apply p-0 pb-2;

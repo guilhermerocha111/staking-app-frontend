@@ -84,28 +84,31 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <h1 className="section-heading-1 z-10">Info Panel</h1>
         <div className="flex">
+          <div className="navLink text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
+            <HashLink
+              to="/rewards"
+              className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
+              style={{backgroundColor: '#15244C', border: '1px solid #2966F5'}}
+            >
+              <img src="/images/icons/smcwlogo.svg" /> INGAME REWARDS LOG
+            </HashLink>
+          </div>
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <Link
               to="/vesting"
-              className="gradient-1 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
+              className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
+              style={{backgroundColor: '#351741', border: '1px solid #F514B2'}}
             >
-              CLAIM / VESTING PANEL <HiOutlineExternalLink />
+              <img src="/images/icons/smcwtoken.svg" />
+              CLAIM / VESTING PANEL
             </Link>
-          </div>
-          <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
-            <HashLink
-              to="/ingame#log"
-              className="gradient-2 button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-1"
-            >
-              INGAME REWARDS LOG <HiOutlineExternalLink />
-            </HashLink>
           </div>
         </div>
       </div>
       <div className="flex justify-between flex-col xl:flex-row gap-8 mt-6">
         {/* SMCW Rewards */}
 
-        <Card className="flex-1" styles={{height: 'fit-content'}}>
+        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '220px'}}>
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
@@ -224,7 +227,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
         {/* SMCW Info */}
 
-        <Card className="flex-1" styles={{height: 'fit-content'}}>
+        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '220px'}}>
           <h3 className="card-heading-1">SMCW Info</h3>
           <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
               <p className="tag-1">
@@ -256,7 +259,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             {!isInfoOpen && (
               <Button
                 onClick={() => setInfoOpen(!isInfoOpen)}
-                className="gradient-2 button-3 mt-3"
+                className="gradient-2 button-3 mt-[40px]"
               >
                 Buy SMCW
                 <FiChevronDown />

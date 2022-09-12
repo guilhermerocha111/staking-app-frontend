@@ -18,14 +18,18 @@ export const usePendings = () => {
     const pool2 = getStakingPool02(signer);
     let amount0 = await pool1.pendingRewards(await signer.getAddress());
     let amount1 = await pool2.pendingRewards(await signer.getAddress());
+    let amountCalculatedSMCW = await pool1.rewardsPerWallet(await signer.getAddress());
+    let amountCalculatedLP = await pool2.rewardsPerWallet(await signer.getAddress());
+    let totalAmount0 = amount0.add(amountCalculatedSMCW)
+    let totalAmount1 = amount1.add(amountCalculatedLP)
     setsmcwRewards(
-      ToFixed(formatUnits(amount0.toString(),"ether"))
+      ToFixed(formatUnits(totalAmount0.toString(),"ether"))
     );
     setlpRewards(
-      ToFixed(formatUnits(amount1.toString(),"ether"))
+      ToFixed(formatUnits(totalAmount1.toString(),"ether"))
     );
     setTotalRewards(
-      ToFixed(formatUnits(amount0.add(amount1).toString(),"ether"))
+      ToFixed(formatUnits(totalAmount0.add(totalAmount1).toString(),"ether"))
       )
 
     }, 2000);
