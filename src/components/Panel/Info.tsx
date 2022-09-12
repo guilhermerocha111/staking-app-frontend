@@ -261,7 +261,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 onClick={() => setInfoOpen(!isInfoOpen)}
                 className="gradient-2 button-3 mt-[40px]"
               >
-                Buy SMCW
+                SMCW INFO / BUY SMCW
                 <FiChevronDown />
               </Button>
             )}
