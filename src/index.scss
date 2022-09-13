@@ -12,6 +12,7 @@ main {
     background-repeat: no-repeat;
     display: block;
     height: 100vh;
+    pointer-events: none;
 
     .imageContainer {
       height: 100%;

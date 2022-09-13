@@ -49,7 +49,7 @@ export const chains:Chains = {
   },
   "0x3": {
     chainId: "0x3",
-    rpcUrls: [`https://ropsten.infura.io/v3/${process.env.INFURA_KEY}`],
+    rpcUrls: [`https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`],
     chainName: "Ropsten Test Network",
     nativeCurrency: { name: "ETH", decimals: 18, symbol: "ETH" },
     blockExplorerUrls: ["https://ropsten.etherscan.io"],

@@ -46,6 +46,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     "tokenPerBlockMaxCap()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpuase()": FunctionFragment;
+    "updateTokenPerBlock(uint256)": FunctionFragment;
     "userStakes(address,uint256)": FunctionFragment;
     "vesting()": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
@@ -121,6 +122,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "unpuase", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "updateTokenPerBlock",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "userStakes",
     values: [string, BigNumberish]
@@ -198,6 +203,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "unpuase", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "updateTokenPerBlock",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "userStakes", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "vesting", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -439,6 +448,11 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    updateTokenPerBlock(
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     userStakes(
       arg0: string,
       arg1: BigNumberish,
@@ -577,6 +591,11 @@ export class MasterChef extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  updateTokenPerBlock(
+    _amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   userStakes(
     arg0: string,
     arg1: BigNumberish,
@@ -706,6 +725,11 @@ export class MasterChef extends BaseContract {
     ): Promise<void>;
 
     unpuase(overrides?: CallOverrides): Promise<void>;
+
+    updateTokenPerBlock(
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     userStakes(
       arg0: string,
@@ -902,6 +926,11 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    updateTokenPerBlock(
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     userStakes(
       arg0: string,
       arg1: BigNumberish,
@@ -1017,6 +1046,11 @@ export class MasterChef extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     unpuase(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateTokenPerBlock(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
