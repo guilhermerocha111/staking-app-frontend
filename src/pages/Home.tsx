@@ -14,7 +14,7 @@ export default function Home({ refresh, setRefresh }: RefreshProps) {
         <Outlet />
       </div>
       <div className="bgwrapper">
-        <img src="/images/bgwrapper.jpg" />
+        <div className="imageContainer" />
       </div>
     </main>
   );
