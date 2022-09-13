@@ -110,11 +110,8 @@ export default function Staking({
             <h3>Stake Amount</h3>
             <p className="text-sm flex items-center text-design-grey">
               Wallet Balance:
-              <img
-                src="/images/coin.png"
-                alt=""
-                className="w-4 h-4 object-contain object-center ml-2 mr-1"
-              />
+              {stakingType === "smcw" && <img src="/images/coin.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
+              {stakingType === "lp" && <img src="/images/lp.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
               <span className="text-white">{smcwBalance}</span>
             </p>
           </div>
