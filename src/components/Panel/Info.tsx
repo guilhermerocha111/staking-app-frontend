@@ -43,7 +43,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
   const { addCommasToNumber } = useCommon();
-  const [, ACTION] = useContext(Context);
+  const [{max_apr}, ACTION] = useContext(Context);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -106,43 +106,56 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         </div>
       </div>
       <div className="flex justify-between flex-col xl:flex-row gap-8 mt-6">
-        {/* SMCW Rewards */}
 
-        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '220px'}}>
+        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '280px'}}>
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
           <h3 className="card-heading-1">Total SMCW Rewards</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mt-6">
-              <div className="balance-item">
-                <h4 className="card-heading-4">Available in Wallet</h4>
-                <p className="balance-1">
-                  <img src="/images/coin.png" alt="" />
-                  {addCommasToNumber(Number(smcwBalance), 4)}
-                </p>
-              </div>
-              <div className="balance-item">
-                <h4 className="card-heading-4">Staked Tokens</h4>
-                <p className="balance-1">
-                  <img src="/images/coin.png" alt="" />
-                  {addCommasToNumber(Number(smcw_staked), 4)}
-                </p>
-              </div>
-              <div className="balance-item">
-                <h4 className="card-heading-4">Pending Rewards</h4>
-                <p className="balance-1">
-                  <img src="/images/coin.png" alt="" />
-                  {addCommasToNumber(Number(smcw_Rewards), 4)}
-                </p>
-              </div>
+          {!isTotalRewardsOpen && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-6 mt-6">
+                <div className="balance-item">
+                  <h4 className="card-heading-4">Available in Wallet</h4>
+                  <p className="balance-1 py-2">
+                    <img src="/images/coin.png" alt="" />
+                    {addCommasToNumber(Number(smcwBalance), 4)}
+                  </p>
+                  <p className="balance-1">
+                    <img src="/images/lp.png" alt="" />
+                    {addCommasToNumber(Number(lpBalance), 4)}
+                  </p>
+                </div>
+                <div className="balance-item">
+                  <h4 className="card-heading-4">Staked Tokens</h4>
+                  <p className="balance-1 py-2">
+                    <img src="/images/coin.png" alt="" />
+                    {addCommasToNumber(Number(lp_staked), 4)}
+                  </p>
+                  <p className="balance-1">
+                    <img src="/images/lp.png" alt="" />
+                    {addCommasToNumber(Number(smcw_staked), 4)}
+                  </p>
+                </div>
+                <div className="balance-item">
+                  <h4 className="card-heading-4">Pending Rewards</h4>
+                  <p className="balance-1 py-2">
+                    <img src="/images/coin.png" alt="" />
+                    {addCommasToNumber(Number(smcw_Rewards), 4)}
+                  </p>
+                  <p className="balance-1">
+                    <img src="/images/coin.png" alt="" />
+                    {addCommasToNumber(Number(lp_rewards), 4)}
+                  </p>
+                </div>
             </div>
+          )}
           {
             !isTotalRewardsOpen && (
               <Button
                 onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
-                className="gradient-1 button-3 mt-3"
+                className="gradient-1 button-3 mt-[36px]"
               >
-                Vest SMCW REWARDS
+                VEST SMCW REWARDS
                 <FiChevronDown />
               </Button>
             )
@@ -154,6 +167,38 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               maxHeight: isTotalRewardsOpen ? "2000px" : "0px",
             }}
           >
+        {/* SMCW Rewards */}
+            <div className="gradient-orange p-px rounded-2xl lg:rounded-lg mt-4">
+              <div className="bg-design-background5 p-3 rounded-2xl lg:rounded-lg">
+              <h3 className="card-heading-3 !mb-2">
+                <img src="/images/coin.png" alt="" />
+                Rewards
+              </h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 ">
+                  <div className="balance-item">
+                    <h4 className="card-heading-4">Available in Wallet</h4>
+                    <p className="balance-1">
+                      <img src="/images/coin.png" alt="" />
+                      {addCommasToNumber(Number(smcwBalance), 4)}
+                    </p>
+                  </div>
+                  <div className="balance-item">
+                    <h4 className="card-heading-4">Staked Tokens</h4>
+                    <p className="balance-1">
+                      <img src="/images/coin.png" alt="" />
+                      {addCommasToNumber(Number(smcw_staked), 4)}
+                    </p>
+                  </div>
+                  <div className="balance-item">
+                    <h4 className="card-heading-4">Pending Rewards</h4>
+                    <p className="balance-1">
+                      <img src="/images/coin.png" alt="" />
+                      {addCommasToNumber(Number(smcw_Rewards), 4)}
+                    </p>
+                  </div>
+              </div>
+              </div>
+            </div>
             {/* LP Rewards */}
             <div className="gradient-1 p-px rounded-2xl lg:rounded-lg mt-4">
               <div className="bg-design-background5 py-3 px-3 rounded-2xl lg:rounded-lg">
@@ -227,7 +272,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
         {/* SMCW Info */}
 
-        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '220px'}}>
+        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '280px'}}>
           <h3 className="card-heading-1">SMCW Info</h3>
           <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
               <p className="tag-1">
@@ -257,9 +302,90 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </p>
             </div>
             {!isInfoOpen && (
+              <div className="grid grid-cols-1 md:grid-cols-4 mt-6 md:mt-6">
+              <div className="mb-4 lg:mb-0">
+                <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
+                  Buy SMCW
+                </h4>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://pancakeswap.finance/swap?inputCurrency=0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56&&outputCurrency=0xb2ea51BAa12C461327d12A2069d47b30e680b69D"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/1.png" alt="" />
+                  </a>
+                  <a
+                    href="https://www.huobi.com/en-us/exchange/smcw_usdt/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/2.png" alt="" />
+                  </a>
+                  <a
+                    href="https://www.mexc.com/exchange/SMCW_USDT"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/3.png" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div className="mb-4 lg:mb-0">
+                <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
+                  Price tracking
+                </h4>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://coinmarketcap.com/currencies/space-misfits/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/4.png" alt="" />
+                  </a>
+                  <a
+                    href="https://www.coingecko.com/en/coins/space-misfits"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/5.png" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div className="mb-4 lg:mb-0">
+                <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
+                  Whitepaper
+                </h4>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://space-misfits.gitbook.io/whitepaper/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/6.png" alt="" />
+                  </a>
+                </div>
+              </div>
+              <div>
+                <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
+                  Audit
+                </h4>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://staking.spacemisfits.com/static/media/20220418_Paladin_SpaceMisfitsStaking_Final_Report.8ae6fb80860aeb7ca8d8.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src="/images/icons/7.png" alt="" />
+                  </a>
+                </div>
+              </div>
+            </div>
+            )}
+            {!isInfoOpen && (
               <Button
                 onClick={() => setInfoOpen(!isInfoOpen)}
-                className="gradient-2 button-3 mt-[40px]"
+                className="gradient-2 button-3 mt-[16px]"
               >
                 SMCW INFO / BUY SMCW
                 <FiChevronDown />
@@ -291,6 +417,21 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </p>
                 </div>
               </div>
+              {max_apr && (
+                <div className="grid grid-cols-2 gap-1">
+                  <p className="text-design-grey">Staking APY</p>
+                  <div className="flex items-center">
+                    <img
+                      src="/images/coin.png"
+                      alt=""
+                      className="w-5 h-5 object-contain object-center mr-2"
+                    />
+                    <p className="flex items-end leading-5 gradient-3 clip-text">
+                      Up to {max_apr.toFixed(0)}%
+                    </p>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Supply</p>
                 <div className="flex items-center">
@@ -306,6 +447,19 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Circulating Supply</p>
+                <div className="flex items-center">
+                  <img
+                    src="/images/coin.png"
+                    alt=""
+                    className="w-5 h-5 object-contain object-center mr-2"
+                  />
+                  <p className="flex items-end leading-5">
+                    {addCommasToNumber(tokenInfo.max_supply)}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                <p className="text-design-grey">Max Supply</p>
                 <div className="flex items-center">
                   <img
                     src="/images/coin.png"

@@ -23,9 +23,11 @@ module.exports = {
           backgroundBlack: "#020202",
           gradientPink: "#F514B2",
           gradientPurple: "#3262F2",
-          gradientDarkBlue: "#2559D5          ",
+          gradientDarkBlue: "#2559D5",
           gradientBlue: "#15244C",
           gradientDarkPink: "#9E36CE",
+          gradientOrange: "#F3AB32",
+          gradientDarkOrange: "#D73305"
         },
         brands: {
           discord: "#7289DA",

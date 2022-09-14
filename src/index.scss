@@ -224,6 +224,10 @@ svg{
   @apply bg-gradient-to-r from-design-gradientPink to-design-gradientPurple;
 }
 
+.gradient-orange {
+  @apply bg-gradient-to-r from-design-gradientOrange to-design-gradientDarkOrange;
+}
+
 .gradient-2 {
   @apply bg-gradient-to-r from-design-gradientBlue to-design-gradientDarkBlue;
   @include gradientAnimation(#15244C,#2559D5,  .9s)
