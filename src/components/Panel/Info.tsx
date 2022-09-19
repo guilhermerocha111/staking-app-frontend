@@ -129,11 +129,11 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   <h4 className="card-heading-4">Staked Tokens</h4>
                   <p className="balance-1 py-2">
                     <img src="/images/coin.png" alt="" />
-                    {addCommasToNumber(Number(lp_staked), 4)}
+                    {addCommasToNumber(Number(smcw_staked), 4)}
                   </p>
                   <p className="balance-1">
                     <img src="/images/lp.png" alt="" />
-                    {addCommasToNumber(Number(smcw_staked), 4)}
+                    {addCommasToNumber(Number(lp_staked), 4)}
                   </p>
                 </div>
                 <div className="balance-item">
