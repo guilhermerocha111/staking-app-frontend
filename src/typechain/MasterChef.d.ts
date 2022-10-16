@@ -21,41 +21,35 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MasterChefInterface extends ethers.utils.Interface {
   functions: {
-    "approveForVesting()": FunctionFragment;
     "claim(uint256)": FunctionFragment;
     "deposit(uint256,uint256)": FunctionFragment;
     "getCurrentClaimed(address)": FunctionFragment;
     "getCurrentStaked(address)": FunctionFragment;
     "getCurrentUnstaked(address)": FunctionFragment;
+    "getMultiplier(uint256,uint256)": FunctionFragment;
     "getStakes(address)": FunctionFragment;
     "owner()": FunctionFragment;
+    "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "pendingRewards(address)": FunctionFragment;
     "poolInfo()": FunctionFragment;
-    "puase()": FunctionFragment;
     "pull(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardingToken()": FunctionFragment;
     "rewardsInfo(address)": FunctionFragment;
     "rewardsPerWallet(address)": FunctionFragment;
-    "setTokenPerBlock(uint256)": FunctionFragment;
-    "setTokenPerBlockMaxCap(uint256)": FunctionFragment;
-    "stakers(uint256)": FunctionFragment;
+    "startBlock()": FunctionFragment;
     "token()": FunctionFragment;
     "tokenPerBlock()": FunctionFragment;
-    "tokenPerBlockMaxCap()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "unpuase()": FunctionFragment;
+    "unpause()": FunctionFragment;
+    "updatePool()": FunctionFragment;
     "updateTokenPerBlock(uint256)": FunctionFragment;
-    "userStakes(address,uint256)": FunctionFragment;
+    "userInfo(address)": FunctionFragment;
     "vesting()": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "approveForVesting",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "claim", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "deposit",
@@ -73,15 +67,19 @@ interface MasterChefInterface extends ethers.utils.Interface {
     functionFragment: "getCurrentUnstaked",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getMultiplier",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "getStakes", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "pendingRewards",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "poolInfo", values?: undefined): string;
-  encodeFunctionData(functionFragment: "puase", values?: undefined): string;
   encodeFunctionData(functionFragment: "pull", values: [string]): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -97,16 +95,8 @@ interface MasterChefInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setTokenPerBlock",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setTokenPerBlockMaxCap",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "stakers",
-    values: [BigNumberish]
+    functionFragment: "startBlock",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
@@ -114,32 +104,25 @@ interface MasterChefInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenPerBlockMaxCap",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "unpuase", values?: undefined): string;
+  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "updatePool",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "updateTokenPerBlock",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "userStakes",
-    values: [string, BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: "userInfo", values: [string]): string;
   encodeFunctionData(functionFragment: "vesting", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "withdraw",
     values: [BigNumberish]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "approveForVesting",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
@@ -154,15 +137,19 @@ interface MasterChefInterface extends ethers.utils.Interface {
     functionFragment: "getCurrentUnstaked",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMultiplier",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getStakes", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pendingRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "poolInfo", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "puase", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pull", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -180,63 +167,36 @@ interface MasterChefInterface extends ethers.utils.Interface {
     functionFragment: "rewardsPerWallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setTokenPerBlock",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setTokenPerBlockMaxCap",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "stakers", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "startBlock", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenPerBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "tokenPerBlockMaxCap",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "unpuase", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "updatePool", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateTokenPerBlock",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "userStakes", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "userInfo", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "vesting", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
-    "Deposit(address,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "TokenPerBlockMaxCapUpdate(uint256)": EventFragment;
-    "TokenPerBlockUpdate(uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
-    "Withdraw(address,uint256,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Deposit"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TokenPerBlockMaxCapUpdate"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TokenPerBlockUpdate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Withdraw"): EventFragment;
 }
-
-export type DepositEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    user: string;
-    stakeIndex: BigNumber;
-    amount: BigNumber;
-  }
->;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -244,23 +204,7 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
-export type TokenPerBlockMaxCapUpdateEvent = TypedEvent<
-  [BigNumber] & { tokenPerBlockMaxCap: BigNumber }
->;
-
-export type TokenPerBlockUpdateEvent = TypedEvent<
-  [BigNumber] & { tokenPerBlock: BigNumber }
->;
-
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
-
-export type WithdrawEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    user: string;
-    stakeIndex: BigNumber;
-    amount: BigNumber;
-  }
->;
 
 export class MasterChef extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -306,10 +250,6 @@ export class MasterChef extends BaseContract {
   interface: MasterChefInterface;
 
   functions: {
-    approveForVesting(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     claim(
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -336,18 +276,35 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getMultiplier(
+      _from: BigNumberish,
+      _to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getStakes(
       _user: string,
       overrides?: CallOverrides
     ): Promise<
       [
-        ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+        ([
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          boolean
+        ] & {
           amount: BigNumber;
           weight: BigNumber;
           timestamp: BigNumber;
           stakeUntill: BigNumber;
           stakeFor: BigNumber;
           stakedBlock: BigNumber;
+          rewardDebt: BigNumber;
+          withdrawed: boolean;
         })[]
       ] & {
         stakes: ([
@@ -356,7 +313,9 @@ export class MasterChef extends BaseContract {
           BigNumber,
           BigNumber,
           BigNumber,
-          BigNumber
+          BigNumber,
+          BigNumber,
+          boolean
         ] & {
           amount: BigNumber;
           weight: BigNumber;
@@ -364,33 +323,36 @@ export class MasterChef extends BaseContract {
           stakeUntill: BigNumber;
           stakeFor: BigNumber;
           stakedBlock: BigNumber;
+          rewardDebt: BigNumber;
+          withdrawed: boolean;
         })[];
       }
     >;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    pause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
     pendingRewards(
-      user: string,
+      _user: string,
       overrides?: CallOverrides
-    ): Promise<[BigNumber] & { rewards: BigNumber }>;
+    ): Promise<[BigNumber]>;
 
     poolInfo(
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
         stakeToken: string;
-        balance: BigNumber;
         lastRewardBlock: BigNumber;
+        accSmcwPerShare: BigNumber;
+        balance: BigNumber;
         totalWeight: BigNumber;
       }
     >;
-
-    puase(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     pull(
       user: string,
@@ -421,30 +383,22 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    setTokenPerBlock(
-      _tokenPerBlock: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setTokenPerBlockMaxCap(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+    startBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    tokenPerBlockMaxCap(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    unpuase(
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updatePool(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -453,18 +407,13 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    userStakes(
+    userInfo(
       arg0: string,
-      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        amount: BigNumber;
-        weight: BigNumber;
-        timestamp: BigNumber;
-        stakeUntill: BigNumber;
-        stakeFor: BigNumber;
-        stakedBlock: BigNumber;
+      [BigNumber, BigNumber] & {
+        totalAmount: BigNumber;
+        totalWeight: BigNumber;
       }
     >;
 
@@ -475,10 +424,6 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  approveForVesting(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   claim(
     index: BigNumberish,
@@ -503,40 +448,58 @@ export class MasterChef extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getMultiplier(
+    _from: BigNumberish,
+    _to: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getStakes(
     _user: string,
     overrides?: CallOverrides
   ): Promise<
-    ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    ([
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      boolean
+    ] & {
       amount: BigNumber;
       weight: BigNumber;
       timestamp: BigNumber;
       stakeUntill: BigNumber;
       stakeFor: BigNumber;
       stakedBlock: BigNumber;
+      rewardDebt: BigNumber;
+      withdrawed: boolean;
     })[]
   >;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  pause(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   paused(overrides?: CallOverrides): Promise<boolean>;
 
-  pendingRewards(user: string, overrides?: CallOverrides): Promise<BigNumber>;
+  pendingRewards(_user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   poolInfo(
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, BigNumber, BigNumber] & {
+    [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
       stakeToken: string;
-      balance: BigNumber;
       lastRewardBlock: BigNumber;
+      accSmcwPerShare: BigNumber;
+      balance: BigNumber;
       totalWeight: BigNumber;
     }
   >;
-
-  puase(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   pull(
     user: string,
@@ -564,30 +527,22 @@ export class MasterChef extends BaseContract {
 
   rewardsPerWallet(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  setTokenPerBlock(
-    _tokenPerBlock: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setTokenPerBlockMaxCap(
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
   token(overrides?: CallOverrides): Promise<string>;
 
   tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
-
-  tokenPerBlockMaxCap(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  unpuase(
+  unpause(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updatePool(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -596,19 +551,11 @@ export class MasterChef extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  userStakes(
+  userInfo(
     arg0: string,
-    arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-      amount: BigNumber;
-      weight: BigNumber;
-      timestamp: BigNumber;
-      stakeUntill: BigNumber;
-      stakeFor: BigNumber;
-      stakedBlock: BigNumber;
-    }
+    [BigNumber, BigNumber] & { totalAmount: BigNumber; totalWeight: BigNumber }
   >;
 
   vesting(overrides?: CallOverrides): Promise<string>;
@@ -619,8 +566,6 @@ export class MasterChef extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    approveForVesting(overrides?: CallOverrides): Promise<void>;
-
     claim(index: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     deposit(
@@ -644,38 +589,59 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getMultiplier(
+      _from: BigNumberish,
+      _to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getStakes(
       _user: string,
       overrides?: CallOverrides
     ): Promise<
-      ([BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      ([
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean
+      ] & {
         amount: BigNumber;
         weight: BigNumber;
         timestamp: BigNumber;
         stakeUntill: BigNumber;
         stakeFor: BigNumber;
         stakedBlock: BigNumber;
+        rewardDebt: BigNumber;
+        withdrawed: boolean;
       })[]
     >;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    pause(overrides?: CallOverrides): Promise<void>;
+
     paused(overrides?: CallOverrides): Promise<boolean>;
 
-    pendingRewards(user: string, overrides?: CallOverrides): Promise<BigNumber>;
+    pendingRewards(
+      _user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     poolInfo(
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
         stakeToken: string;
-        balance: BigNumber;
         lastRewardBlock: BigNumber;
+        accSmcwPerShare: BigNumber;
+        balance: BigNumber;
         totalWeight: BigNumber;
       }
     >;
-
-    puase(overrides?: CallOverrides): Promise<void>;
 
     pull(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -701,48 +667,33 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    setTokenPerBlock(
-      _tokenPerBlock: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setTokenPerBlockMaxCap(
-      _amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<string>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
-
-    tokenPerBlockMaxCap(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    unpuase(overrides?: CallOverrides): Promise<void>;
+    unpause(overrides?: CallOverrides): Promise<void>;
+
+    updatePool(overrides?: CallOverrides): Promise<void>;
 
     updateTokenPerBlock(
       _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    userStakes(
+    userInfo(
       arg0: string,
-      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        amount: BigNumber;
-        weight: BigNumber;
-        timestamp: BigNumber;
-        stakeUntill: BigNumber;
-        stakeFor: BigNumber;
-        stakedBlock: BigNumber;
+      [BigNumber, BigNumber] & {
+        totalAmount: BigNumber;
+        totalWeight: BigNumber;
       }
     >;
 
@@ -755,24 +706,6 @@ export class MasterChef extends BaseContract {
   };
 
   filters: {
-    "Deposit(address,uint256,uint256)"(
-      user?: string | null,
-      stakeIndex?: null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { user: string; stakeIndex: BigNumber; amount: BigNumber }
-    >;
-
-    Deposit(
-      user?: string | null,
-      stakeIndex?: null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { user: string; stakeIndex: BigNumber; amount: BigNumber }
-    >;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -795,52 +728,14 @@ export class MasterChef extends BaseContract {
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "TokenPerBlockMaxCapUpdate(uint256)"(
-      tokenPerBlockMaxCap?: null
-    ): TypedEventFilter<[BigNumber], { tokenPerBlockMaxCap: BigNumber }>;
-
-    TokenPerBlockMaxCapUpdate(
-      tokenPerBlockMaxCap?: null
-    ): TypedEventFilter<[BigNumber], { tokenPerBlockMaxCap: BigNumber }>;
-
-    "TokenPerBlockUpdate(uint256)"(
-      tokenPerBlock?: null
-    ): TypedEventFilter<[BigNumber], { tokenPerBlock: BigNumber }>;
-
-    TokenPerBlockUpdate(
-      tokenPerBlock?: null
-    ): TypedEventFilter<[BigNumber], { tokenPerBlock: BigNumber }>;
-
     "Unpaused(address)"(
       account?: null
     ): TypedEventFilter<[string], { account: string }>;
 
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
-
-    "Withdraw(address,uint256,uint256)"(
-      user?: string | null,
-      stakeIndex?: null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { user: string; stakeIndex: BigNumber; amount: BigNumber }
-    >;
-
-    Withdraw(
-      user?: string | null,
-      stakeIndex?: null,
-      amount?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { user: string; stakeIndex: BigNumber; amount: BigNumber }
-    >;
   };
 
   estimateGas: {
-    approveForVesting(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     claim(
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -867,19 +762,28 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getMultiplier(
+      _from: BigNumberish,
+      _to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getStakes(_user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pendingRewards(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    poolInfo(overrides?: CallOverrides): Promise<BigNumber>;
-
-    puase(
+    pause(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    pendingRewards(
+      _user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    poolInfo(overrides?: CallOverrides): Promise<BigNumber>;
 
     pull(
       user: string,
@@ -899,30 +803,22 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    setTokenPerBlock(
-      _tokenPerBlock: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setTokenPerBlockMaxCap(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
-
-    tokenPerBlockMaxCap(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    unpuase(
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updatePool(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -931,11 +827,7 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    userStakes(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    userInfo(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     vesting(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -946,10 +838,6 @@ export class MasterChef extends BaseContract {
   };
 
   populateTransaction: {
-    approveForVesting(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     claim(
       index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -976,6 +864,12 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getMultiplier(
+      _from: BigNumberish,
+      _to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getStakes(
       _user: string,
       overrides?: CallOverrides
@@ -983,18 +877,18 @@ export class MasterChef extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    pause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pendingRewards(
-      user: string,
+      _user: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     poolInfo(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    puase(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     pull(
       user: string,
@@ -1017,35 +911,22 @@ export class MasterChef extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    setTokenPerBlock(
-      _tokenPerBlock: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setTokenPerBlockMaxCap(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    stakers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    startBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    tokenPerBlockMaxCap(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    unpuase(
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updatePool(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1054,9 +935,8 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    userStakes(
+    userInfo(
       arg0: string,
-      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

@@ -3,13 +3,13 @@ import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { ethers, Signer } from "ethers";
 
 const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 80001, 57, 97],
+  supportedChainIds: [5],
 });
 
 const walletconnect = new WalletConnectConnector({
   qrcode: true,
   bridge: "https://bridge.walletconnect.org",
-  rpc: { 3: `https://ropsten.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
+  rpc: { 5: `https://ropsten.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
 });
 
 export const connectors = {
@@ -47,11 +47,11 @@ export const chains:Chains = {
     nativeCurrency: { name: "tBNB", decimals: 18, symbol: "tBNB" },
     blockExplorerUrls: ["https://testnet.bscscan.com"],
   },
-  "0x3": {
-    chainId: "0x3",
+  "0x5": {
+    chainId: "0x5",
     rpcUrls: [`https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`],
-    chainName: "Ropsten Test Network",
+    chainName: "Goerli Test Network",
     nativeCurrency: { name: "ETH", decimals: 18, symbol: "ETH" },
-    blockExplorerUrls: ["https://ropsten.etherscan.io"],
+    blockExplorerUrls: ["https://goerli.etherscan.io"],
   },
 };

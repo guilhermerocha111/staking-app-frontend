@@ -25,7 +25,7 @@ window.Buffer = Buffer;
 export default function Nav() {
   const tokenInfo: TokenInfo = usePrice();
   const [isOpen, setIsOpen] = useState(false);
-  const [defaultChainId] = useState("0x3");
+  const [defaultChainId] = useState("0x5");
   const { activate, deactivate, active, library, connector, error } = useWeb3React();
   const [{tx_loader, max_apr}] = useContext(Context);
 
