@@ -28,6 +28,7 @@ interface LockerInterface extends ethers.utils.Interface {
     "owner()": FunctionFragment;
     "pools(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "supplyContract()": FunctionFragment;
     "token()": FunctionFragment;
     "totalClaimed()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -53,6 +54,10 @@ interface LockerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "pools", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supplyContract",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
@@ -88,6 +93,10 @@ interface LockerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "pools", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supplyContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
@@ -233,6 +242,8 @@ export class Locker extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    supplyContract(overrides?: CallOverrides): Promise<[string]>;
+
     token(overrides?: CallOverrides): Promise<[string]>;
 
     totalClaimed(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -288,6 +299,8 @@ export class Locker extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  supplyContract(overrides?: CallOverrides): Promise<string>;
+
   token(overrides?: CallOverrides): Promise<string>;
 
   totalClaimed(overrides?: CallOverrides): Promise<BigNumber>;
@@ -337,6 +350,8 @@ export class Locker extends BaseContract {
     pools(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    supplyContract(overrides?: CallOverrides): Promise<string>;
 
     token(overrides?: CallOverrides): Promise<string>;
 
@@ -471,6 +486,8 @@ export class Locker extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    supplyContract(overrides?: CallOverrides): Promise<BigNumber>;
+
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalClaimed(overrides?: CallOverrides): Promise<BigNumber>;
@@ -521,6 +538,8 @@ export class Locker extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    supplyContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

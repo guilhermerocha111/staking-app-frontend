@@ -49,6 +49,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERCFull20__factory>;
     getContractFactory(
+      name: "ISupply",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISupply__factory>;
+    getContractFactory(
       name: "IVesting",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IVesting__factory>;
@@ -72,6 +76,10 @@ declare module "hardhat/types/runtime" {
       name: "StakingToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.StakingToken__factory>;
+    getContractFactory(
+      name: "Supply",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Supply__factory>;
     getContractFactory(
       name: "IPool",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -127,6 +135,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERCFull20>;
     getContractAt(
+      name: "ISupply",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISupply>;
+    getContractAt(
       name: "IVesting",
       address: string,
       signer?: ethers.Signer
@@ -156,6 +169,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.StakingToken>;
+    getContractAt(
+      name: "Supply",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Supply>;
     getContractAt(
       name: "IPool",
       address: string,

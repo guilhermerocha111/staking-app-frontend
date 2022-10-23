@@ -263,22 +263,13 @@ export class NFTRewards extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         lastStakeAmount: BigNumber;
         rewards: BigNumber;
         stakeTime: BigNumber;
         lastStakeTime: BigNumber;
         claimed: BigNumber;
-        lastClaim: BigNumber;
       }
     >;
 
@@ -348,22 +339,13 @@ export class NFTRewards extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       amount: BigNumber;
       lastStakeAmount: BigNumber;
       rewards: BigNumber;
       stakeTime: BigNumber;
       lastStakeTime: BigNumber;
       claimed: BigNumber;
-      lastClaim: BigNumber;
     }
   >;
 
@@ -433,22 +415,13 @@ export class NFTRewards extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         amount: BigNumber;
         lastStakeAmount: BigNumber;
         rewards: BigNumber;
         stakeTime: BigNumber;
         lastStakeTime: BigNumber;
         claimed: BigNumber;
-        lastClaim: BigNumber;
       }
     >;
 

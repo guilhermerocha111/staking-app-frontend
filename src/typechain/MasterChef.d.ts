@@ -39,6 +39,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     "rewardsInfo(address)": FunctionFragment;
     "rewardsPerWallet(address)": FunctionFragment;
     "startBlock()": FunctionFragment;
+    "supplyContract()": FunctionFragment;
     "token()": FunctionFragment;
     "tokenPerBlock()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -96,6 +97,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "startBlock",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supplyContract",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
@@ -168,6 +173,10 @@ interface MasterChefInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "startBlock", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "supplyContract",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenPerBlock",
@@ -385,6 +394,8 @@ export class MasterChef extends BaseContract {
 
     startBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    supplyContract(overrides?: CallOverrides): Promise<[string]>;
+
     token(overrides?: CallOverrides): Promise<[string]>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -529,6 +540,8 @@ export class MasterChef extends BaseContract {
 
   startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
+  supplyContract(overrides?: CallOverrides): Promise<string>;
+
   token(overrides?: CallOverrides): Promise<string>;
 
   tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
@@ -669,6 +682,8 @@ export class MasterChef extends BaseContract {
 
     startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
+    supplyContract(overrides?: CallOverrides): Promise<string>;
+
     token(overrides?: CallOverrides): Promise<string>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
@@ -805,6 +820,8 @@ export class MasterChef extends BaseContract {
 
     startBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
+    supplyContract(overrides?: CallOverrides): Promise<BigNumber>;
+
     token(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenPerBlock(overrides?: CallOverrides): Promise<BigNumber>;
@@ -912,6 +929,8 @@ export class MasterChef extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     startBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    supplyContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

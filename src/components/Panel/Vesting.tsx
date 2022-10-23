@@ -130,7 +130,7 @@ export default function Vesting() {
                     <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
                   </td>
                   <td>{item.amount}</td>
-                  <td>{formatWeight(item.weight, item.amount)}</td>
+                  <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.reward}</td>
                   <td>{item.timestamp}</td>
                   {item.percentage < 100 ? (
