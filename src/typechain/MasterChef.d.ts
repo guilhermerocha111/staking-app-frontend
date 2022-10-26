@@ -378,11 +378,12 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         totalClaimed: BigNumber;
         totalUnstaked: BigNumber;
         totalStaked: BigNumber;
         totalWeight: BigNumber;
+        totalRewardDebt: BigNumber;
         lastVest: BigNumber;
       }
     >;
@@ -422,9 +423,10 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber] & {
         totalAmount: BigNumber;
         totalWeight: BigNumber;
+        totalRewardDebt: BigNumber;
       }
     >;
 
@@ -527,11 +529,12 @@ export class MasterChef extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       totalClaimed: BigNumber;
       totalUnstaked: BigNumber;
       totalStaked: BigNumber;
       totalWeight: BigNumber;
+      totalRewardDebt: BigNumber;
       lastVest: BigNumber;
     }
   >;
@@ -568,7 +571,11 @@ export class MasterChef extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber] & { totalAmount: BigNumber; totalWeight: BigNumber }
+    [BigNumber, BigNumber, BigNumber] & {
+      totalAmount: BigNumber;
+      totalWeight: BigNumber;
+      totalRewardDebt: BigNumber;
+    }
   >;
 
   vesting(overrides?: CallOverrides): Promise<string>;
@@ -666,11 +673,12 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         totalClaimed: BigNumber;
         totalUnstaked: BigNumber;
         totalStaked: BigNumber;
         totalWeight: BigNumber;
+        totalRewardDebt: BigNumber;
         lastVest: BigNumber;
       }
     >;
@@ -706,9 +714,10 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber] & {
         totalAmount: BigNumber;
         totalWeight: BigNumber;
+        totalRewardDebt: BigNumber;
       }
     >;
 
