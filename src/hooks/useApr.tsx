@@ -46,7 +46,7 @@ export const useApr = () => {
     function apr(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
       let totalWeightUpdated;
       formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
-
+      console.log(totalWeightUpdated)
       return parseFloat(
         formatUnits(
           tokenPerBlock

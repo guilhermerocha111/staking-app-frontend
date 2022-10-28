@@ -44,7 +44,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     "tokenPerBlock()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
-    "updatePool()": FunctionFragment;
+    "updatePool(address)": FunctionFragment;
     "updateTokenPerBlock(uint256)": FunctionFragment;
     "userInfo(address)": FunctionFragment;
     "vesting()": FunctionFragment;
@@ -113,10 +113,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "updatePool",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "updatePool", values: [string]): string;
   encodeFunctionData(
     functionFragment: "updateTokenPerBlock",
     values: [BigNumberish]
@@ -354,9 +351,8 @@ export class MasterChef extends BaseContract {
     poolInfo(
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber] & {
         stakeToken: string;
-        lastRewardBlock: BigNumber;
         accSmcwPerShare: BigNumber;
         balance: BigNumber;
         totalWeight: BigNumber;
@@ -411,6 +407,7 @@ export class MasterChef extends BaseContract {
     ): Promise<ContractTransaction>;
 
     updatePool(
+      _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -423,10 +420,11 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber] & {
         totalAmount: BigNumber;
         totalWeight: BigNumber;
         totalRewardDebt: BigNumber;
+        lastRewardBlock: BigNumber;
       }
     >;
 
@@ -505,9 +503,8 @@ export class MasterChef extends BaseContract {
   poolInfo(
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    [string, BigNumber, BigNumber, BigNumber] & {
       stakeToken: string;
-      lastRewardBlock: BigNumber;
       accSmcwPerShare: BigNumber;
       balance: BigNumber;
       totalWeight: BigNumber;
@@ -559,6 +556,7 @@ export class MasterChef extends BaseContract {
   ): Promise<ContractTransaction>;
 
   updatePool(
+    _user: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -571,10 +569,11 @@ export class MasterChef extends BaseContract {
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber] & {
       totalAmount: BigNumber;
       totalWeight: BigNumber;
       totalRewardDebt: BigNumber;
+      lastRewardBlock: BigNumber;
     }
   >;
 
@@ -654,9 +653,8 @@ export class MasterChef extends BaseContract {
     poolInfo(
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber] & {
         stakeToken: string;
-        lastRewardBlock: BigNumber;
         accSmcwPerShare: BigNumber;
         balance: BigNumber;
         totalWeight: BigNumber;
@@ -703,7 +701,7 @@ export class MasterChef extends BaseContract {
 
     unpause(overrides?: CallOverrides): Promise<void>;
 
-    updatePool(overrides?: CallOverrides): Promise<void>;
+    updatePool(_user: string, overrides?: CallOverrides): Promise<void>;
 
     updateTokenPerBlock(
       _amount: BigNumberish,
@@ -714,10 +712,11 @@ export class MasterChef extends BaseContract {
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber] & {
         totalAmount: BigNumber;
         totalWeight: BigNumber;
         totalRewardDebt: BigNumber;
+        lastRewardBlock: BigNumber;
       }
     >;
 
@@ -845,6 +844,7 @@ export class MasterChef extends BaseContract {
     ): Promise<BigNumber>;
 
     updatePool(
+      _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -955,6 +955,7 @@ export class MasterChef extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     updatePool(
+      _user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

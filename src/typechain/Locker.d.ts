@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface LockerInterface extends ethers.utils.Interface {
   functions: {
+    "activePool(address)": FunctionFragment;
     "addPools(address[])": FunctionFragment;
     "claimVestedTokens(uint256)": FunctionFragment;
     "getClaimAmount(address,uint256)": FunctionFragment;
@@ -37,6 +38,7 @@ interface LockerInterface extends ethers.utils.Interface {
     "vestingDuration()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "activePool", values: [string]): string;
   encodeFunctionData(functionFragment: "addPools", values: [string[]]): string;
   encodeFunctionData(
     functionFragment: "claimVestedTokens",
@@ -76,6 +78,7 @@ interface LockerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "activePool", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addPools", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "claimVestedTokens",
@@ -195,6 +198,8 @@ export class Locker extends BaseContract {
   interface: LockerInterface;
 
   functions: {
+    activePool(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+
     addPools(
       _pools: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -262,6 +267,8 @@ export class Locker extends BaseContract {
     vestingDuration(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
+  activePool(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
   addPools(
     _pools: string[],
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -319,6 +326,8 @@ export class Locker extends BaseContract {
   vestingDuration(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    activePool(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
     addPools(_pools: string[], overrides?: CallOverrides): Promise<void>;
 
     claimVestedTokens(
@@ -460,6 +469,8 @@ export class Locker extends BaseContract {
   };
 
   estimateGas: {
+    activePool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     addPools(
       _pools: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -507,6 +518,11 @@ export class Locker extends BaseContract {
   };
 
   populateTransaction: {
+    activePool(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     addPools(
       _pools: string[],
       overrides?: Overrides & { from?: string | Promise<string> }
