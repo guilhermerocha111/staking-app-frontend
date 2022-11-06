@@ -118,7 +118,7 @@ export default function IngameStaking1() {
           </h2>
         </div>
         <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 sm:mt-2 sm:w-full">
-          1000SMCW = 1/day
+          3000SMCW = 1/day
           <br />
           Max: 20/day
         </div>
@@ -175,26 +175,26 @@ export default function IngameStaking1() {
                   </p>
                 </div>
                 <NumberInput
-                  placeholder="1000 (min) 20000 (max)"
+                  placeholder="3000 (min) 60000 (max)"
                   value={stakeAmount}
                   setValue={setStakeAmount}
-                  min={1000}
+                  min={3000}
                   max={
-                    20000 - Number(userInfo.stakedAmount) - Number(userInfo.lastAmount)
+                    60000 - Number(userInfo.stakedAmount) - Number(userInfo.lastAmount)
                   }
-                  step={1000}
-                  roundTo={1000}
+                  step={3000}
+                  roundTo={3000}
                   decimalpoints={0}
                   className={'mt-2'}
                   required
                 />
                 <p className="flex items-center text-sm mt-2 text-design-darkBlue2">
-                  <FiInfo className=" mr-2" /> Only multiples of 1000
+                  <FiInfo className=" mr-2" /> Only multiples of 3000
                 </p>
               </div>
 
               {isApproved ? (
-                <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 1000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
+                <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                   {isLoading ? 'Staking...' : 'Increase / Stake'} <HiOutlineExternalLink />
                 </Button>
               ) : (
@@ -238,18 +238,18 @@ export default function IngameStaking1() {
                 </p>
               </div>
               <NumberInput
-                placeholder="1000 (min) 20000 (max)"
+                placeholder="3000 (min) 60000 (max)"
                 value={unstakeAmount}
                 setValue={setUnstakeAmount}
-                min={1000}
+                min={3000}
                 max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
-                step={1000}
-                roundTo={1000}
+                step={3000}
+                roundTo={3000}
                 decimalpoints={0}
                 required
               />
               <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 1000
+                <FiInfo className=" mr-2" /> Only multiples of 3000
               </p>
               <Button type="submit" className="gradient-1 button-3 mt-2">
                 Decrease / Unstake <HiOutlineExternalLink />
