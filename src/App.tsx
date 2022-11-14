@@ -15,13 +15,14 @@ import { TELEMETRY_ASSETS } from "./utils/constants";
 import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
 import IngameRewards from './components/Panel/IngameRewards'
+import loaderGif from './static/preloader.gif';
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
-  const [, ACTION] = useContext(Context);
+  const [{tx_loader}, ACTION] = useContext(Context);
 
   const modalStyles = 
         {
@@ -82,6 +83,14 @@ export default function App() {
     }
   },[chainId])
 
+  useEffect(() => {
+    if (tx_loader) {
+      document.querySelector('body')?.classList.add('collapsed')
+    } else {
+      document.querySelector('body')?.classList.remove('collapsed')
+    }
+  }, [tx_loader])
+
   const switchNetwork = async () => {
     try {
       await library.provider.request({
@@ -138,6 +147,11 @@ export default function App() {
             )}
           </div>
       </Modal>
+      {tx_loader && (
+        <div className={'loaderWrapper'}>
+          <img src={loaderGif} />
+        </div>
+      )}
     </div>
   );
 }

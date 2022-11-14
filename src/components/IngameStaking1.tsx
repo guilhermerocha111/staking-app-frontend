@@ -21,6 +21,7 @@ import { useWeb3React } from "@web3-react/core";
 import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
+import useCommon from "../hooks/useCommon";
 
 export default function IngameStaking1() {
   const stakingType = "smcw";
@@ -32,6 +33,15 @@ export default function IngameStaking1() {
   const [isLoading, setIsLoading] = useState(false);
   const [, ACTION] = useContext(Context);
   const { chainId, active } = useWeb3React();
+  const { addCommasToNumber } = useCommon();
+
+  const [actionType, setActionType] = useState<any>("default");
+
+  const actionMessage = {
+    stake: 'Staking...',
+    claim: 'Claiming...',
+    default: 'Increase / Stake'
+  }
 
   const stake = useStake();
   const unstake = useUnstake();
@@ -51,13 +61,16 @@ export default function IngameStaking1() {
     e.preventDefault();
     ACTION.SET_TX_LOADER(true);
     setIsLoading(true);
+    setActionType('stake');
     try {
       await stake(parseEther(stakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Stake Amount: ${stakeAmount}`);
       setIsLoading(false);
+      setActionType('default');
       // window.location.reload();
     } catch (err) {
+      setActionType('default');
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       console.log(err);
@@ -87,6 +100,7 @@ export default function IngameStaking1() {
     // @note integrate enjin apis and then execute claim transaction
     ACTION.SET_TX_LOADER(true);
     setIsLoading(true);
+    setActionType('claim');
     try {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
@@ -95,11 +109,13 @@ export default function IngameStaking1() {
       toast.success(`Claimed successfully`);
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
+      setActionType('default');
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       toast.error("Something went wrong");
+      setActionType('default');
     }
   };
 
@@ -171,7 +187,7 @@ export default function IngameStaking1() {
                       alt=""
                       className="w-4 h-4 object-contain object-center ml-2 mr-1"
                     />
-                    <span className="text-white">{smcwBalance}</span>
+                    <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
                   </p>
                 </div>
                 <NumberInput
@@ -195,7 +211,8 @@ export default function IngameStaking1() {
 
               {isApproved ? (
                 <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
-                  {isLoading ? 'Staking...' : 'Increase / Stake'} <HiOutlineExternalLink />
+                  {/* @ts-ignore */}
+                  {actionMessage[actionType]} <HiOutlineExternalLink />
                 </Button>
               ) : (
                 <Button
@@ -309,59 +326,71 @@ export default function IngameStaking1() {
             <p className="flex items-center gap-2">{estimated} / day</p>
           </div>
         </div>
-        <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
-          <input
-            disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
-            value={enjinAddress}
-            onChange={(e) => setEnjinAddress(e.target.value)}
-            type="text"
-            placeholder="Put your Enjin Wallet Address Here"
-          />
-        </div>
-        <form onSubmit={(e) => handleClaim(e)} className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
-          {/* <Select
-            options={[
-              {
-                value: "",
-                label: "Select Telemetry of choice",
-              },
-              {
-                value: "Type 1",
-                label: "Type 1",
-              },
-              {
-                value: "Type 2",
-                label: "Type 2",
-              },
-            ]}
-            value={telemetryType}
-            onChange={(e) => setTelemetryType(e.target.value)}
-            required
-          /> */}
+        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden z-1">
+          <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 `}>
+              <button
+                className={`font-semibold py-3 link-active-2`}
+                onClick={() => setType("stake")}
+              >
+                Claim
+              </button>
+            </div>
+          <div className="grid grid-cols-1 gap-2 p-4 ">
+            <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+              <input
+                disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
+                value={enjinAddress}
+                onChange={(e) => setEnjinAddress(e.target.value)}
+                type="text"
+                placeholder="Put your Enjin Wallet Address Here"
+              />
+            </div>
+            <form onSubmit={(e) => handleClaim(e)} className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+              {/* <Select
+                options={[
+                  {
+                    value: "",
+                    label: "Select Telemetry of choice",
+                  },
+                  {
+                    value: "Type 1",
+                    label: "Type 1",
+                  },
+                  {
+                    value: "Type 2",
+                    label: "Type 2",
+                  },
+                ]}
+                value={telemetryType}
+                onChange={(e) => setTelemetryType(e.target.value)}
+                required
+              /> */}
 
-          <h3 className="mb-1">Claim Amount</h3>
-          <NumberInput
-            placeholder="Amount of rewards to claim"
-            value={claimAmount}
-            setValue={setClaimAmount}
-            min={1}
-            max={Number(pendings) + Number(userInfo.userRewards)}
-            step={1}
-            decimalpoints={0}
-            required
-          />
-          {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
-            <Button
-              type="submit"
-              disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
-              className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
-                ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
-              `}
-            >
-              Claim Rewards<FiDownload />
-            </Button>
-          )}
-        </form>
+              <h3 className="mb-1">Claim Amount</h3>
+              <NumberInput
+                placeholder="Amount of rewards to claim"
+                value={claimAmount}
+                setValue={setClaimAmount}
+                min={1}
+                max={Number(pendings) + Number(userInfo.userRewards)}
+                step={1}
+                decimalpoints={0}
+                required
+              />
+              {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
+                <Button
+                  type="submit"
+                  disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
+                  className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
+                    ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
+                  `}
+                >
+                  Claim Rewards<FiDownload />
+                </Button>
+              )}
+            </form>
+          </div>
+        </div>
       </div>
     </Card>
   );

@@ -73,8 +73,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
       window.location.reload();
     } catch (error: any) {
       ACTION.SET_TX_LOADER(false);
-      console.log(error);
-      toast.error(error.reason || error.message);
+      toast.error('Execution reverted: not enough rewards. (happens when trying to claim “0” pending rewards)');
     }
   };
 
@@ -107,7 +106,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
       </div>
       <div className="flex justify-between flex-col xl:flex-row gap-8 mt-6">
 
-        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '280px'}}>
+        <Card className="flex-1 custom-border" styles={{height: isTotalRewardsOpen ? 'auto' : 'fit-content', minHeight: '280px'}}>
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
@@ -272,7 +271,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
         {/* SMCW Info */}
 
-        <Card className="flex-1 custom-border" styles={{height: 'fit-content', minHeight: '280px'}}>
+        <Card className="flex-1 custom-border" styles={{height: isInfoOpen ? 'auto' : 'fit-content', minHeight: '280px'}}>
           <h3 className="card-heading-1">SMCW Info</h3>
           <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
               <p className="tag-1">
@@ -387,7 +386,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 onClick={() => setInfoOpen(!isInfoOpen)}
                 className="gradient-2 button-3 mt-[16px]"
               >
-                SMCW INFO / BUY SMCW
+                SMCW INFO
                 <FiChevronDown />
               </Button>
             )}
@@ -419,7 +418,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               {max_apr && (
                 <div className="grid grid-cols-2 gap-1">
-                  <p className="text-design-grey">Staking APY</p>
+                  <p className="text-design-grey">Staking APR</p>
                   <div className="flex items-center">
                     <img
                       src="/images/coin.png"
@@ -427,7 +426,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                       className="w-5 h-5 object-contain object-center mr-2"
                     />
                     <p className="flex items-end leading-5 gradient-3 clip-text">
-                      Up to {max_apr.toFixed(0)}%
+                      Up to {addCommasToNumber(Number(max_apr.toFixed(0)), 0)}%
                     </p>
                   </div>
                 </div>
@@ -441,7 +440,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {addCommasToNumber(tokenInfo.max_supply)}
+                    {addCommasToNumber(tokenInfo.total_supply)}
                   </p>
                 </div>
               </div>
@@ -454,7 +453,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {addCommasToNumber(tokenInfo.max_supply)}
+                    {addCommasToNumber(Number(tokenInfo.self_reported_circulating_supply.toFixed(0)), 0)}
                   </p>
                 </div>
               </div>

@@ -112,7 +112,7 @@ export default function Staking({
               Wallet Balance:
               {stakingType === "smcw" && <img src="/images/coin.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
               {stakingType === "lp" && <img src="/images/lp.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
-              <span className="text-white">{smcwBalance}</span>
+              <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
             </p>
           </div>
           <div className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
@@ -187,7 +187,7 @@ export default function Staking({
             >
               100%
             </button>
-            <p className="text-sm ml-1">Stake until {stakeUntill}</p>
+            <p className="text-sm ml-1">Stake until {stakeUntill} UTC</p>
           </div>
           {isApproved ? (
             <Button
@@ -221,7 +221,7 @@ export default function Staking({
           </p>
         )}
         <div className="gradient-2 button-3 border border-design-blue mt-2">
-          Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
+          Estimated Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
         </div>
         <div className="w-full mt-4 overflow-x-auto overflow-y-hidden">
           <div
@@ -271,11 +271,14 @@ export default function Staking({
         </div>
         <div className="card-2 mt-6">
           <p className="text-sm">
-            Stake as many times as you like <br /> you can stake or withdraw
+            Stake as many times as you like <br /> You can stake or withdraw
             rewards at any time (after vesting period ends) at{" "}
             <a href="/vesting" className="external-link">
               Vesting LOG <HiOutlineExternalLink />
             </a>
+          </p>
+          <p className="text-sm">
+            *APR is estimated based on current users stakes and constantly changing
           </p>
         </div>
       </div>

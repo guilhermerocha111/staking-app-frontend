@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { chains, connectors } from "../utils/connectors";
 import { TokenInfo, usePrice } from "../hooks/usePrice";
 import { contracts, DEFAULT_CHAINID } from "../utils/constants";
+import useCommon from '../hooks/useCommon';
 
 import { Context } from '../contextStore';
 import { useContext } from 'react'; 
@@ -75,6 +76,8 @@ export default function Nav() {
         }
   };
 
+  const { addCommasToNumber } = useCommon();
+
   const disconnect = () => {
     deactivate();
     localStorage.removeItem("isConnected");
@@ -105,7 +108,7 @@ export default function Nav() {
   };
 
   return (
-    <nav className="bg-design-background4 bg-opacity-20 text-design-white fixed top-0 left-0 w-full blurred-container z-40">
+    <nav className="bg-opacity-20 text-design-white fixed top-0 left-0 w-full blurred-container z-40">
       <div className="hidden lg:flex bg-design-backgroundBlack text-xs font-semibold py-2 px-4 items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <p className="flex items-center">
@@ -142,8 +145,8 @@ export default function Nav() {
                 alt=""
                 className="h-4 w-4 object-contain object-center mr-1.5"
               />
-              Staking APY
-              <span className="gradient-3 clip-text ml-2">Up to {max_apr.toFixed(0)}%</span>
+              Staking APR
+              <span className="gradient-3 clip-text ml-2">Up to {addCommasToNumber(Number(max_apr.toFixed(0)), 0)}%</span>
             </p>
           )}
         </div>
@@ -242,9 +245,6 @@ export default function Nav() {
       </div>
       <div
         className="mx-auto px-4 lg:px-8"
-        style={{
-          maxWidth: "calc(1536px + 4rem)",
-        }}
       >
         <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
           <a href="/">
@@ -259,7 +259,7 @@ export default function Nav() {
               className="block lg:hidden h-14"
             />
           </a>
-          <div className="hidden lg:flex gap-4 text-design-grey">
+          {/* <div className="hidden lg:flex gap-4 text-design-grey">
             <a href="/">HOME</a>
             <a href="/">NEWS</a>
             <a href="/" className="link-active">
@@ -268,7 +268,7 @@ export default function Nav() {
             <a href="/">TUTORIAL</a>
             <a href="/">SHOP</a>
             <a href="/">DOWNLOAD</a>
-          </div>
+          </div> */}
           <div className="flex items-center gap-6 lg:w-32">
             {/* <Button className="!hidden lg:!flex gradient-1 button-3 font-semibold">
               Play Now
@@ -324,7 +324,7 @@ export default function Nav() {
                   <img src="/images/close.png" alt="Close" />
                 </Button>
               </div>
-              <div className="grid grid-cols-1 gap-6 mt-8 text-design-grey font-semibold">
+              {/* <div className="grid grid-cols-1 gap-6 mt-8 text-design-grey font-semibold">
                 <a href="/">PROFILE</a>
                 <a href="/">HOME</a>
                 <a href="/">NEWS</a>
@@ -333,7 +333,7 @@ export default function Nav() {
                 </a>
                 <a href="/">TUTORIAL</a>
                 <a href="/">SHOP</a>
-              </div>
+              </div> */}
             </div>
             <div className="grid grid-cols-1 gap-3">
               <div className="flex justify-center items-center gap-4 mb-4">

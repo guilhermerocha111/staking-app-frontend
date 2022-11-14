@@ -138,7 +138,7 @@ export default function IngameRewards() {
 
 
   return (
-    <section className="max-w-screen-2xl mx-auto mt-12" id="log">
+    <section className="max-w-screen-2xl mx-auto mt-8" id="log">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
         <div>
           <h1 className="section-heading-1">

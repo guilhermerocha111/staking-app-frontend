@@ -26,6 +26,25 @@ main {
   }
 }
 
+.loaderWrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+body.collapsed {
+  height: 100%;
+  overflow-y: hidden;
+}
+
 .poolsMenu {
   @media (max-width: 768px) {
     overflow: scroll;
@@ -171,20 +190,20 @@ main {
   }
 }
 
-@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-  .blurred-container {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-}
+// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+//   .blurred-container {
+//     -webkit-backdrop-filter: blur(12px);
+//     backdrop-filter: blur(12px);
+//   }
+// }
 
-/* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
-@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-  .blurred-container {
-    --tw-bg-opacity: 1;
-    background-color: rgb(2 2 2 / var(--tw-bg-opacity));
-  }
-}
+// /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
+// @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+//   .blurred-container {
+//     --tw-bg-opacity: 1;
+//     background-color: rgb(2 2 2 / var(--tw-bg-opacity));
+//   }
+// }
 
 * {
   font-family: 'Titillium Web', sans-serif;
@@ -230,7 +249,6 @@ svg{
 
 .gradient-2 {
   @apply bg-gradient-to-r from-design-gradientBlue to-design-gradientDarkBlue;
-  @include gradientAnimation(#15244C,#2559D5,  .9s)
 }
 
 .gradient-3 {

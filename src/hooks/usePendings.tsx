@@ -32,7 +32,7 @@ export const usePendings = () => {
       ToFixed(formatUnits(totalAmount0.add(totalAmount1).toString(),"ether"))
       )
 
-    }, 10000);
+    }, 2500);
   }, [total_rewards,account]);
   return {smcw_Rewards,lp_rewards,total:total_rewards};
 };
