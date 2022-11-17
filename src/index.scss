@@ -320,6 +320,19 @@ svg{
   @apply relative bg-design-background2 text-white border border-design-darkBlue lg:shadow-lg rounded-lg p-5;
 }
 
+.tableHeader {
+  @apply relative bg-design-background2;
+
+  &::before {
+    content: '';
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    top: -20px;
+    @apply bg-design-background2;
+  }
+}
+
 .card-2{
   @apply relative bg-design-background5 text-white border border-design-steelBlue shadow rounded-xl p-4;
 }

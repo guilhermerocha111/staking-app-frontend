@@ -134,7 +134,7 @@ export default function IngameStaking1() {
           </h2>
         </div>
         <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 sm:mt-2 sm:w-full">
-          3000SMCW = 1/day
+          3,000 SMCW = 1/day
           <br />
           Max: 20/day
         </div>
@@ -191,7 +191,7 @@ export default function IngameStaking1() {
                   </p>
                 </div>
                 <NumberInput
-                  placeholder="3000 (min) 60000 (max)"
+                  placeholder="3,000 (min) 60,000 (max)"
                   value={stakeAmount}
                   setValue={setStakeAmount}
                   min={3000}
@@ -205,7 +205,7 @@ export default function IngameStaking1() {
                   required
                 />
                 <p className="flex items-center text-sm mt-2 text-design-darkBlue2">
-                  <FiInfo className=" mr-2" /> Only multiples of 3000
+                  <FiInfo className=" mr-2" /> Only multiples of 3,000
                 </p>
               </div>
 
@@ -255,7 +255,7 @@ export default function IngameStaking1() {
                 </p>
               </div>
               <NumberInput
-                placeholder="3000 (min) 60000 (max)"
+                placeholder="3,000 (min) 60,000 (max)"
                 value={unstakeAmount}
                 setValue={setUnstakeAmount}
                 min={3000}
@@ -266,7 +266,7 @@ export default function IngameStaking1() {
                 required
               />
               <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 3000
+                <FiInfo className=" mr-2" /> Only multiples of 3,000
               </p>
               <Button type="submit" className="gradient-1 button-3 mt-2">
                 Decrease / Unstake <HiOutlineExternalLink />
@@ -307,7 +307,7 @@ export default function IngameStaking1() {
                 alt=""
                 className="w-5 h-5 object-contain object-center mr-1"
               />
-              {Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
+              {addCommasToNumber(Number(userInfo.stakedAmount) + Number(userInfo.lastAmount),2)}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
@@ -336,6 +336,7 @@ export default function IngameStaking1() {
               </button>
             </div>
           <div className="grid grid-cols-1 gap-2 p-4 ">
+            <h3 className="mb-1">Enjin Wallet address</h3>
             <div className={`input ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
               <input
                 disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }

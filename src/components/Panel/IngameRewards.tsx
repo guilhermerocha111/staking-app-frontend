@@ -123,7 +123,7 @@ export default function IngameRewards() {
                     {`${item.reciever_address?.substr(0, 6)}...${item.reciever_address?.substr(-4)}`}
                     <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(item.reciever_address)} />
                 </td>
-                <td>{moment(item.timestamp).format("LT")}</td>
+                <td>{moment(item.timestamp).format("LT")} UTC</td>
                 <td>
                     
                 </td>
@@ -163,7 +163,7 @@ export default function IngameRewards() {
               minWidth: "1200px",
             }}
           >
-            <thead className="grid grid-cols-1">
+            <thead className="grid grid-cols-1 tableHeader" style={{position: 'sticky', top: '0'}}>
               <tr className="text-left !border-b">
                 <th>Type</th>
                 <th>Reward</th>

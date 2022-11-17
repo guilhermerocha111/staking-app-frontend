@@ -221,7 +221,7 @@ export default function Staking({
           </p>
         )}
         <div className="gradient-2 button-3 border border-design-blue mt-2">
-          Estimated Daily Rewards: <img src="/images/coin.png" alt="" /> {avarage}
+          Estimated Daily Rewards: <img src="/images/coin.png" alt="" /> {addCommasToNumber(Number(avarage), 2)}
         </div>
         <div className="w-full mt-4 overflow-x-auto overflow-y-hidden">
           <div

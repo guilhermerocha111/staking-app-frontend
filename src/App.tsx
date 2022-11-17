@@ -16,6 +16,7 @@ import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
 import IngameRewards from './components/Panel/IngameRewards'
 import loaderGif from './static/preloader.gif';
+import Button from "./components/Button";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
@@ -114,6 +115,20 @@ export default function App() {
   return (
     <div className="bg-design-background text-white">
       <Nav />
+      <div
+        className="max-w-screen-2xl mx-auto pt-12"
+        style={{zIndex: 2, position: 'relative'}}
+      >
+        <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
+          <a href="/">
+            <img
+              src="/images/logo2.png"
+              alt=""
+              className="hidden lg:block h-14"
+            />
+          </a>
+        </div>
+      </div>
       <Routes>
         <Route path="/" element={<Home refresh={refresh} setRefresh={setRefresh} />}>
           <Route path="/" element={<SMCW refresh={refresh} setRefresh={setRefresh} />} />

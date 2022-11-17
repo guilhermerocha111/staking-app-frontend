@@ -244,7 +244,7 @@ export default function Nav() {
         </div>
       </div>
       <div
-        className="mx-auto px-4 lg:px-8"
+        className="bg-design-background4 bg-opacity-80 mx-auto px-4 lg:px-8 lg:hidden"
       >
         <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
           <a href="/">

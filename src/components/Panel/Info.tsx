@@ -409,9 +409,10 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     {addCommasToNumber(Number(total_staked), 4)}
                     <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
                       ${" "}
-                      {(
+                      {
+                      addCommasToNumber(Number((
                         parseFloat(total_staked) * tokenInfo.quote?.USD?.price
-                      ).toFixed(4)}
+                      ).toFixed(4)), 4)}
                     </span>
                   </p>
                 </div>
