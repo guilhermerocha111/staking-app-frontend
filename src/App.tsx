@@ -15,15 +15,13 @@ import { TELEMETRY_ASSETS } from "./utils/constants";
 import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
 import IngameRewards from './components/Panel/IngameRewards'
-import loaderGif from './static/preloader.gif';
-import Button from "./components/Button";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
-  const [{tx_loader}, ACTION] = useContext(Context);
+  const [{tx_loader, telemetry_assets}, ACTION] = useContext(Context);
 
   const modalStyles = 
         {
@@ -53,6 +51,17 @@ export default function App() {
       }
     })
   }
+
+  const getTelemetryAssets = async () => {
+    const telemetryAssets = await new ApiClient().getTelemetryAssets()
+    ACTION.SET_TELEMETRY_ASSETS(telemetryAssets)
+  }
+
+  useEffect(() => {
+    if (telemetry_assets.length === 0) {
+      getTelemetryAssets()
+    }
+  }, [telemetry_assets])
 
   useEffect(() => {
     wsClient.onmessage = async (message) => {
@@ -162,11 +171,6 @@ export default function App() {
             )}
           </div>
       </Modal>
-      {tx_loader && (
-        <div className={'loaderWrapper'}>
-          <img src={loaderGif} />
-        </div>
-      )}
     </div>
   );
 }

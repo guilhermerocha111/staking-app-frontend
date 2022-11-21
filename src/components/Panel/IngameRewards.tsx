@@ -5,7 +5,6 @@ import { useState, useContext, useEffect } from "react";
 import { Context } from '../../contextStore';
 import { useWeb3React } from "@web3-react/core";
 import ApiClient from "../../api/ApiClient";
-import { TELEMETRY_ASSETS } from "../../utils/constants";
 import moment from "moment";
 
 interface rewardItem {
@@ -18,7 +17,7 @@ interface rewardItem {
 export default function IngameRewards() {
 //   const [filter, setFilter] = useState<string>("");
 //   const [sort, setSort] = useState<string>("");
-  const [{telemetry_rewards}, ACTION] = useContext(Context);
+  const [{telemetry_rewards, telemetry_assets}, ACTION] = useContext(Context);
   const [telemetryRewards, setTelemetryRewards] = useState({})
   const [showCollapsed, setCollapsed] = useState<any>([]);
 
@@ -33,10 +32,6 @@ export default function IngameRewards() {
 
   const copyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
-  }
-
-  const getTelemetryInfo = (id: any) => {
-    return TELEMETRY_ASSETS.find(telemetry => telemetry.id === id)
   }
 
   useEffect(() => {
@@ -112,8 +107,8 @@ export default function IngameRewards() {
                   
                 </td>
                 <td>
-                    <img src={getTelemetryInfo(item.asset_id)?.image} />
-                    {getTelemetryInfo(item.asset_id)?.label}
+                    <img src={telemetry_assets[item.asset_id]?.image} />
+                    {telemetry_assets[item.asset_id]?.name}
                 </td>
                 <td>
                     {`${item.claim_address?.substr(0, 6)}...${item.claim_address?.substr(-4)}`}

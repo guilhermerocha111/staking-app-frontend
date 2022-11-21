@@ -22,6 +22,7 @@ import { parseEther } from "ethers/lib/utils";
 import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
 import useCommon from "../hooks/useCommon";
+import Loader from "./Loader";
 
 export default function IngameStaking1() {
   const stakingType = "smcw";
@@ -31,11 +32,16 @@ export default function IngameStaking1() {
   const [claimAmount, setClaimAmount] = useState<string>("0");
   const [type, setType] = useState<"stake" | "unstake">("stake");
   const [isLoading, setIsLoading] = useState(false);
-  const [, ACTION] = useContext(Context);
+  const [{active_tx}, ACTION] = useContext(Context);
   const { chainId, active } = useWeb3React();
   const { addCommasToNumber } = useCommon();
 
   const [actionType, setActionType] = useState<any>("default");
+
+
+  const setActiveTx = (tx_string: string) => {
+    ACTION.SET_ACTIVE_TX(tx_string);
+  }
 
   const actionMessage = {
     stake: 'Staking...',
@@ -62,17 +68,20 @@ export default function IngameStaking1() {
     ACTION.SET_TX_LOADER(true);
     setIsLoading(true);
     setActionType('stake');
+    setActiveTx('TELEMETRY_STAKE');
     try {
       await stake(parseEther(stakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Stake Amount: ${stakeAmount}`);
       setIsLoading(false);
       setActionType('default');
+      setActiveTx('');
       // window.location.reload();
     } catch (err) {
       setActionType('default');
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
+      setActiveTx('');
       console.log(err);
     }
   };
@@ -81,16 +90,19 @@ export default function IngameStaking1() {
     e.preventDefault();
     setIsLoading(true);
     ACTION.SET_TX_LOADER(true);
+    setActiveTx('TELEMETRY_UNSTAKE');
     try {
       await unstake(parseEther(unstakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Unstake Amount: ${unstakeAmount}`);
       setIsLoading(false);
+      setActiveTx('');
       // window.location.reload();
     } catch (err) {
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       console.log(err);
+      setActiveTx('');
     }
     
   };
@@ -101,6 +113,7 @@ export default function IngameStaking1() {
     ACTION.SET_TX_LOADER(true);
     setIsLoading(true);
     setActionType('claim');
+    setActiveTx('TELEMETRY_CLAIM');
     try {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
@@ -110,12 +123,14 @@ export default function IngameStaking1() {
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       setActionType('default');
+      setActiveTx('');
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       toast.error("Something went wrong");
       setActionType('default');
+      setActiveTx('');
     }
   };
 
@@ -213,6 +228,9 @@ export default function IngameStaking1() {
                 <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                   {/* @ts-ignore */}
                   {actionMessage[actionType]} <HiOutlineExternalLink />
+                  {
+                    (active_tx === 'TELEMETRY_STAKING') ? <Loader /> : <HiOutlineExternalLink />
+                  }
                 </Button>
               ) : (
                 <Button
@@ -222,11 +240,16 @@ export default function IngameStaking1() {
                   type="button"
                   onClick={async () => {
                     setIsLoading(true);
+                    setActiveTx('TELEMETRY_APPROVE');
                     await approve(contracts[DEFAULT_CHAINID].nftStaking);
+                    setActiveTx('');
                     setIsLoading(false);
                   }}
                 >
                   {isLoading ? "Approving..." : "Approve"}
+                  {
+                    (active_tx === 'TELEMETRY_APPROVE') ? <Loader /> : ''
+                  }
                 </Button>
               )}
               {!isApproved && (
@@ -269,7 +292,10 @@ export default function IngameStaking1() {
                 <FiInfo className=" mr-2" /> Only multiples of 3,000
               </p>
               <Button type="submit" className="gradient-1 button-3 mt-2">
-                Decrease / Unstake <HiOutlineExternalLink />
+                Decrease / Unstake
+                {
+                    (active_tx === 'TELEMETRY_UNSTAKE') ? <Loader /> : <HiOutlineExternalLink />
+                }
               </Button>
               {!isApproved && (
                 <p className="flex items-center text-sm mt-4">
@@ -386,7 +412,10 @@ export default function IngameStaking1() {
                     ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
                   `}
                 >
-                  Claim Rewards<FiDownload />
+                  Claim Rewards 
+                  {
+                    (active_tx === 'TELEMETRY_CLAIM') ? <Loader /> : <FiDownload />
+                  }
                 </Button>
               )}
             </form>

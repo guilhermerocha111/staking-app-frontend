@@ -16,6 +16,7 @@ import { useAllowance } from "../hooks/useAllowance";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
 import { Context } from '../contextStore';
+import Loader from './Loader';
 
 interface StakingProps {
   title: string;
@@ -24,6 +25,8 @@ interface StakingProps {
   avarage:string;
   poolAddress: string;
   defaultAmount?: string;
+  approve_tx_string: string;
+  stake_tx_string: string;
   //this is to implement different type of function here in this component for diffrent staking methods
   stakingType: string;
   refresh: boolean;
@@ -37,6 +40,8 @@ export default function Staking({
   poolAddress,
   avarage,
   defaultAmount,
+  approve_tx_string,
+  stake_tx_string,
   stakingType,
   refresh,
   setRefresh,
@@ -47,11 +52,15 @@ export default function Staking({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [, ACTION] = useContext(Context);
+  const [{active_tx}, ACTION] = useContext(Context);
   const isApproved = useAllowance(stakingType, poolAddress,loading);
   const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
   const { addCommasToNumber } = useCommon();
+
+  const setActiveTx = (tx_string: string) => {
+    ACTION.SET_ACTIVE_TX(tx_string);
+  }
 
   useEffect(() => {
     setStakeUntill(
@@ -62,6 +71,7 @@ export default function Staking({
   const stakeInPool = async () => {
     try {
       ACTION.SET_TX_LOADER(true);
+      setActiveTx(stake_tx_string);
       setLoading(true);
       console.log(BigNumber.from(stakeLength))
       const tx = await pool.deposit(
@@ -72,8 +82,10 @@ export default function Staking({
       toast.success(`Successfully staked ${stakeAmount} SMCW`);
       setLoading(false);
       ACTION.SET_TX_LOADER(false);
+      setActiveTx('');
       setRefresh(!refresh);
     } catch (error: any) {
+      setActiveTx('');
       toast.error(error.reason);
       setLoading(false);
       ACTION.SET_TX_LOADER(false);
@@ -195,7 +207,10 @@ export default function Staking({
               className={`gradient-1 button-3 mt-4 ${Number(stakeAmount.replace('.', '')[0]) >= 1 ? '' : 'opacity-50 pointer-events-none'}`}
               disabled={loading}
             >
-               {loading ? "Staking..." : "Stake"} <HiOutlineExternalLink />
+               {loading ? "Staking..." : "Stake"}
+                {
+                  (active_tx === stake_tx_string) ? <Loader /> : <HiOutlineExternalLink />
+                }
             </Button>
           ) : (
             <Button
@@ -204,12 +219,19 @@ export default function Staking({
               }`}
               onClick={async () => {
                 setLoading(true);
+                setActiveTx(approve_tx_string)
                 await approve(poolAddress);
                 setLoading(false);
+                setActiveTx('')
                 setRefresh(!refresh);
               }}
             >
               {loading ? "Approving..." : "Approve"}
+              {
+                active_tx === approve_tx_string && (
+                  <Loader />
+                )
+              }
             </Button>
           )}
         </div>

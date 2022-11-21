@@ -9,6 +9,14 @@ const actions = {
                     payload: value,
                 })
     },
+    [types.SET_ACTIVE_TX]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_ACTIVE_TX,
+                    payload: value,
+                })
+    },
     [types.SET_MAX_APR]:
         (dispatch) =>
             (value = {}) => {
@@ -22,6 +30,14 @@ const actions = {
             (value = {}) => {
                 dispatch({
                     type: types.SET_TELEMETRY_REWARDS,
+                    payload: value,
+                })
+    },
+    [types.SET_TELEMETRY_ASSETS]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_TELEMETRY_ASSETS,
                     payload: value,
                 })
     },

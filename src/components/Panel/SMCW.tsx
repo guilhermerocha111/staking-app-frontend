@@ -64,6 +64,8 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               avarage={pool1Avarage}
               poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
               title="SMCW Staking"
+              approve_tx_string="APPROVE_SMCW_POOL"
+              stake_tx_string="STAKE_SMCW_POOL"
               defaultAmount="0.0"
               stakingType="smcw"
             />
@@ -75,6 +77,8 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               avarage={pool2Avarage}
               poolAddress={contracts[DEFAULT_CHAINID].lpTosmcw}
               title="BUSD/SMCW LP"
+              approve_tx_string="APPROVE_LP_POOL"
+              stake_tx_string="STAKE_LP_POOL"
               defaultAmount="0.0"
               stakingType="lp"
             />

@@ -8,4 +8,8 @@ export default class ApiClient extends Base {
     async getTelemetryRewards(wallet_id: string) {
         return await super.get(`rewards/${wallet_id}`)
     }
+
+    async getTelemetryAssets() {
+        return await super.get(`assets`)
+    }
 }

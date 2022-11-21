@@ -3,7 +3,9 @@ import {types} from "../types";
 export const initialState = {
     tx_loader: false,
     max_apr: null,
-    telemetry_rewards: []
+    active_tx: '',
+    telemetry_rewards: [],
+    telemetry_assets: []
 }
 
 export const reducers = {
@@ -18,5 +20,13 @@ export const reducers = {
     [types.SET_TELEMETRY_REWARDS]: (state, telemetry_rewards) => ({
         ...state,
         telemetry_rewards,
+    }),
+    [types.SET_ACTIVE_TX]: (state, active_tx) => ({
+        ...state,
+        active_tx,
+    }),
+    [types.SET_TELEMETRY_ASSETS]: (state, telemetry_assets) => ({
+        ...state,
+        telemetry_assets,
     }),
 };
