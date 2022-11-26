@@ -118,7 +118,7 @@ export default function IngameRewards() {
                     {`${item.reciever_address?.substr(0, 6)}...${item.reciever_address?.substr(-4)}`}
                     <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(item.reciever_address)} />
                 </td>
-                <td>{moment(item.timestamp).format("LT")} UTC</td>
+                <td>{moment(item.timestamp).format("HH:mm")} UTC</td>
                 <td>
                     
                 </td>
@@ -140,10 +140,10 @@ export default function IngameRewards() {
             <img src="/images/icons/blank.svg" alt="" /> Ingame Rewards Log
           </h1>
           <p className="flex items-center gap-2 mt-4">
-            SMCW Staking
             <button className="tag-1">
-              BSC <img src="/images/Binance.png" alt="" />
+              Enjin <img src="/images/enjin.png" alt="" />
             </button>
+            View your claimed ingame rewards
           </p>
         </div>
       </div>

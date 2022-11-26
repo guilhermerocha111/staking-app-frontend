@@ -26,10 +26,10 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
         <img src="/images/coin.png" alt="" /> SMCW
       </h1>
       <p className="flex items-center gap-2 mt-4">
-        SMCW Staking
         <button className="tag-1">
           BSC <img src="/images/Binance.png" alt="" />
         </button>
+        Stake SMCW or LP and earn SMCW rewards
       </p>
       <div className="relative flex gap-6 mt-9 flex-col lg:flex-row" style={{minHeight: '400px'}}>
         {(!active ||DEFAULT_CHAINID !== toHex(chainId)) && (
@@ -63,7 +63,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               pool={pool1}
               avarage={pool1Avarage}
               poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
-              title="SMCW Staking"
+              title="SMCW"
               approve_tx_string="APPROVE_SMCW_POOL"
               stake_tx_string="STAKE_SMCW_POOL"
               defaultAmount="0.0"

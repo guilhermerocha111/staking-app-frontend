@@ -8,7 +8,9 @@ export const useStaked = (refresh: boolean) => {
   const { account, library } = useWeb3React();
   const [lp_staked, setlpStaked] = useState("0");
   const [smcw_staked, setsmceStaked] = useState("0");
-  const [total_staked, setTotalStaked] = useState("0");
+  const [smcw_staked_total, setsmceStakedTotal] = useState("0");
+  const [lp_staked_total, setlpStakedTotal] = useState("0");
+  const [ingame_staked, setIngameStaked] = useState("0");
 
   useMemo(async () => {
     const signer: Signer = await getSigner(library);
@@ -19,6 +21,8 @@ export const useStaked = (refresh: boolean) => {
     let amount1 = await pool2.getCurrentStaked(await signer.getAddress());
     // TODO: Also add the current staked amount in the total staked in dapp
     let amount3 = await pool3.getCurrentStaked();
+    let amount4 = await pool1.poolInfo()
+    let amount5 = await pool2.poolInfo()
     
     setsmceStaked(
       ethers.utils.formatUnits(amount0.toString(), "ether")
@@ -26,9 +30,15 @@ export const useStaked = (refresh: boolean) => {
     setlpStaked(
       ethers.utils.formatUnits(amount1.toString(), "ether")
     );
-    setTotalStaked(
-      ethers.utils.formatUnits(amount0.add(amount1).add(amount3).toString(),"ether")
+    setIngameStaked(
+      ethers.utils.formatUnits(amount3.toString(), "ether")
+    );
+    setsmceStakedTotal(
+      ethers.utils.formatUnits(amount4.balance.toString(), "ether")
+    );
+    setlpStakedTotal(
+      ethers.utils.formatUnits(amount5.balance.toString(), "ether")
     )
   }, [account, refresh]);
-  return {smcw_staked,lp_staked,total_staked};
+  return {smcw_staked,lp_staked, ingame_staked, smcw_staked_total, lp_staked_total};
 };

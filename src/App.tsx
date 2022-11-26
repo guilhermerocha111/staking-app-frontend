@@ -11,7 +11,6 @@ import {  DEFAULT_CHAINID, toHex } from "./utils/constants";
 import { chains } from "./utils/connectors";
 import { wsClient } from './api/wsClient';
 import Modal from "react-modal";
-import { TELEMETRY_ASSETS } from "./utils/constants";
 import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
 import IngameRewards from './components/Panel/IngameRewards'
@@ -21,7 +20,7 @@ export default function App() {
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
-  const [{tx_loader, telemetry_assets}, ACTION] = useContext(Context);
+  const [{telemetry_assets}, ACTION] = useContext(Context);
 
   const modalStyles = 
         {
@@ -41,7 +40,7 @@ export default function App() {
   }
 
   const getTelemetryInfo = (id: any) => {
-    return TELEMETRY_ASSETS.find(telemetry => telemetry.id === id)
+    return telemetry_assets[id]
   }
 
   if(active){
@@ -93,14 +92,6 @@ export default function App() {
     }
   },[chainId])
 
-  useEffect(() => {
-    if (tx_loader) {
-      document.querySelector('body')?.classList.add('collapsed')
-    } else {
-      document.querySelector('body')?.classList.remove('collapsed')
-    }
-  }, [tx_loader])
-
   const switchNetwork = async () => {
     try {
       await library.provider.request({
@@ -124,20 +115,6 @@ export default function App() {
   return (
     <div className="bg-design-background text-white">
       <Nav />
-      <div
-        className="max-w-screen-2xl mx-auto pt-12"
-        style={{zIndex: 2, position: 'relative'}}
-      >
-        <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
-          <a href="/">
-            <img
-              src="/images/logo2.png"
-              alt=""
-              className="hidden lg:block h-14"
-            />
-          </a>
-        </div>
-      </div>
       <Routes>
         <Route path="/" element={<Home refresh={refresh} setRefresh={setRefresh} />}>
           <Route path="/" element={<SMCW refresh={refresh} setRefresh={setRefresh} />} />
@@ -165,7 +142,7 @@ export default function App() {
                       <img src={getTelemetryInfo(reward.id)?.image} />
                       <div className={'rewardQuantity'}>x{reward.quantity}</div>
                     </div>
-                    <div>{getTelemetryInfo(reward.id)?.label}</div>
+                    <div>{getTelemetryInfo(reward.id)?.name}</div>
                 </div>
               )
             )}

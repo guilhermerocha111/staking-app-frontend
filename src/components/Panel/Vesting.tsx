@@ -11,6 +11,7 @@ import { Context } from '../../contextStore';
 import {
   useNavigate,
 } from "react-router-dom";
+import useCommon from "../../hooks/useCommon"
 
 
 interface VestingTypes {
@@ -35,6 +36,7 @@ export default function Vesting() {
   const { PoolStakes } = useVestingPanel();
   const [, ACTION] = useContext(Context);
   const navigate = useNavigate();
+  const { addCommasToNumber } = useCommon();
 
   const handleClaim = async (
     amount: string,
@@ -66,10 +68,10 @@ export default function Vesting() {
             <img src="/images/unlock.png" alt="" /> Vesting Panel
           </h1>
           <p className="flex items-center gap-2 mt-4">
-            SMCW Staking
             <button className="tag-1">
               BSC <img src="/images/Binance.png" alt="" />
             </button>
+            Unstake your SMCW or LP. View SMCW claimed rewards vesting period
           </p>
         </div>
         <div className="flex items-center gap-2 mt-5 lg:mt-0">
@@ -129,10 +131,10 @@ export default function Vesting() {
                   <td>
                     <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
                   </td>
-                  <td>{item.amount}</td>
+                  <td>{addCommasToNumber(item.amount, 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
-                  <td>{item.reward}</td>
-                  <td>{item.timestamp}</td>
+                  <td>{addCommasToNumber(item.reward, 4)}</td>
+                  <td>{item.timestamp} UTC</td>
                   {item.percentage < 100 ? (
                     <td>
                       {item.unlocksIn} days

@@ -37,7 +37,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const [isInfoOpen, setInfoOpen] = useState(false);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();
-  const { smcw_staked, lp_staked, total_staked } = useStaked(refresh);
+  const { smcw_staked, lp_staked, ingame_staked, smcw_staked_total, lp_staked_total } = useStaked(refresh);
   const [isTotalRewardsOpen, setTotalRewardsOpen] = useState(false);
   const { days, hours, minutes, seconds } = useTimeDiff(
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
@@ -278,7 +278,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 BSC <img src="/images/Binance.png" alt="" />
               </p>
               <p className="flex items-center w-full max-w-full">
-                Contract
+                SMCW Contract:
                 <span
                   className="inline-block text-design-pink ml-3 truncate"
                   style={{
@@ -398,7 +398,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           >
             <div className="mt-8 grid grid-cols-1 gap-3">
               <div className="grid grid-cols-2 gap-1">
-                <p className="text-design-grey">Total Staked in DApp</p>
+                <p className="text-design-grey">Total Staked in SMCW Pool</p>
                 <div className="flex items-start lg:items-center">
                   <img
                     src="/images/coin.png"
@@ -406,14 +406,47 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
                   />
                   <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
-                    {addCommasToNumber(Number(total_staked), 4)}
+                    {addCommasToNumber(Number(smcw_staked_total), 4)}
                     <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
                       ${" "}
                       {
                       addCommasToNumber(Number((
-                        parseFloat(total_staked) * tokenInfo.quote?.USD?.price
+                        parseFloat(smcw_staked_total) * tokenInfo.quote?.USD?.price
                       ).toFixed(4)), 4)}
                     </span>
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                <p className="text-design-grey">Total Staked in Ingame Pools</p>
+                <div className="flex items-start lg:items-center">
+                  <img
+                    src="/images/coin.png"
+                    alt=""
+                    className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
+                  />
+                  <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
+                    {addCommasToNumber(Number(ingame_staked), 4)}
+                    <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
+                      ${" "}
+                      {
+                      addCommasToNumber(Number((
+                        parseFloat(ingame_staked) * tokenInfo.quote?.USD?.price
+                      ).toFixed(4)), 4)}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                <p className="text-design-grey">Total Staked in LP Pools</p>
+                <div className="flex items-start lg:items-center">
+                  <img
+                    src="/images/coin.png"
+                    alt=""
+                    className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
+                  />
+                  <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
+                    {addCommasToNumber(Number(lp_staked_total), 4)}
                   </p>
                 </div>
               </div>

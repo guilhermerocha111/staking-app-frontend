@@ -8,10 +8,10 @@ export default function Ingame() {
         <img src="/images/logo.png" alt="" /> INGAME
       </h1>
       <p className="flex items-center gap-2 mt-4">
-        SMCW Staking
         <button className="tag-1">
           BSC <img src="/images/Binance.png" alt="" />
         </button>
+        Stake SMCW or LP and earn SMCW rewards
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-9">
         <IngameStaking1 />

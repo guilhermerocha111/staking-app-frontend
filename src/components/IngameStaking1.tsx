@@ -352,7 +352,7 @@ export default function IngameStaking1() {
             <p className="flex items-center gap-2">{estimated} / day</p>
           </div>
         </div>
-        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden z-1">
+        <div className={`relative border border-design-darkBlue rounded-xl overflow-hidden z-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 `}>
               <button
                 className={`font-semibold py-3 link-active-2`}
