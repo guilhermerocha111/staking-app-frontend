@@ -128,7 +128,7 @@ export default function IngameRewards() {
         ))
       }
 
-      return contextJSX
+      return contextJSX.reverse()
   }
 
 

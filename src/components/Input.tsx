@@ -36,15 +36,16 @@ export function NumberInput({ ...props }: NumberInputProps) {
   return (
     <div className={`counter ${props.className ? props.className : ''}`}>
       <input
+        pattern="[0-9.]+"
         type="text"
         placeholder={props.placeholder}
         value={String(addCommasToNumber(Number(props.value), 1))}
         onChange={(e) => {
-          props.setValue(e.target.value.replace('-', '').replaceAll(',', ''))
+          props.setValue(e.target.value.replace('-', '').replaceAll(',', '').replace(/[^\d]+/g,''))
         }}
         onBlur={(e) =>
           {
-            let targetValue = (props.max && Number(e.target.value.replaceAll(',', '')) > props.max) ? String(props.max) : e.target.value.replaceAll(',', '')
+            let targetValue = (props.max && Number(e.target.value.replaceAll(',', '').replace(/[^\d]+/g,'')) > props.max) ? String(props.max) : e.target.value.replaceAll(',', '').replace(/[^\d]+/g,'')
             console.log(targetValue)
             if (props.roundTo) {
               let parsedValue = String(Math.trunc(Number(targetValue)/props.roundTo) * props.roundTo)

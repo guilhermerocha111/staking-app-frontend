@@ -274,7 +274,7 @@ export default function IngameStaking1() {
                     alt=""
                     className="w-4 h-4 object-contain object-center ml-2 mr-1"
                   />
-                  <span className="text-white">{smcwBalance}</span>
+                  <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
                 </p>
               </div>
               <NumberInput
@@ -348,7 +348,7 @@ export default function IngameStaking1() {
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
-            <h5 className="text-design-grey">Estimated Rewards</h5>
+            <h5 className="text-design-grey">Estimated Rewards*</h5>
             <p className="flex items-center gap-2">{estimated} / day</p>
           </div>
         </div>
@@ -369,7 +369,7 @@ export default function IngameStaking1() {
                 value={enjinAddress}
                 onChange={(e) => setEnjinAddress(e.target.value)}
                 type="text"
-                placeholder="Put your Enjin Wallet Address Here"
+                placeholder="Put your Enjin Wallet Address Here. At least 1 Pending Reward is required."
               />
             </div>
             <form onSubmit={(e) => handleClaim(e)} className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
@@ -420,6 +420,9 @@ export default function IngameStaking1() {
                   }
                 </Button>
               )}
+               <p className="flex items-center text-md mt-2">
+                  <FiInfo className="text-design-darkBlue2 mr-2" /> *It will take at least 24 hours (usually more) from you stake until you see your first rewards.
+                </p>
             </form>
           </div>
         </div>

@@ -74,7 +74,7 @@ export default function Vesting() {
             Unstake your SMCW or LP. View SMCW claimed rewards vesting period
           </p>
         </div>
-        <div className="flex items-center gap-2 mt-5 lg:mt-0">
+        {/* <div className="flex items-center gap-2 mt-5 lg:mt-0">
           <Select
             className="select-alt"
             options={[
@@ -100,7 +100,7 @@ export default function Vesting() {
           <button className="button-1 rounded-md" onClick={() => navigate('/')}>
             Close <span style={{position: 'relative', top: '2px', color: '#e919b6'}}>&#x2715;</span>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="mt-6 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">

@@ -110,7 +110,8 @@ export default function Nav() {
   return (
     <nav className="bg-opacity-20 text-design-white fixed top-0 left-0 w-full blurred-container z-40">
       <div className="hidden lg:flex bg-design-backgroundBlack text-xs font-semibold py-2 px-4 items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+        <div className="max-w-screen-2xl mx-auto" style={{display: 'flex', width: '100%'}}>
+        <div className="flex items-center gap-4" style={{marginRight: 'auto'}}>
           <p className="flex items-center">
             <img
               src="/images/coin.png"
@@ -217,7 +218,7 @@ export default function Nav() {
               <FaTelegramPlane />
             </a>
             <a
-              href="https://twitter.com/spacemisfits.com"
+              href="https://twitter.com/spacemisfits"
               target="_blank"
               rel="noreferrer"
               className=" bg-brands-twitter rounded-button-1"
@@ -242,6 +243,8 @@ export default function Nav() {
             </a>
           </p>
         </div>
+        </div>
+        
       </div>
       <div
         className="bg-design-background4 bg-opacity-80 mx-auto px-4 lg:px-8 lg:hidden"
