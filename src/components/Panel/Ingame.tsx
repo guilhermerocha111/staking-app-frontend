@@ -11,7 +11,7 @@ export default function Ingame() {
         <button className="tag-1">
           BSC <img src="/images/Binance.png" alt="" />
         </button>
-        Stake SMCW or LP and earn SMCW rewards
+        Stake SMCW and earn ingame rewards
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-9">
         <IngameStaking1 />

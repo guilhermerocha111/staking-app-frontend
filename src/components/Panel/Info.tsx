@@ -242,7 +242,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             <p className="mt-4 text-center lg:text-left">
               *You can claim rewards once/week. Rewards must vest for 1 month.{" "}
               <Link to="/vesting" className="external-link">
-                Vesting LOG
+                Vesting Panel  <img style={{width: '16px', marginLeft: '4px'}} src="/images/coin.png" alt="" />
               </Link>
             </p>
             {/* Todo: Add a locked state here */}
@@ -291,7 +291,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   className="min-w-fit ml-3"
                   onClick={() => {
                     window.navigator.clipboard.writeText(
-                      contracts[DEFAULT_CHAINID].smcw
+                      tokenInfo.platform.token_address
                     );
                     toast.success("Copied to clipboard");
                   }}
@@ -441,7 +441,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 <p className="text-design-grey">Total Staked in LP Pools</p>
                 <div className="flex items-start lg:items-center">
                   <img
-                    src="/images/coin.png"
+                    src="/images/lp.png"
                     alt=""
                     className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
                   />

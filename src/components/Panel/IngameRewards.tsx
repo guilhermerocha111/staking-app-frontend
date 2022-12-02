@@ -150,7 +150,7 @@ export default function IngameRewards() {
       <div className="mt-6 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
         {!telemetry_rewards.length && (
-            <Overlay>You don't have any telemetry rewards</Overlay>
+            <Overlay>You have not connected your wallet or claimed any rewards yet</Overlay>
           )}
           <table
             className="text-sm grid grid-cols-1 telemetry-rewards-table"

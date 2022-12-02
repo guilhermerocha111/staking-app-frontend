@@ -227,7 +227,7 @@ export default function IngameStaking1() {
               {isApproved ? (
                 <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                   {/* @ts-ignore */}
-                  {actionMessage[actionType]} <HiOutlineExternalLink />
+                  {actionType === 'claim' ? actionMessage['default'] : actionMessage[actionType]}
                   {
                     (active_tx === 'TELEMETRY_STAKING') ? <Loader /> : <HiOutlineExternalLink />
                   }
@@ -409,10 +409,12 @@ export default function IngameStaking1() {
                   type="submit"
                   disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
                   className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
+                    ${(isLoading) ? 'opacity-50 pointer-events-none' : ''}
                     ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
                   `}
                 >
-                  Claim Rewards 
+                  {/* @ts-ignore */}
+                  {actionType === 'claim' ? 'Claiming...' : 'Claim Rewards '}
                   {
                     (active_tx === 'TELEMETRY_CLAIM') ? <Loader /> : <FiDownload />
                   }

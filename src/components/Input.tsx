@@ -1,4 +1,5 @@
 import { FiChevronUp, FiChevronDown } from "react-icons/fi";
+import useCommon from '../hooks/useCommon';
 
 interface InputProps {
   type: "text" | "number" | "email" | "password";
@@ -30,18 +31,21 @@ export default function Input({ ...props }: InputProps) {
 }
 
 export function NumberInput({ ...props }: NumberInputProps) {
+  const { addCommasToNumber } = useCommon();
+
   return (
     <div className={`counter ${props.className ? props.className : ''}`}>
       <input
-        type="number"
+        type="text"
         placeholder={props.placeholder}
-        value={props.value}
+        value={String(addCommasToNumber(Number(props.value), 1))}
         onChange={(e) => {
-          props.setValue(e.target.value.replace('-', ''))
+          props.setValue(e.target.value.replace('-', '').replaceAll(',', ''))
         }}
         onBlur={(e) =>
           {
-            let targetValue = (props.max && Number(e.target.value) > props.max) ? String(props.max) : e.target.value
+            let targetValue = (props.max && Number(e.target.value.replaceAll(',', '')) > props.max) ? String(props.max) : e.target.value.replaceAll(',', '')
+            console.log(targetValue)
             if (props.roundTo) {
               let parsedValue = String(Math.trunc(Number(targetValue)/props.roundTo) * props.roundTo)
               props.setValue(

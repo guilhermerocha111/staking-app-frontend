@@ -105,8 +105,7 @@ export default function Vesting() {
       <div className="mt-6 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
         {PoolStakes.length === 0 &&(
-            <Overlay>You don't have any vesting period 
-            available.</Overlay>
+            <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
           )}
           <table
             className="text-sm grid grid-cols-1 vesting-table"
