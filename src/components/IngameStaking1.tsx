@@ -88,6 +88,7 @@ export default function IngameStaking1() {
 
   const handleUnstake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(unstakeAmount)
     setIsLoading(true);
     ACTION.SET_TX_LOADER(true);
     setActiveTx('TELEMETRY_UNSTAKE');
@@ -215,7 +216,7 @@ export default function IngameStaking1() {
                   }
                   step={3000}
                   roundTo={3000}
-                  decimalpoints={0}
+                  decimalpoints={2}
                   className={'mt-2'}
                   required
                 />
@@ -285,13 +286,13 @@ export default function IngameStaking1() {
                 max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
                 step={3000}
                 roundTo={3000}
-                decimalpoints={0}
+                decimalpoints={2}
                 required
               />
               <p className="flex items-center text-sm text-design-darkBlue2">
                 <FiInfo className=" mr-2" /> Only multiples of 3,000
               </p>
-              <Button type="submit" className="gradient-1 button-3 mt-2">
+              <Button type="submit" className={`gradient-1 button-3 mt-2 ${(Number(unstakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                 Decrease / Unstake
                 {
                     (active_tx === 'TELEMETRY_UNSTAKE') ? <Loader /> : <HiOutlineExternalLink />
@@ -410,11 +411,11 @@ export default function IngameStaking1() {
                   disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
                   className={`gradient-2 button-3 mt-4 border border-design-blue cursor-pointer hover:button-2
                     ${(isLoading) ? 'opacity-50 pointer-events-none' : ''}
-                    ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) ? 'opacity-50 pointer-events-none' : ''}
+                    ${(Number(claimAmount) < 1  || isNaN(Number(claimAmount))) || (Number(pendings) + Number(userInfo.userRewards) === 0) ? 'opacity-50 pointer-events-none' : ''}
                   `}
                 >
                   {/* @ts-ignore */}
-                  {actionType === 'claim' ? 'Claiming...' : 'Claim Rewards '}
+                  {actionType === 'claim' ? 'Claiming...' : 'Claim Rewards '} {Number(pendings) + Number(userInfo.userRewards)}
                   {
                     (active_tx === 'TELEMETRY_CLAIM') ? <Loader /> : <FiDownload />
                   }

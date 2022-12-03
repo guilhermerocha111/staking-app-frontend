@@ -12,4 +12,8 @@ export default class ApiClient extends Base {
     async getTelemetryAssets() {
         return await super.get(`assets`)
     }
+
+    async getAppInfo() {
+        return await super.get('info')
+    }
 }

@@ -9,17 +9,18 @@ const injected = new InjectedConnector({
 const walletconnect = new WalletConnectConnector({
   qrcode: true,
   bridge: "https://bridge.walletconnect.org",
-  rpc: { 5: `https://ropsten.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
+  rpc: { 5: `https://goerli.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
 });
 
 export const connectors = {
   injected: injected,
   walletConnect: walletconnect,
+
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
    if (!library) {
-     return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
+      return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
    } else {
     return library.getSigner();
    }

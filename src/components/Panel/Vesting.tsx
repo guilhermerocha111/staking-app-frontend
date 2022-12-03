@@ -118,7 +118,6 @@ export default function Vesting() {
                 <th>Pools</th>
                 <th>Amount</th>
                 <th>Weight</th>
-                <th>Reward</th>
                 <th>Date staked</th>
                 <th>Unlocks in</th>
                 <th>Action</th>
@@ -130,9 +129,8 @@ export default function Vesting() {
                   <td>
                     <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
                   </td>
-                  <td>{addCommasToNumber(item.amount, 0)}</td>
+                  <td>{addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
-                  <td>{addCommasToNumber(item.reward, 4)}</td>
                   <td>{item.timestamp} UTC</td>
                   {item.percentage < 100 ? (
                     <td>

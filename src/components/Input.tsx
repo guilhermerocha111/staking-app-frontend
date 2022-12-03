@@ -5,7 +5,7 @@ interface InputProps {
   type: "text" | "number" | "email" | "password";
   placeholder?: string;
   defaultValue?: string;
-  value: string;
+  value: any;
   min?: number | string;
   max?: number | string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +15,7 @@ interface InputProps {
 
 interface NumberInputProps {
   placeholder?: string;
-  value: string;
+  value: any;
   setValue: (value: string) => void;
   min?: number;
   max?: number;
@@ -33,19 +33,35 @@ export default function Input({ ...props }: InputProps) {
 export function NumberInput({ ...props }: NumberInputProps) {
   const { addCommasToNumber } = useCommon();
 
+  function commafy( num:string ) {
+    var str = num.split('.');
+    if (str[0].length >= 4) {
+        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+    }
+    if (str[1] && str[1].length >= 4) {
+        str[1] = str[1].replace(/(\d{3})/g, '$1');
+    }
+    return str.join('.');
+}
+
+  const formatValue = (value:string) => {
+    const regex = (props.decimalpoints && props.decimalpoints > 0) ? /[^\d(.)]+/g : /[^\d]+/g
+    return commafy(value.replace('-', '').replaceAll(',', '').replace(regex,''))
+  }
+
   return (
     <div className={`counter ${props.className ? props.className : ''}`}>
       <input
-        pattern="[0-9.]+"
         type="text"
         placeholder={props.placeholder}
-        value={String(addCommasToNumber(Number(props.value), 1))}
+        value={formatValue(props.value)}
         onChange={(e) => {
-          props.setValue(e.target.value.replace('-', '').replaceAll(',', '').replace(/[^\d]+/g,''))
+          props.setValue(e.target.value)
         }}
         onBlur={(e) =>
           {
-            let targetValue = (props.max && Number(e.target.value.replaceAll(',', '').replace(/[^\d]+/g,'')) > props.max) ? String(props.max) : e.target.value.replaceAll(',', '').replace(/[^\d]+/g,'')
+            const regex = (props.decimalpoints) ? /[^\d(.)]+/igm : /[^\d]+/g
+            let targetValue = (props.max && Number(e.target.value.replaceAll(',', '').replace(regex,'')) > props.max) ? String(props.max) : e.target.value.replaceAll(',', '').replace(regex,'')
             console.log(targetValue)
             if (props.roundTo) {
               let parsedValue = String(Math.trunc(Number(targetValue)/props.roundTo) * props.roundTo)

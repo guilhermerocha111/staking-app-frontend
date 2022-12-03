@@ -21,7 +21,7 @@ export default function IngameRewards() {
   const [telemetryRewards, setTelemetryRewards] = useState({})
   const [showCollapsed, setCollapsed] = useState<any>([]);
 
-  const { account } = useWeb3React();
+  const { account, active } = useWeb3React();
 
   const handleGetRewards = async () => {
       if (account) {
@@ -149,8 +149,8 @@ export default function IngameRewards() {
       </div>
       <div className="mt-6 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
-        {!telemetry_rewards.length && (
-            <Overlay>You have not connected your wallet or claimed any rewards yet</Overlay>
+        {(!telemetry_rewards.length || !active) && (
+            <Overlay>You have not connected your wallet or claimed any rewards yet.</Overlay>
           )}
           <table
             className="text-sm grid grid-cols-1 telemetry-rewards-table"

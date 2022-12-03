@@ -113,6 +113,7 @@ export const useVestingPanel = () => {
     setInGameLocker([formatLocks]);
     setAllLocked(locks);
     setAllStakes([...stakes1, ...stakes2, ...formatLocks]);
+    console.log([...stakes1, ...stakes2, ...formatLocks])
   }, [account]);
   return {
     PoolStakes,

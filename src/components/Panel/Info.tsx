@@ -242,7 +242,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             <p className="mt-4 text-center lg:text-left">
               *You can claim rewards once/week. Rewards must vest for 1 month.{" "}
               <Link to="/vesting" className="external-link">
-                Vesting Panel  <img style={{width: '16px', marginLeft: '4px'}} src="/images/coin.png" alt="" />
+                Vesting Panel  <HiOutlineExternalLink />
               </Link>
             </p>
             {/* Todo: Add a locked state here */}

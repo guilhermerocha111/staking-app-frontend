@@ -48,6 +48,10 @@ export default function Nav() {
     }
   }, [document.querySelector('.walletconnect-modal__close__wrapper')])
 
+  useEffect(() => {
+
+  })
+
 
 
   const connect = async (type: string | null, reload: boolean = true) => {
@@ -172,10 +176,9 @@ export default function Nav() {
           )}
 
 
-          {tx_loader && (
+          {(tx_loader && active) && (
             <div
               className="button-1 !rounded-md"
-              onClick={() => disconnect()}
             >
               Pending Tx...
             </div>

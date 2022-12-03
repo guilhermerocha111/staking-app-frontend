@@ -293,10 +293,10 @@ export default function Staking({
         </div>
         <div className="card-2 mt-6">
           <p className="text-sm">
-            Stake as many times as you like <br /> You can stake or withdraw
+            Stake as many times as you like <br /> You can unstake or withdraw
             rewards at any time (after vesting period ends) at{" "}
             <a href="/vesting" className="external-link">
-              Vesting LOG <HiOutlineExternalLink />
+              Vesting Panel <HiOutlineExternalLink />
             </a>
           </p>
           <p className="text-sm">
