@@ -9,6 +9,7 @@ import {
 import { getSigner } from "../utils/connectors";
 import { formatUnits } from "ethers/lib/utils";
 import { useWeb3React } from "@web3-react/core";
+import moment from 'moment'
 
 function ToFixed(amount: string) {
   return parseFloat(amount).toFixed(4);
@@ -34,6 +35,13 @@ export const useVestingPanel = () => {
       return ((time - current) / 86400).toFixed(0);
     }
 
+    function getMinutesBetweenDates(endDateVal: number) {
+      const startDate = moment()
+      const endDate = moment(endDateVal*1000)
+
+      return endDate.diff(startDate, 'minutes')
+  }
+
     function timePercentage(timestamp: number, time: number) {
       let current = Date.now() / 1000;
       let totalDays = (time - timestamp) / 86400;
@@ -54,8 +62,9 @@ export const useVestingPanel = () => {
         poolInstance: pool1,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         weight: formatUnits(s.weight, "ether"),
+        isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: diffDays(s.stakeUntill.toNumber()),
+        unlocksIn: getMinutesBetweenDates(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -77,8 +86,9 @@ export const useVestingPanel = () => {
         poolInstance: pool2,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         weight: formatUnits(s.weight, "ether"),
+        isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: diffDays(s.stakeUntill.toNumber()),
+        unlocksIn: getMinutesBetweenDates(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -101,7 +111,7 @@ export const useVestingPanel = () => {
         poolInstance: vesting,
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
-        unlocksIn: diffDays(s.vestingDuration.toNumber()),
+        unlocksIn: getMinutesBetweenDates(s.vestingDuration.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.vestingTime.toNumber(),

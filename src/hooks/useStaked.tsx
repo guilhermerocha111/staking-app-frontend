@@ -26,9 +26,9 @@ export const useStaked = (refresh: boolean) => {
       amount1 = await pool2.getCurrentStaked(await signer.getAddress());
     }
     console.log(smcw_staking)
-    let amount3 = smcw_staking;
-    let amount4 = lp_staking;
-    let amount5 = nft_staking;
+    let amount3 = nft_staking;
+    let amount4 = smcw_staking;
+    let amount5 = lp_staking;
 
     
     setsmceStaked(

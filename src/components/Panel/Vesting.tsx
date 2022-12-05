@@ -39,17 +39,17 @@ export default function Vesting() {
   const { addCommasToNumber } = useCommon();
 
   const handleClaim = async (
-    amount: string,
     type: string,
-    poolInstance: Locker | MasterChef
+    poolInstance: Locker | MasterChef,
+    index: number
   ) => {
     ACTION.SET_TX_LOADER(true);
     if (type == "stake"){
-      let tx = await (poolInstance as MasterChef).claim(parseEther(amount));
+      let tx = await (poolInstance as MasterChef).withdraw(index);
       await tx.wait()
     }
     else if(type == "vest"){
-      let tx = await (poolInstance as Locker).claimVestedTokens(parseEther(amount))
+      let tx = await (poolInstance as Locker).claimVestedTokens(index)
       await tx.wait()
     }
     ACTION.SET_TX_LOADER(false);
@@ -132,9 +132,9 @@ export default function Vesting() {
                   <td>{addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
-                  {item.percentage < 100 ? (
+                  {(item.percentage < 100 && item.percentage > 0 && !item.isClaimed) ? (
                     <td>
-                      {item.unlocksIn} days
+                      {item.unlocksIn > 0 ? item.unlocksIn : 0} mins
                       {item.percentage && (
                         <div className="progress-wrapper">
                           <svg
@@ -143,38 +143,44 @@ export default function Vesting() {
                           >
                             <circle cx="50%" cy="50%" r="50%" />
                           </svg>
-                          <p>{item.percentage}%</p>
+                          <p>{item.percentage > 0 ? item.percentage : 100}%</p>
                         </div>
                       )}
                     </td>
                   ) : item.isClaimed ? (
-                    <td>Claimed</td>
+                    <td>{item.type === 'stake' ? 'Withdrawed' : 'Claimed'}</td>
                   ) : (
                     <td>Available Now</td>
                   )}
 
                   <td>
-                    {item.percentage >= 100 ? (
-                      <Button
-                        onClick={async () =>
-                          await handleClaim(
-                            item.amount,
-                            item.type,
-                            item.poolInstance
-                          )
-                        }
-                        className="gradient-2 button-3 border border-design-blue !py-2"
-                      >
-                        {item.action} <HiOutlineExternalLink />
-                      </Button>
-                    ) : (
-                      <Button
-                        className="button-3 border border-design-pink !bg-design-backgroundPink !py-2 cursor-not-allowed"
-                        disabled
-                      >
-                        {item.state} <img src="/images/lock.png" alt="" />
-                      </Button>
-                    )}
+                    {
+                      !item.isClaimed && (
+                        <>
+                          {(item.percentage >= 100 || item.percentage === -1) ? (
+                            <Button
+                              onClick={async () =>
+                                await handleClaim(
+                                  item.type,
+                                  item.poolInstance,
+                                  item.index
+                                )
+                              }
+                              className="gradient-2 button-3 border border-design-blue !py-2"
+                            >
+                              {item.action} <HiOutlineExternalLink />
+                            </Button>
+                          ) : (
+                            <Button
+                              className="button-3 border border-design-pink !bg-design-backgroundPink !py-2 cursor-not-allowed"
+                              disabled
+                            >
+                              {item.state} <img src="/images/lock.png" alt="" />
+                            </Button>
+                          )}
+                        </>
+                      )
+                    }
                   </td>
                 </tr>
               ))}
