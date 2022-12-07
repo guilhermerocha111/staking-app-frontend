@@ -415,7 +415,7 @@ export default function IngameStaking1() {
                   `}
                 >
                   {/* @ts-ignore */}
-                  {actionType === 'claim' ? 'Claiming...' : 'Claim Rewards '} {Number(pendings) + Number(userInfo.userRewards)}
+                  {actionType === 'claim' ? 'Claiming...' : 'Claim Rewards '}
                   {
                     (active_tx === 'TELEMETRY_CLAIM') ? <Loader /> : <FiDownload />
                   }

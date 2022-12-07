@@ -63,7 +63,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         }
       });
     };
-  }, [refresh, locked, days, chainId,account]);
+  }, [refresh, locked, days, hours, minutes, chainId,account]);
 
   const vest = async () => {
     ACTION.SET_TX_LOADER(true);

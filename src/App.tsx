@@ -65,6 +65,7 @@ export default function App() {
   useEffect(() => {
     wsClient.onmessage = async (message) => {
       const response = JSON.parse(String(message?.data))
+      console.log(response)
       if (response.isMint && response.wallet === account) {
         const mintRewards: any[] = []
         response.rewards.forEach((id: string)=> {

@@ -115,12 +115,13 @@ export default function Vesting() {
           >
             <thead className="grid grid-cols-1">
               <tr className="text-left !border-b">
-                <th>Pools</th>
+                <th>Pool</th>
+                <th>Type</th>
                 <th>Amount</th>
                 <th>Weight</th>
-                <th>Date staked</th>
+                <th>Date</th>
                 <th>Unlocks in</th>
-                <th>Action</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody className="text-base">
@@ -129,6 +130,7 @@ export default function Vesting() {
                   <td>
                     <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
                   </td>
+                  <td>{item.type === 'stake' ? 'Stake' : 'Claim'}</td>
                   <td>{addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
@@ -148,16 +150,16 @@ export default function Vesting() {
                       )}
                     </td>
                   ) : item.isClaimed ? (
-                    <td>{item.type === 'stake' ? 'Withdrawed' : 'Claimed'}</td>
+                    <td>Unlocked</td>
                   ) : (
-                    <td>Available Now</td>
+                    <td>Unlocked</td>
                   )}
 
                   <td>
                     {
-                      !item.isClaimed && (
+                      !item.isClaimed ? (
                         <>
-                          {(item.percentage >= 100 || item.percentage === -1) ? (
+                          {(item.percentage >= 100 || item.percentage < 0) ? (
                             <Button
                               onClick={async () =>
                                 await handleClaim(
@@ -178,6 +180,13 @@ export default function Vesting() {
                               {item.state} <img src="/images/lock.png" alt="" />
                             </Button>
                           )}
+                          {
+
+                          }
+                        </>
+                      ) : (
+                        <>
+                          {item.type === "stake" ? "Unstaked" : "Claimed"}
                         </>
                       )
                     }
