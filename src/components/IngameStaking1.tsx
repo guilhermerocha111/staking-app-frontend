@@ -69,6 +69,13 @@ export default function IngameStaking1() {
     setIsLoading(true);
     setActionType('stake');
     setActiveTx('TELEMETRY_STAKE');
+    if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > 60000) {
+      toast.error('Max staked amount reached');
+      setIsLoading(false);
+      setActionType('default');
+      setActiveTx('');
+      return;
+    }
     try {
       await stake(parseEther(stakeAmount).toString());
       ACTION.SET_TX_LOADER(false);

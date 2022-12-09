@@ -46,6 +46,8 @@ export const useVestingPanel = () => {
       let current = Date.now() / 1000;
       let totalDays = (time - timestamp) / 86400;
       let currentDays = (current - timestamp) / 86400;
+      console.log(totalDays)
+      console.log(currentDays)
       if (time < current) return -1;
       return ((currentDays / totalDays) * 100).toFixed(0);
     }
@@ -64,7 +66,7 @@ export const useVestingPanel = () => {
         weight: formatUnits(s.weight, "ether"),
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: getMinutesBetweenDates(s.stakeUntill.toNumber()),
+        unlocksIn: diffDays(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -88,7 +90,7 @@ export const useVestingPanel = () => {
         weight: formatUnits(s.weight, "ether"),
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: getMinutesBetweenDates(s.stakeUntill.toNumber()),
+        unlocksIn: diffDays(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -111,7 +113,7 @@ export const useVestingPanel = () => {
         poolInstance: vesting,
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
-        unlocksIn: getMinutesBetweenDates(s.vestingDuration.toNumber()),
+        unlocksIn: diffDays(s.vestingDuration.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.vestingTime.toNumber(),

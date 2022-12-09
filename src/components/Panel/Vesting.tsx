@@ -12,6 +12,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import useCommon from "../../hooks/useCommon"
+import Loader from "../Loader";
 
 
 interface VestingTypes {
@@ -38,22 +39,33 @@ export default function Vesting() {
   const navigate = useNavigate();
   const { addCommasToNumber } = useCommon();
 
+  const [unstakingIndex, setUnstakingIndex] = useState<number|null>(null);
+  const [claimingIndex, setClaimingIndex] = useState<number|null>(null);
+
   const handleClaim = async (
     type: string,
     poolInstance: Locker | MasterChef,
     index: number
   ) => {
     ACTION.SET_TX_LOADER(true);
-    if (type == "stake"){
-      let tx = await (poolInstance as MasterChef).withdraw(index);
-      await tx.wait()
+    try {
+      if (type == "stake"){
+        setUnstakingIndex(index)
+        let tx = await (poolInstance as MasterChef).withdraw(index);
+        await tx.wait()
+      }
+      else if(type == "vest"){
+        setClaimingIndex(index)
+        let tx = await (poolInstance as Locker).claimVestedTokens(index)
+        await tx.wait()
+      }
+      window.location.reload();
+    } catch(err) {
+      ACTION.SET_TX_LOADER(false);
+      setUnstakingIndex(null)
+      setClaimingIndex(null)
     }
-    else if(type == "vest"){
-      let tx = await (poolInstance as Locker).claimVestedTokens(index)
-      await tx.wait()
-    }
-    ACTION.SET_TX_LOADER(false);
-    window.location.reload();
+    
   };
 
   const formatWeight = (weight: number, amount: number) => {
@@ -134,9 +146,8 @@ export default function Vesting() {
                   <td>{addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
-                  {(item.percentage < 100 && item.percentage > 0 && !item.isClaimed) ? (
                     <td>
-                      {item.unlocksIn > 0 ? item.unlocksIn : 0} mins
+                      {item.unlocksIn >= 0 ? `${item.unlocksIn} days` : 'Unlocked' } 
                       {item.percentage && (
                         <div className="progress-wrapper">
                           <svg
@@ -145,16 +156,10 @@ export default function Vesting() {
                           >
                             <circle cx="50%" cy="50%" r="50%" />
                           </svg>
-                          <p>{item.percentage > 0 ? item.percentage : 100}%</p>
+                          <p>{item.percentage === -1 ? 100 : item.percentage}%</p>
                         </div>
                       )}
                     </td>
-                  ) : item.isClaimed ? (
-                    <td>Unlocked</td>
-                  ) : (
-                    <td>Unlocked</td>
-                  )}
-
                   <td>
                     {
                       !item.isClaimed ? (
@@ -170,7 +175,8 @@ export default function Vesting() {
                               }
                               className="gradient-2 button-3 border border-design-blue !py-2"
                             >
-                              {item.action} <HiOutlineExternalLink />
+                              {item.type === 'stake' && (item.index === unstakingIndex ? (<>Unstaking... <Loader /></>) : (<>Unstake <HiOutlineExternalLink /></>))}
+                              {item.type === 'vest' && (item.index === claimingIndex ? (<>Claiming... <Loader /></>) : (<>Claim NOW <HiOutlineExternalLink /></>))}
                             </Button>
                           ) : (
                             <Button
