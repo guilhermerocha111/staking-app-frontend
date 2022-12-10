@@ -7,20 +7,22 @@ import { Route, Routes } from "react-router-dom";
 import Ingame from "./components/Panel/Ingame";
 import Vesting from "./components/Panel/Vesting";
 import { useWeb3React } from "@web3-react/core";
-import {  DEFAULT_CHAINID, toHex } from "./utils/constants";
+import { contracts, DEFAULT_CHAINID, toHex } from "./utils/constants";
 import { chains } from "./utils/connectors";
-import { wsClient } from './api/wsClient';
 import Modal from "react-modal";
 import ApiClient from "./api/ApiClient";
 import {Context} from "./contextStore";
 import IngameRewards from './components/Panel/IngameRewards'
+import { tokens } from "./utils/contracts";
+import { getSigner } from "./utils/connectors";
+import { BigNumber } from "ethers";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
-  const [{telemetry_assets}, ACTION] = useContext(Context);
+  const [{telemetry_assets, telemetry_rewards_by_tx}, ACTION] = useContext(Context);
 
   const modalStyles = 
         {
@@ -37,6 +39,7 @@ export default function App() {
 
   const onCloseModal = () => {
     setShowRewardModal(false);
+    ACTION.SET_REWARDS(null);
   }
 
   const getTelemetryInfo = (id: any) => {
@@ -62,11 +65,10 @@ export default function App() {
     }
   }, [telemetry_assets])
 
-  useEffect(() => {
-    wsClient.onmessage = async (message) => {
-      const response = JSON.parse(String(message?.data))
+  const parseRewards = async () => {
+    const response = telemetry_rewards_by_tx
       console.log(response)
-      if (response.isMint && response.wallet === account) {
+      if (response && response.isMint && response.wallet === account) {
         const mintRewards: any[] = []
         response.rewards.forEach((id: string)=> {
             if (!mintRewards.some(e => e.id === id)) {
@@ -84,7 +86,56 @@ export default function App() {
         setMintRewards(mintRewards);
         setShowRewardModal(true);
       }
-    };
+  }
+
+  useEffect(() => {
+    parseRewards() 
+  }, [account, telemetry_rewards_by_tx])
+
+  const checkAndSetAllowances = async () => {
+      const pools = [
+        {
+          stakingType: 'smcw',
+          pool: contracts[DEFAULT_CHAINID].smcwTosmcw,
+          key: 'smcw_to_smcw'
+        },
+        {
+          stakingType: 'lp',
+          pool: contracts[DEFAULT_CHAINID].lpTosmcw,
+          key: 'lp_to_smcw'
+        },
+        {
+          stakingType: 'smcw',
+          pool: contracts[DEFAULT_CHAINID].nftStaking,
+          key: 'smcw_to_nft'
+        }
+      ]
+
+      const allowances = {}
+
+      for (let i=0; i<pools.length; i++) {
+        const signer = await getSigner(library);
+        const token = tokens[pools[i].stakingType](signer);
+        const allowance = await token.allowance(
+          await signer.getAddress(),
+          pools[i].pool
+        );
+        if (allowance.eq(BigNumber.from(0))) {
+          // @ts-ignore
+          allowances[pools[i].key] = false
+        } else {
+          // @ts-ignore
+          allowances[pools[i].key] = true
+        }
+      }
+
+      ACTION.SET_ALLOWANCE(allowances)
+  }
+
+  useEffect(() => {
+    if (account && library) {
+      checkAndSetAllowances()
+    }
   }, [account])
     
   useEffect(()=>{

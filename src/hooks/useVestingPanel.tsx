@@ -10,6 +10,7 @@ import { getSigner } from "../utils/connectors";
 import { formatUnits } from "ethers/lib/utils";
 import { useWeb3React } from "@web3-react/core";
 import moment from 'moment'
+import useCountdown from "../hooks/useCountdown";
 
 function ToFixed(amount: string) {
   return parseFloat(amount).toFixed(4);
@@ -29,10 +30,34 @@ export const useVestingPanel = () => {
     let stakes01 = await pool1.getStakes(await signer.getAddress());
     let stakes02 = await pool2.getStakes(await signer.getAddress());
     let locks = await vesting.getUserClaims(await signer.getAddress());
+
     function diffDays(time: number) {
       let current = Date.now() / 1000;
       if (time < current) return -1;
       return ((time - current) / 86400).toFixed(0);
+    }
+
+    function countdown(targetTime: number) {
+      let targetDate = new Date(targetTime).getTime() * 1000;
+      let nowDate = new Date().getTime();
+      let distance = targetDate - nowDate;
+
+      let _second = 1000;
+      let _minute = _second * 60;
+      let _hour = _minute * 60;
+      let _day = _hour * 24;
+
+      let days = Math.floor(distance / _day);
+      let hours = Math.floor((distance % _day) / _hour);
+      let minutes = Math.floor((distance % _hour) / _minute);
+      let seconds = Math.floor((distance % _minute) / _second);
+
+      return {
+        days: days > 0 ? days : 0,
+        hours: hours > 0 ? hours : 0,
+        minutes: minutes > 0 ? minutes : 0,
+        seconds: seconds > 0 ? seconds : 0
+      }
     }
 
     function getMinutesBetweenDates(endDateVal: number) {
@@ -46,8 +71,6 @@ export const useVestingPanel = () => {
       let current = Date.now() / 1000;
       let totalDays = (time - timestamp) / 86400;
       let currentDays = (current - timestamp) / 86400;
-      console.log(totalDays)
-      console.log(currentDays)
       if (time < current) return -1;
       return ((currentDays / totalDays) * 100).toFixed(0);
     }
@@ -66,7 +89,7 @@ export const useVestingPanel = () => {
         weight: formatUnits(s.weight, "ether"),
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: diffDays(s.stakeUntill.toNumber()),
+        unlocksIn: countdown(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -90,7 +113,7 @@ export const useVestingPanel = () => {
         weight: formatUnits(s.weight, "ether"),
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
-        unlocksIn: diffDays(s.stakeUntill.toNumber()),
+        unlocksIn: countdown(s.stakeUntill.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.timestamp.toNumber(),
@@ -113,7 +136,7 @@ export const useVestingPanel = () => {
         poolInstance: vesting,
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
-        unlocksIn: diffDays(s.vestingDuration.toNumber()),
+        unlocksIn: countdown(s.vestingDuration.toNumber()),
         timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
         percentage: timePercentage(
           s.vestingTime.toNumber(),

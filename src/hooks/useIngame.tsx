@@ -34,6 +34,7 @@ export const useClaim = () => {
     const pool = getIngamePool(signer);
     const tx = await pool.claim(claimAmount, enjinAddress);
     await tx.wait()
+    return tx
   }, []);
 };
 

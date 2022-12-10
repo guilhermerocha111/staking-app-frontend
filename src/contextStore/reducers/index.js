@@ -5,7 +5,13 @@ export const initialState = {
     max_apr: null,
     active_tx: '',
     telemetry_rewards: [],
-    telemetry_assets: []
+    telemetry_assets: [],
+    telemetry_rewards_by_tx: null,
+    allowance: {
+        smcw_to_smcw: null,
+        lp_to_smcw: null,
+        smcw_to_nft: null
+    },
 }
 
 export const reducers = {
@@ -29,4 +35,18 @@ export const reducers = {
         ...state,
         telemetry_assets,
     }),
+    [types.SET_REWARDS]: (state, telemetry_rewards_by_tx) => ({
+        ...state,
+        telemetry_rewards_by_tx,
+    }),
+    [types.SET_ALLOWANCE]: (state, allowance) => {
+        return {
+            ...state,
+            allowance: {
+                smcw_to_smcw: allowance.smcw_to_smcw,
+                lp_to_smcw: allowance.lp_to_smcw,
+                smcw_to_nft: allowance.smcw_to_nft
+            },
+        }
+    },
 };

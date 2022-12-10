@@ -9,6 +9,22 @@ const actions = {
                     payload: value,
                 })
     },
+    [types.SET_REWARDS]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_REWARDS,
+                    payload: value,
+                })
+    },
+    [types.SET_ALLOWANCE]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_ALLOWANCE,
+                    payload: value,
+                })
+    },
     [types.SET_ACTIVE_TX]:
         (dispatch) =>
             (value = {}) => {

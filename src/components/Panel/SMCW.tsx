@@ -6,6 +6,8 @@ import { useSigner } from "../../hooks/useSigner";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { contracts, DEFAULT_CHAINID, toHex } from "../../utils/constants";
 import { getStakingPool01, getStakingPool02 } from "../../utils/contracts";
+import { Context } from '../../contextStore';
+import { useContext } from 'react'; 
 
 interface RefreshProps {
   refresh: boolean;
@@ -16,6 +18,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
   const signer = useSigner();
   const { swcw, lp,pool1Avarage,pool2Avarage } = useApr();
   const { chainId ,active } = useWeb3React();
+  const [{allowance},] = useContext(Context);
 
   const pool1 = getStakingPool01(signer);
   const pool2 = getStakingPool02(signer);
@@ -62,6 +65,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               apr={swcw}
               pool={pool1}
               avarage={pool1Avarage}
+              isApproved={allowance.smcw_to_smcw}
               poolAddress={contracts[DEFAULT_CHAINID].smcwTosmcw}
               title="SMCW"
               approve_tx_string="APPROVE_SMCW_POOL"
@@ -75,6 +79,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               apr={lp}
               pool={pool2}
               avarage={pool2Avarage}
+              isApproved={allowance.lp_to_smcw}
               poolAddress={contracts[DEFAULT_CHAINID].lpTosmcw}
               title="BUSD/SMCW LP"
               approve_tx_string="APPROVE_LP_POOL"

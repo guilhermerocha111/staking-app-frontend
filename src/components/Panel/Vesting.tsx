@@ -1,19 +1,19 @@
 import Card from "../Card";
 import Button from "../Button";
-import Select from "../Select";
+// import Select from "../Select";
 import Overlay from "../Overlay";
 import { useState, useContext } from "react";
-import { parseEther } from "ethers/lib/utils";
+// import { parseEther } from "ethers/lib/utils";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useVestingPanel } from "../../hooks/useVestingPanel";
 import { Locker, MasterChef, NFTRewards } from "../../typechain";
 import { Context } from '../../contextStore';
-import {
-  useNavigate,
-} from "react-router-dom";
+// import {
+//   useNavigate,
+// } from "react-router-dom";
 import useCommon from "../../hooks/useCommon"
 import Loader from "../Loader";
-
+import { useWeb3React } from "@web3-react/core";
 
 interface VestingTypes {
   icon: string;
@@ -32,12 +32,13 @@ interface VestingTypes {
 }
 
 export default function Vesting() {
-  const [filter, setFilter] = useState<string>("");
-  const [sort, setSort] = useState<string>("");
+  // const [filter, setFilter] = useState<string>("");
+  // const [sort, setSort] = useState<string>("");
   const { PoolStakes } = useVestingPanel();
   const [, ACTION] = useContext(Context);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { addCommasToNumber } = useCommon();
+  const { account, active } = useWeb3React();
 
   const [unstakingIndex, setUnstakingIndex] = useState<number|null>(null);
   const [claimingIndex, setClaimingIndex] = useState<number|null>(null);
@@ -116,7 +117,7 @@ export default function Vesting() {
       </div>
       <div className="mt-6 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
-        {PoolStakes.length === 0 &&(
+        {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
           )}
           <table
@@ -147,8 +148,10 @@ export default function Vesting() {
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
                     <td>
-                      {item.unlocksIn >= 0 ? `${item.unlocksIn} days` : 'Unlocked' } 
-                      {item.percentage && (
+                      {/* {item.unlocksIn.days >= 0 ? `${item.unlocksIn.days} days` : 'Unlocked' } */}
+                      {`${item.unlocksIn.days || item.unlocksIn.hours || item.unlocksIn.minutes || item.unlocksIn.seconds || ''}`}
+                      {`${item.unlocksIn.days > 0 && ' days' || item.unlocksIn.hours > 0 && ' hours' || item.unlocksIn.minutes > 0 && ' mins' || item.unlocksIn.seconds > 0 && ' secs' || 'Unlocked'}`}
+                      {(item.percentage && !item.isClaimed) && (
                         <div className="progress-wrapper">
                           <svg
                             preserveAspectRatio="none"

@@ -17,12 +17,14 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import { useTokenBalance } from "../hooks/useTokenBalance";
 import { Context } from '../contextStore';
 import Loader from './Loader';
+import Overlay from './Overlay';
 
 interface StakingProps {
   title: string;
   apr: IAPR;
   pool: MasterChef;
   avarage:string;
+  isApproved?:boolean|null;
   poolAddress: string;
   defaultAmount?: string;
   approve_tx_string: string;
@@ -39,6 +41,7 @@ export default function Staking({
   apr,
   poolAddress,
   avarage,
+  isApproved,
   defaultAmount,
   approve_tx_string,
   stake_tx_string,
@@ -53,7 +56,7 @@ export default function Staking({
   const [loading, setLoading] = useState<boolean>(false);
 
   const [{active_tx}, ACTION] = useContext(Context);
-  const isApproved = useAllowance(stakingType, poolAddress,loading);
+
   const smcwBalance = useTokenBalance(stakingType,loading);
   const approve = useApprove(stakingType);
   const { addCommasToNumber } = useCommon();
@@ -80,11 +83,13 @@ export default function Staking({
       );
       await tx.wait();
       toast.success(`Successfully staked ${stakeAmount} SMCW`);
+      setStakeAmount("0.0");
       setLoading(false);
       ACTION.SET_TX_LOADER(false);
       setActiveTx('');
       setRefresh(!refresh);
     } catch (error: any) {
+      setStakeAmount("0.0");
       setActiveTx('');
       toast.error(error.reason);
       setLoading(false);
@@ -100,6 +105,11 @@ export default function Staking({
 
   return (
     <Card className="flex-1">
+      {(isApproved === null) && (
+            <Overlay withIcon={false}>
+              <Loader width={'64px'}/>
+            </Overlay>
+      )}
       <div className="flex items-center gap-3 text-2xl font-semibold">
         <div className="card-icon-1">
           {stakingType === "smcw" && <img src="/images/coin.png" alt="" />}
@@ -109,7 +119,7 @@ export default function Staking({
       </div>
       <div className="mt-6 grid grid-cols-1 gap-2">
         <div className="relative grid grid-cols-1 gap-2">
-          {!isApproved && (
+          {isApproved === false && (
             <div className="absolute z-10 h-5/6 w-full flex items-start justify-center pt-12">
               <div className="flex flex-col items-center justify-center">
                 <img src="images/icons/locked.svg" alt="" />
@@ -136,7 +146,7 @@ export default function Staking({
             min={1}
             max={99999999}
             step={1}
-            decimalpoints={1}
+            decimalpoints={2}
             required
           />
           <div className="mt-4">

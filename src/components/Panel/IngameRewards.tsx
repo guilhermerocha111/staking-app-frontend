@@ -101,7 +101,7 @@ export default function IngameRewards() {
           </tr>
           <>{showCollapsed.includes(group) ? (
             // @ts-ignore
-            telemetryRewards[group].map((item: any, index: number) => (
+            telemetryRewards[group].map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
                   
@@ -118,7 +118,8 @@ export default function IngameRewards() {
                     {`${item.reciever_address?.substr(0, 6)}...${item.reciever_address?.substr(-4)}`}
                     <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(item.reciever_address)} />
                 </td>
-                <td>{moment(item.timestamp).format("HH:mm")} UTC</td>
+                 {/* @ts-ignore */}
+                <td>{array[index-1]?.timestamp && (moment(item.timestamp).format("HH:mm") === moment(array[index-1].timestamp).format("HH:mm")) ? '' : `${moment(item.timestamp).format("HH:mm")} UTC`}</td>
                 <td>
                     
                 </td>

@@ -1,7 +1,7 @@
 import Card from "./Card";
 import Overlay from "./Overlay";
 import  { NumberInput } from "./Input";
-import {  useState, useContext } from "react";
+import {  useState, useContext, useEffect } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import Button from "./Button";
@@ -10,6 +10,7 @@ import { useAllowance } from "../hooks/useAllowance";
 import { contracts, DEFAULT_CHAINID, toHex } from "../utils/constants";
 import { useApprove } from "../hooks/useApprove";
 import { useTokenBalance } from "../hooks/useTokenBalance";
+import ApiClient from "../api/ApiClient";
 // import Timer from "./Timer";
 import {
   useIngameUserInfo,
@@ -32,7 +33,8 @@ export default function IngameStaking1() {
   const [claimAmount, setClaimAmount] = useState<string>("0");
   const [type, setType] = useState<"stake" | "unstake">("stake");
   const [isLoading, setIsLoading] = useState(false);
-  const [{active_tx}, ACTION] = useContext(Context);
+  const [isApproved, setIsApproved] = useState(null);
+  const [{active_tx, allowance}, ACTION] = useContext(Context);
   const { chainId, active } = useWeb3React();
   const { addCommasToNumber } = useCommon();
 
@@ -57,11 +59,11 @@ export default function IngameStaking1() {
   const userInfo = useIngameUserInfo(isLoading);
   const approve = useApprove(stakingType);
   const smcwBalance = useTokenBalance(stakingType,isLoading);
-  const isApproved = useAllowance(
-    stakingType,
-    contracts[DEFAULT_CHAINID].nftStaking,
-    isLoading
-  );
+ 
+
+  useEffect(() => {
+    setIsApproved(allowance.smcw_to_nft)
+  }, [allowance.smcw_to_nft])
 
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -126,7 +128,9 @@ export default function IngameStaking1() {
       if (enjinAddress.length !== 42) {
         toast.error("Address is not correct");
       }
-      await claim(claimAmount, enjinAddress)
+      const tx = await claim(claimAmount, enjinAddress);
+      const rewardsResponse = await new ApiClient().getRewardsByTxHash(tx.hash)
+      ACTION.SET_REWARDS(rewardsResponse)
       toast.success(`Claimed successfully`);
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
@@ -144,6 +148,11 @@ export default function IngameStaking1() {
 
   return (
     <Card className="flex-1">
+       {(active && isApproved === null) && (
+            <Overlay withIcon={false}>
+              <Loader width={'64px'}/>
+            </Overlay>
+      )}
       {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
       )}
@@ -164,7 +173,7 @@ export default function IngameStaking1() {
       </div>
       <div className="mt-6 grid grid-cols-1 gap-4">
         <div className="relative border border-design-darkBlue rounded-xl overflow-hidden z-1">
-          {(!isApproved && active) && (
+          {(isApproved === false && active) && (
                 <div className="absolute z-10 h-4/6 w-full flex items-start justify-center pt-4">
                   <div className="flex flex-col items-center justify-center">
                     <img src="images/icons/locked.svg" alt="" />
