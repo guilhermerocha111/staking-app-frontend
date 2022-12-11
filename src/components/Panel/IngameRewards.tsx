@@ -111,7 +111,7 @@ export default function IngameRewards() {
             telemetryRewards[group].map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
-                  <img src={telemetry_assets[item.asset_id]?.image} style={{width: '32px', height: '32px'}}/>
+                  <img src={telemetry_assets[item.asset_id]?.image} style={{width: '32px', height: '32px', borderRadius: '8px'}}/>
                     {telemetry_assets[item.asset_id]?.name}
                 </td>
                 <td>
