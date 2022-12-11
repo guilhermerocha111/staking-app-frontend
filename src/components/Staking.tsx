@@ -66,8 +66,9 @@ export default function Staking({
   }
 
   useEffect(() => {
+    let now = Date.now() + 60 * 60 * 24 * 30 * 1000;
     setStakeUntill(
-      moment().add(30, "days").format("dddd, MMMM Do YYYY, h:mm:ss a")
+      moment(now).utc().format("dddd, MMMM Do YYYY, h:mm:ss a")
     );
   }, [isApproved, loading, refresh]);
 
@@ -176,8 +177,9 @@ export default function Staking({
               value={stakeLength}
               onChange={(e) => {
                 setStakeLength(e.target.value);
-                let d = moment()
-                  .add(parseInt(e.target.value), "days")
+                let term = Number(e.target.value)
+                let now = Date.now() + 60 * 60 * 24 * term * 1000;
+                let d = moment(now).utc()
                   .format("dddd, MMMM Do YYYY, h:mm:ss a");
                 setStakeUntill(d);
               }}

@@ -506,7 +506,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
             </div>
             {/* Buy */}
-            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-24">
+            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-[2.25rem]">
               <div className="mb-4 lg:mb-0">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Buy SMCW

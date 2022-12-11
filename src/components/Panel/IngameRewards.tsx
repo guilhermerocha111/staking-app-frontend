@@ -43,8 +43,9 @@ export default function IngameRewards() {
   useEffect(() => {
     if (telemetry_rewards) {
       const groupByDate = {}
+      console.log(telemetry_rewards)
       telemetry_rewards.forEach((reward: rewardItem) => {
-          let key = moment(reward.timestamp).format('L');
+          let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
           // @ts-ignore
           if (groupByDate[key] === undefined) {
             // @ts-ignore
@@ -56,7 +57,7 @@ export default function IngameRewards() {
           
           setTelemetryRewards(groupByDate)
       })
-
+      console.log(groupByDate)
     }
     
 
@@ -86,13 +87,19 @@ export default function IngameRewards() {
                   } items
               </td>
               <td>
-                 
+                {// @ts-ignore
+                `${telemetryRewards[group][0].claim_address?.substr(0, 6)}...${telemetryRewards[group][0].claim_address?.substr(-4)}`}
+                {/* @ts-ignore */}
+                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].claim_address)} />
               </td>
               <td>
-                  
+                {// @ts-ignore
+                `${telemetryRewards[group][0].reciever_address?.substr(0, 6)}...${telemetryRewards[group][0].reciever_address?.substr(-4)}`}
+                {/* @ts-ignore */}
+                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].reciever_address)} />
               </td>
               
-              <td>{moment(group).format("MMM Do YY")}</td>
+              <td>{moment(group.replaceAll('_', ' ')).format("MMM Do YY HH:mm")} UTC</td>
               <td>
                   <Button className="gradient-2 button-3 border border-design-blue !py-2" onClick={() => handleToggleCollapsed(group)}>{
                     showCollapsed.includes(group) ? 'Hide' : 'Show'
@@ -104,22 +111,19 @@ export default function IngameRewards() {
             telemetryRewards[group].map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
-                  
-                </td>
-                <td>
-                    <img src={telemetry_assets[item.asset_id]?.image} />
+                  <img src={telemetry_assets[item.asset_id]?.image} style={{width: '32px', height: '32px'}}/>
                     {telemetry_assets[item.asset_id]?.name}
                 </td>
                 <td>
-                    {`${item.claim_address?.substr(0, 6)}...${item.claim_address?.substr(-4)}`}
-                    <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(item.claim_address)} />
+                    
                 </td>
                 <td>
-                    {`${item.reciever_address?.substr(0, 6)}...${item.reciever_address?.substr(-4)}`}
-                    <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(item.reciever_address)} />
+                    
                 </td>
-                 {/* @ts-ignore */}
-                <td>{array[index-1]?.timestamp && (moment(item.timestamp).format("HH:mm") === moment(array[index-1].timestamp).format("HH:mm")) ? '' : `${moment(item.timestamp).format("HH:mm")} UTC`}</td>
+                <td>
+                    
+                </td>
+                <td></td>
                 <td>
                     
                 </td>
