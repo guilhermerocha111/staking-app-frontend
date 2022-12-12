@@ -20,4 +20,8 @@ export default class ApiClient extends Base {
     async getRewardsByTxHash(tx_hash: string) {
         return await super.get(`tx/${tx_hash}`)
     }
+
+    async getAPR() {
+        return await super.get('apr')
+    }
 }

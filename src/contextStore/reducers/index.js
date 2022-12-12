@@ -12,6 +12,10 @@ export const initialState = {
         lp_to_smcw: null,
         smcw_to_nft: null
     },
+    lpInfo: {
+        lp_price: 0,
+        smcw_price: 0
+    }
 }
 
 export const reducers = {
@@ -47,6 +51,12 @@ export const reducers = {
                 lp_to_smcw: allowance.lp_to_smcw,
                 smcw_to_nft: allowance.smcw_to_nft
             },
+        }
+    },
+    [types.SET_LP_INFO]: (state, lpInfo) => {
+        return {
+            ...state,
+            lpInfo
         }
     },
 };

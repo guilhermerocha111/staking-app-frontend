@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext } from "react";
+import { useMemo, useState, useContext, useEffect, useCallback } from "react";
 import { BigNumber, Signer } from "ethers";
 import { getStakingPool01, getStakingPool02 } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
@@ -20,16 +20,26 @@ const APRDefaults: IAPR = {
   sixMonth: "0",
   twelveMonth: "0",
 };
+
+
 export const useApr = () => {
   const { account, library } = useWeb3React();
   const [smcw_APR, setsmcwAPR] = useState<IAPR>(APRDefaults);
   const [lp_APR, setlpAPR] = useState<IAPR>(APRDefaults);
   const [pool1Avarage, setPool1Average] = useState<string>("0");
   const [pool2Avarage, setPool2Average] = useState<string>("0");
-  const [, ACTION] = useContext(Context);
+  const [{lpInfo}, ACTION] = useContext(Context);
+
+  let lpInfoProxy = {
+    smcw_price: 0,
+    lp_price: 0
+  }
+
+  if (lpInfo.smcw_price > 0) {
+    lpInfoProxy = lpInfo
+  }
 
   useMemo(async () => {
-    setInterval(async() => {
       const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
@@ -59,6 +69,23 @@ export const useApr = () => {
       ).toFixed(2);
     }
 
+    function aprLp(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
+      let totalWeightUpdated;
+      formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
+      console.log(lpInfoProxy)
+      console.log(tokenPerBlock)
+      console.log(TOTAL_BLOCK_PER_YEAR)
+      console.log(Weight)
+      console.log(totalWeightUpdated)
+      return parseFloat(
+        formatUnits(
+          (Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT) / Number(totalWeightUpdated) * lpInfoProxy.lp_price)
+            .toString(),
+          "ether"
+        )
+      ).toFixed(2);
+    }
+
     ACTION.SET_MAX_APR(
       Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) > Number(apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock)) ?
       Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) :
@@ -75,12 +102,11 @@ export const useApr = () => {
       });
     // if (!amount1.isZero())
       setlpAPR({
-        oneMonth: apr(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
-        threeMonth: apr(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),
-        sixMonth: apr(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
-        twelveMonth: apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
+        oneMonth: aprLp(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
+        threeMonth: aprLp(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),
+        sixMonth: aprLp(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
+        twelveMonth: aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
       });
-    }, 2000)
-  }, [account]);
+  }, [account, lpInfo]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };
 };

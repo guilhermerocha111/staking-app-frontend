@@ -59,6 +59,11 @@ export default function App() {
     ACTION.SET_TELEMETRY_ASSETS(telemetryAssets)
   }
 
+  const getLpInfo = async () => {
+    let lpInfo = await new ApiClient().getAPR()
+    ACTION.SET_LP_INFO(lpInfo)
+  }
+
   useEffect(() => {
     if (telemetry_assets.length === 0) {
       getTelemetryAssets()
@@ -137,6 +142,10 @@ export default function App() {
       checkAndSetAllowances()
     }
   }, [account])
+
+  useEffect(() => {
+    getLpInfo()
+  }, [])
     
   useEffect(()=>{
     if(chainId !== undefined && toHex(chainId) !== DEFAULT_CHAINID){
