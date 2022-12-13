@@ -111,51 +111,53 @@ export default function App() {
     parseRewards() 
   }, [account, telemetry_rewards_by_tx])
 
-  const checkAndSetAllowances = async () => {
-      const pools = [
-        {
-          stakingType: 'smcw',
-          pool: contracts[DEFAULT_CHAINID].smcwTosmcw,
-          key: 'smcw_to_smcw'
-        },
-        {
-          stakingType: 'lp',
-          pool: contracts[DEFAULT_CHAINID].lpTosmcw,
-          key: 'lp_to_smcw'
-        },
-        {
-          stakingType: 'smcw',
-          pool: contracts[DEFAULT_CHAINID].nftStaking,
-          key: 'smcw_to_nft'
+  const checkAndSetAllowances = () => {
+      setInterval(async () => {
+        const pools = [
+          {
+            stakingType: 'smcw',
+            pool: contracts[DEFAULT_CHAINID].smcwTosmcw,
+            key: 'smcw_to_smcw'
+          },
+          {
+            stakingType: 'lp',
+            pool: contracts[DEFAULT_CHAINID].lpTosmcw,
+            key: 'lp_to_smcw'
+          },
+          {
+            stakingType: 'smcw',
+            pool: contracts[DEFAULT_CHAINID].nftStaking,
+            key: 'smcw_to_nft'
+          }
+        ]
+  
+        const allowances = {}
+  
+        for (let i=0; i<pools.length; i++) {
+          const signer = await getSigner(library);
+          const token = tokens[pools[i].stakingType](signer);
+          const allowance = await token.allowance(
+            await signer.getAddress(),
+            pools[i].pool
+          );
+          if (allowance.eq(BigNumber.from(0))) {
+            // @ts-ignore
+            allowances[pools[i].key] = false
+          } else {
+            // @ts-ignore
+            allowances[pools[i].key] = true
+          }
         }
-      ]
-
-      const allowances = {}
-
-      for (let i=0; i<pools.length; i++) {
-        const signer = await getSigner(library);
-        const token = tokens[pools[i].stakingType](signer);
-        const allowance = await token.allowance(
-          await signer.getAddress(),
-          pools[i].pool
-        );
-        if (allowance.eq(BigNumber.from(0))) {
-          // @ts-ignore
-          allowances[pools[i].key] = false
-        } else {
-          // @ts-ignore
-          allowances[pools[i].key] = true
-        }
-      }
-
-      ACTION.SET_ALLOWANCE(allowances)
+  
+        ACTION.SET_ALLOWANCE(allowances)
+      }, 2500)
   }
 
   useEffect(() => {
     if (account && library) {
       checkAndSetAllowances()
     }
-  }, [account])
+  }, [account, library])
 
   useEffect(() => {
     getLpInfo()

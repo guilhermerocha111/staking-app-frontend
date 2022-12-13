@@ -9,13 +9,12 @@ const injected = new InjectedConnector({
 const walletconnect = new WalletConnectConnector({
   qrcode: true,
   bridge: "https://bridge.walletconnect.org",
-  rpc: { 5: `https://goerli.infura.io/v3/4913daa7178a4c77823ddea002c39d00` },
+  infuraId: '7699868d5e3a43ce83485ebbc121b20f',
 });
 
 export const connectors = {
   injected: injected,
   walletConnect: walletconnect,
-
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {

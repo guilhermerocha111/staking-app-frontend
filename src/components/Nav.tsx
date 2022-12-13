@@ -89,6 +89,7 @@ export default function Nav() {
 
   const switchNetwork = async () => {
     const provider = library ? library.provider : window.ethereum
+    console.log(library)
     try {
       await provider.request({
         method: "wallet_switchEthereumChain",
