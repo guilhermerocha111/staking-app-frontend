@@ -24,11 +24,10 @@ import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 
 export default function Nav() {
-  const tokenInfo: TokenInfo = usePrice();
   const [isOpen, setIsOpen] = useState(false);
   const [defaultChainId] = useState("0x5");
   const { activate, deactivate, active, library, connector, error } = useWeb3React();
-  const [{tx_loader, max_apr}] = useContext(Context);
+  const [{tx_loader, tokenInfo, max_apr}] = useContext(Context);
 
   useEffect(() => {
       if (localStorage.getItem("isConnected") == "true") {
@@ -36,7 +35,7 @@ export default function Nav() {
       }
   }, []);
 
-  useEffect(() => {
+ useEffect(() => {
     let closeBtn = document.querySelector('.walletconnect-modal__close__wrapper')
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
@@ -130,7 +129,7 @@ export default function Nav() {
           <button
             onClick={() => {
               window.navigator.clipboard.writeText(
-                tokenInfo.platform.token_address
+                tokenInfo?.platform?.token_address
               );
               toast.success("Copied to clipboard");
             }}

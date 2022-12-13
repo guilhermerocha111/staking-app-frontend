@@ -44,7 +44,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
                 <span className="tag-1 !inline-flex mx-1 text-white">
                   BSC <img src="/images/Binance.png" alt="" />
                 </span>
-                Network through your Connected Wallet
+                Network
               </p>
               <a
                 className="text-design-blue flex items-center gap-1"

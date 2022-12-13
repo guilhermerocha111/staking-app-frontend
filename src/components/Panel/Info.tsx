@@ -30,7 +30,6 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const vestRewards = useVesting();
   const { pathname } = useLocation();
   const { locked } = useVestingPanel();
-  const tokenInfo: TokenInfo = usePrice();
   const lpBalance = useTokenBalance("lp",refresh);
   const smcwBalance = useTokenBalance("smcw",refresh);
   const { chainId, active, account } = useWeb3React();
@@ -43,7 +42,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
     locked.length ? locked[locked.length - 1][3] : BigNumber.from("0")
   );
   const { addCommasToNumber } = useCommon();
-  const [{max_apr}, ACTION] = useContext(Context);
+  const [{max_apr, tokenInfo}, ACTION] = useContext(Context);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -285,13 +284,13 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     maxWidth: "68%",
                   }}
                 >
-                  {tokenInfo.platform.token_address}
+                  {tokenInfo?.platform?.token_address}
                 </span>
                 <button
                   className="min-w-fit ml-3"
                   onClick={() => {
                     window.navigator.clipboard.writeText(
-                      tokenInfo.platform.token_address
+                      tokenInfo?.platform?.token_address
                     );
                     toast.success("Copied to clipboard");
                   }}
@@ -411,7 +410,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                       ${" "}
                       {
                       addCommasToNumber(Number((
-                        parseFloat(smcw_staked_total) * tokenInfo.quote?.USD?.price
+                        parseFloat(smcw_staked_total) * tokenInfo?.quote?.USD?.price
                       ).toFixed(4)), 4)}
                     </span>
                   </p>
@@ -431,7 +430,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                       ${" "}
                       {
                       addCommasToNumber(Number((
-                        parseFloat(ingame_staked) * tokenInfo.quote?.USD?.price
+                        parseFloat(ingame_staked) * tokenInfo?.quote?.USD?.price
                       ).toFixed(4)), 4)}
                     </span>
                   </p>
@@ -474,7 +473,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {addCommasToNumber(tokenInfo.total_supply)}
+                    {addCommasToNumber(tokenInfo?.total_supply)}
                   </p>
                 </div>
               </div>
@@ -487,7 +486,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {addCommasToNumber(Number(tokenInfo.self_reported_circulating_supply.toFixed(0)), 0)}
+                    {addCommasToNumber(Number(tokenInfo?.self_reported_circulating_supply.toFixed(0)), 0)}
                   </p>
                 </div>
               </div>
@@ -500,7 +499,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     className="w-5 h-5 object-contain object-center mr-2"
                   />
                   <p className="flex items-end leading-5">
-                    {addCommasToNumber(tokenInfo.max_supply)}
+                    {addCommasToNumber(tokenInfo?.max_supply)}
                   </p>
                 </div>
               </div>

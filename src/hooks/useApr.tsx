@@ -72,11 +72,6 @@ export const useApr = () => {
     function aprLp(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
       let totalWeightUpdated;
       formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
-      console.log(lpInfoProxy)
-      console.log(tokenPerBlock)
-      console.log(TOTAL_BLOCK_PER_YEAR)
-      console.log(Weight)
-      console.log(totalWeightUpdated)
       return parseFloat(
         formatUnits(
           (Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT) / Number(totalWeightUpdated) * lpInfoProxy.lp_price)

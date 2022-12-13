@@ -17,6 +17,22 @@ const actions = {
                     payload: value,
                 })
     },
+    [types.SET_ALLOWANCE_ONE]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_ALLOWANCE_ONE,
+                    payload: value,
+                })
+    },
+    [types.SET_PRICE]:
+        (dispatch) =>
+            (value = {}) => {
+                dispatch({
+                    type: types.SET_PRICE,
+                    payload: value,
+                })
+    },
     [types.SET_LP_INFO]:
         (dispatch) =>
             (value = {}) => {

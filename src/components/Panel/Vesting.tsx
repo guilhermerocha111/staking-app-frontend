@@ -124,6 +124,7 @@ export default function Vesting() {
             className="text-sm grid grid-cols-1 vesting-table"
             style={{
               minWidth: "1200px",
+              display: !active ? 'none' : 'grid'
             }}
           >
             <thead className="grid grid-cols-1">

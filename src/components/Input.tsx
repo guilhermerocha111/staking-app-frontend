@@ -45,8 +45,8 @@ export function NumberInput({ ...props }: NumberInputProps) {
 }
 
   const formatValue = (value:string) => {
-    const regex = (props.decimalpoints && props.decimalpoints > 0) ? /[^\d(.)]+/g : /[^\d]+/g
-    return commafy(value.replace('-', '').replaceAll(')','').replaceAll('(', '').replaceAll(',', '').replace(regex,''))
+    const regex = (props.decimalpoints && props.decimalpoints > 0) ? /[^.\d]+/g : /[^\d]+/g
+    return commafy(value.replace('-', '').replaceAll(')','').replaceAll('(', '').replaceAll(',', '').replace(regex,'').replace(/\.(([^\.]*)\.)*/g, '.$2'))
   }
 
   return (

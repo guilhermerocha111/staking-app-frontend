@@ -99,7 +99,7 @@ export default function IngameRewards() {
                 <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].reciever_address)} />
               </td>
               
-              <td>{moment(group.replaceAll('_', ' ')).format("MMM Do YY HH:mm")} UTC</td>
+              <td>{moment(group.replaceAll('_', ' ')).utc().format("L HH:mm")} UTC</td>
               <td>
                   <Button className="gradient-2 button-3 border border-design-blue !py-2" onClick={() => handleToggleCollapsed(group)}>{
                     showCollapsed.includes(group) ? 'Hide' : 'Show'
@@ -161,6 +161,7 @@ export default function IngameRewards() {
             className="text-sm grid grid-cols-1 telemetry-rewards-table"
             style={{
               minWidth: "1200px",
+              display: !active ? 'none' : 'grid'
             }}
           >
             <thead className="grid grid-cols-1 tableHeader" style={{position: 'sticky', top: '0'}}>

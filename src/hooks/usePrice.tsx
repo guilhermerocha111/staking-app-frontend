@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import ApiClient from "../api/ApiClient";
 
 interface Platform {
@@ -96,12 +96,27 @@ const DEFAULT_VALUE: TokenInfo = {
 };
 export const usePrice = (): TokenInfo => {
   const [price, setPrice] = useState<TokenInfo>(DEFAULT_VALUE);
-  useMemo(async () => {
-    try {
-        const res: TokenInfo = await new ApiClient().getPriceSMCW();
+  const [flag, setFlag] = useState<Boolean>(false);
+
+  const checkPrice = async () => {
+    if (!flag) {
+      const res: TokenInfo = await new ApiClient().getPriceSMCW();
+      setFlag(true)
+      // @ts-ignore
+      if (res?.status !== false) {
         setPrice({...res});
+      } else {
+        setPrice({...DEFAULT_VALUE}); 
+    }
+          
+    }
+  }
+
+  useEffect( () => {
+    try {
+        checkPrice()  
     } catch (error) {
-        
+      console.log('PRICE ERROR')
     }
    
   }, []);

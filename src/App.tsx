@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
@@ -63,12 +63,26 @@ export default function App() {
     let lpInfo = await new ApiClient().getAPR()
     ACTION.SET_LP_INFO(lpInfo)
   }
+  
+
+  const getPrice = useCallback(async () => {
+    const res = await new ApiClient().getPriceSMCW();
+    // @ts-ignore
+    if (res?.status !== false) {
+      ACTION.SET_PRICE({...res});
+    }
+  }, []);
 
   useEffect(() => {
     if (telemetry_assets.length === 0) {
       getTelemetryAssets()
     }
   }, [telemetry_assets])
+
+  useEffect(() => {
+    console.log('i fire once');
+    getPrice();
+  }, [getPrice])
 
   const parseRewards = async () => {
     const response = telemetry_rewards_by_tx
