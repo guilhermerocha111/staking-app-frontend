@@ -81,11 +81,7 @@ export const useApr = () => {
       ).toFixed(2);
     }
 
-    ACTION.SET_MAX_APR(
-      Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) > Number(apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock)) ?
-      Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)) :
-      Number(apr(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))
-    );
+    ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     // if (!amount0.isZero())
