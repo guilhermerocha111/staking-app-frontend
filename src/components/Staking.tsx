@@ -49,9 +49,10 @@ export default function Staking({
   refresh,
   setRefresh,
 }: StakingProps) {
-  const [stakeAmount, setStakeAmount] = useState<string>("0.0");
+  const [stakeAmount, setStakeAmount] = useState<string>("0.00");
   const [stakeLength, setStakeLength] = useState<string>("30");
   const [stakeUntill, setStakeUntill] = useState<string>("");
+  const [stakingApproving, setStakingApproving] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -75,6 +76,7 @@ export default function Staking({
   const stakeInPool = async () => {
     try {
       ACTION.SET_TX_LOADER(true);
+      setStakingApproving(true);
       setActiveTx(stake_tx_string);
       setLoading(true);
       console.log(BigNumber.from(stakeLength))
@@ -83,14 +85,16 @@ export default function Staking({
         BigNumber.from(stakeLength)
       );
       await tx.wait();
-      toast.success(`Successfully staked ${stakeAmount} SMCW`);
-      setStakeAmount("0.0");
+      toast.success(`Successfully staked ${stakeAmount} ${stakingType === 'smcw' ? 'SMCW' : 'BUSD/SMCW LP'}`);
+      setStakeAmount("0.00");
       setLoading(false);
       ACTION.SET_TX_LOADER(false);
       setActiveTx('');
+      setStakingApproving(false);
       setRefresh(!refresh);
     } catch (error: any) {
-      setStakeAmount("0.0");
+      setStakingApproving(false);
+      setStakeAmount("0.00");
       setActiveTx('');
       toast.error(error.reason);
       setLoading(false);
@@ -109,6 +113,7 @@ export default function Staking({
       {(isApproved === null) && (
             <Overlay withIcon={false}>
               <Loader width={'64px'}/>
+              <>Loading...</>
             </Overlay>
       )}
       <div className="flex items-center gap-3 text-2xl font-semibold">
@@ -141,7 +146,7 @@ export default function Staking({
           <div className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
         
           <NumberInput
-            placeholder="0.0"
+            placeholder="0.00"
             value={stakeAmount}
             setValue={setStakeAmount}
             min={1}
@@ -225,7 +230,7 @@ export default function Staking({
             >
                {loading ? "Staking..." : "Stake"}
                 {
-                  (active_tx === stake_tx_string) ? <Loader /> : <HiOutlineExternalLink />
+                  (stakingApproving) ? <Loader /> : <HiOutlineExternalLink />
                 }
             </Button>
           ) : (

@@ -85,6 +85,7 @@ export default function Nav() {
     deactivate();
     localStorage.removeItem("isConnected");
     localStorage.removeItem("connector");
+    window.location.reload();
   };
 
   const switchNetwork = async () => {

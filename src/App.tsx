@@ -150,7 +150,7 @@ export default function App() {
         }
   
         ACTION.SET_ALLOWANCE(allowances)
-      }, 2500)
+      }, 5000)
   }
 
   useEffect(() => {

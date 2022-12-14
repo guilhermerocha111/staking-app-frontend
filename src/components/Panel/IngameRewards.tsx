@@ -78,7 +78,13 @@ export default function IngameRewards() {
           <>
           <tr>
               <td>
-                FT Reward
+                <img src="/images/telemetry1.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> INGAME / Hidden Data
+              </td>
+              <td>
+                <img src="/images/enjin.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> Enjin JumpNet
+              </td>
+              <td>
+                
               </td>
               <td>
                   
@@ -99,7 +105,7 @@ export default function IngameRewards() {
                 <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].reciever_address)} />
               </td>
               
-              <td>{moment(group.replaceAll('_', ' ')).utc().format("L HH:mm")} UTC</td>
+              <td>{moment(group.replaceAll('_', ' ')).utc().format("MM/DD/YYYY HH:mm")} UTC {}</td>
               <td>
                   <Button className="gradient-2 button-3 border border-design-blue !py-2" onClick={() => handleToggleCollapsed(group)}>{
                     showCollapsed.includes(group) ? 'Hide' : 'Show'
@@ -111,17 +117,17 @@ export default function IngameRewards() {
             telemetryRewards[group].map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
-                  <img src={telemetry_assets[item.asset_id]?.image} style={{width: '32px', height: '32px', borderRadius: '8px'}}/>
+                 
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                  FT Reward 
+                </td>
+                <td>
+                  <img src={telemetry_assets[item.asset_id]?.image} style={{width: '24px', height: '24px', borderRadius: '4px'}}/>
                     {telemetry_assets[item.asset_id]?.name}
-                </td>
-                <td>
-                    
-                </td>
-                <td>
-                    
-                </td>
-                <td>
-                    
                 </td>
                 <td></td>
                 <td>
@@ -166,6 +172,8 @@ export default function IngameRewards() {
           >
             <thead className="grid grid-cols-1 tableHeader" style={{position: 'sticky', top: '0'}}>
               <tr className="text-left !border-b">
+                <th>Pool</th>
+                <th>Network</th>
                 <th>Type</th>
                 <th>Reward</th>
                 <th>Claimant Wallet</th>

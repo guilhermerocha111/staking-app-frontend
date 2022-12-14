@@ -90,7 +90,7 @@ export const useVestingPanel = () => {
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
         unlocksIn: countdown(s.stakeUntill.toNumber()),
-        timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
+        timestamp: moment(date).utc().format("MM/DD/YYYY HH:mm"),
         percentage: timePercentage(
           s.timestamp.toNumber(),
           s.stakeUntill.toNumber()
@@ -114,7 +114,7 @@ export const useVestingPanel = () => {
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
         unlocksIn: countdown(s.stakeUntill.toNumber()),
-        timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
+        timestamp: moment(date).utc().format("MM/DD/YYYY HH:mm"),
         percentage: timePercentage(
           s.timestamp.toNumber(),
           s.stakeUntill.toNumber()
@@ -137,7 +137,7 @@ export const useVestingPanel = () => {
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         unlocksIn: countdown(s.vestingDuration.toNumber()),
-        timestamp: `${date.toLocaleString("en-GB", { timeZone: "UTC" })}`,
+        timestamp: moment(date).utc().format("MM/DD/YYYY HH:mm"),
         percentage: timePercentage(
           s.vestingTime.toNumber(),
           s.vestingDuration.toNumber()

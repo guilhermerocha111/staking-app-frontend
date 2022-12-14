@@ -151,6 +151,7 @@ export default function IngameStaking1() {
        {(active && isApproved === null) && (
             <Overlay withIcon={false}>
               <Loader width={'64px'}/>
+              <>Loading...</>
             </Overlay>
       )}
       {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (

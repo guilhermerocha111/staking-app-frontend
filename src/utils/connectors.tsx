@@ -49,7 +49,7 @@ export const chains:Chains = {
   },
   "0x5": {
     chainId: "0x5",
-    rpcUrls: [`https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`],
+    rpcUrls: [`https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`],
     chainName: "Goerli Test Network",
     nativeCurrency: { name: "ETH", decimals: 18, symbol: "ETH" },
     blockExplorerUrls: ["https://goerli.etherscan.io"],
