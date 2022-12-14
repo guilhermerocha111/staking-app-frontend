@@ -74,7 +74,7 @@ export const useApr = () => {
       formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
       return parseFloat(
         formatUnits(
-          (Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT) / Number(totalWeightUpdated) * lpInfoProxy.lp_price)
+          ((Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT)) / (Number(totalWeightUpdated) * lpInfoProxy.lp_price))
             .toString(),
           "ether"
         )
