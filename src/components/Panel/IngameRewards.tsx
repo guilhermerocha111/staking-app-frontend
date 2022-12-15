@@ -77,7 +77,7 @@ export default function IngameRewards() {
         contextJSX.push((
           <>
           <tr>
-              <td>
+              <td style={{fontSize: '14px'}}>
                 <img src="/images/telemetry1.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> INGAME / Hidden Data
               </td>
               <td>
@@ -158,7 +158,7 @@ export default function IngameRewards() {
           </p>
         </div>
       </div>
-      <div className="mt-6 flex-1">
+      <div className="mt-9 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
         {(!telemetry_rewards.length || !active) && (
             <Overlay>You have not connected your wallet or claimed any rewards yet.</Overlay>
@@ -167,7 +167,8 @@ export default function IngameRewards() {
             className="text-sm grid grid-cols-1 telemetry-rewards-table"
             style={{
               minWidth: "1200px",
-              display: !active ? 'none' : 'grid'
+              display: !active ? 'none' : 'grid',
+              gridAutoColumns: 'auto'
             }}
           >
             <thead className="grid grid-cols-1 tableHeader" style={{position: 'sticky', top: '0'}}>

@@ -14,6 +14,11 @@ import { Context } from '../../contextStore';
 import useCommon from "../../hooks/useCommon"
 import Loader from "../Loader";
 import { useWeb3React } from "@web3-react/core";
+import {
+  useUnstake,
+} from "../../hooks/useIngame";
+import { parseEther } from "ethers/lib/utils";
+import ApiClient from '../../api/ApiClient';
 
 interface VestingTypes {
   icon: string;
@@ -39,14 +44,18 @@ export default function Vesting() {
   // const navigate = useNavigate();
   const { addCommasToNumber } = useCommon();
   const { account, active } = useWeb3React();
+  const unstake = useUnstake();
 
   const [unstakingIndex, setUnstakingIndex] = useState<number|null>(null);
   const [claimingIndex, setClaimingIndex] = useState<number|null>(null);
+  const [nftIndex, setNftIndex] = useState<number|null>(null);
 
   const handleClaim = async (
     type: string,
     poolInstance: Locker | MasterChef,
-    index: number
+    index: number,
+    id?: string,
+    unstakeAmount?: number
   ) => {
     ACTION.SET_TX_LOADER(true);
     try {
@@ -59,10 +68,16 @@ export default function Vesting() {
         setClaimingIndex(index)
         let tx = await (poolInstance as Locker).claimVestedTokens(index)
         await tx.wait()
+      } else if (type == 'nft') {
+        setNftIndex(index);
+        await unstake(parseEther(String(unstakeAmount)).toString());
+        // @ts-ignore
+        await new ApiClient().setStakingClaimed(id);
       }
       window.location.reload();
     } catch(err) {
       ACTION.SET_TX_LOADER(false);
+      setNftIndex(null);
       setUnstakingIndex(null)
       setClaimingIndex(null)
     }
@@ -71,6 +86,17 @@ export default function Vesting() {
 
   const formatWeight = (weight: number, amount: number) => {
     return `${parseFloat((Number(weight)/amount).toFixed(8))}x`;
+  }
+
+  const renderTypeText = (type: string) => {
+    switch (type) {
+      case "stake":
+        return "Stake";
+      case "vest":
+        return "Claim";
+      case "nft":
+        return "Stake";
+    }
   }
 
   return (
@@ -115,7 +141,7 @@ export default function Vesting() {
           </button>
         </div> */}
       </div>
-      <div className="mt-6 flex-1">
+      <div className="mt-9 flex-1">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
         {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
@@ -140,11 +166,12 @@ export default function Vesting() {
             </thead>
             <tbody className="text-base">
               {PoolStakes.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <img src={`/images/${item.icon}.png`} alt="" /> {item.pool}
+                <tr key={index} style={{minHeight: '48px'}}>
+                  <td title={item.pool}>
+                    <img src={`/images/${item.icon}.png`} alt="" />
+                    <span style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "150px"}}>{item.pool}</span>
                   </td>
-                  <td>{item.type === 'stake' ? 'Stake' : 'Claim'}</td>
+                  <td>{renderTypeText(item.type)}</td>
                   <td>{addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
@@ -174,13 +201,16 @@ export default function Vesting() {
                                 await handleClaim(
                                   item.type,
                                   item.poolInstance,
-                                  item.index
+                                  item.index,
+                                  item.id || '',
+                                  item.amount || 0
                                 )
                               }
                               className="gradient-2 button-3 border border-design-blue !py-2"
                             >
                               {item.type === 'stake' && (item.index === unstakingIndex ? (<>Unstaking... <Loader /></>) : (<>Unstake <HiOutlineExternalLink /></>))}
                               {item.type === 'vest' && (item.index === claimingIndex ? (<>Claiming... <Loader /></>) : (<>Claim NOW <HiOutlineExternalLink /></>))}
+                              {item.type === 'nft' && (item.index === nftIndex ? (<>Unstaking... <Loader /></>) : (<>Unstake <HiOutlineExternalLink /></>))}
                             </Button>
                           ) : (
                             <Button

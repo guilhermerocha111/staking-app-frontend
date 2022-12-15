@@ -11,6 +11,7 @@ import { formatUnits } from "ethers/lib/utils";
 import { useWeb3React } from "@web3-react/core";
 import moment from 'moment'
 import useCountdown from "../hooks/useCountdown";
+import ApiClient from "../api/ApiClient";
 
 function ToFixed(amount: string) {
   return parseFloat(amount).toFixed(4);
@@ -22,14 +23,24 @@ export const useVestingPanel = () => {
   const [PoolStakes, setAllStakes] = useState<any[]>([]);
   const [InGameLocks, setInGameLocker] = useState<any[]>([]);
 
+  const nft_pools = [
+    {
+      pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || ""
+    }
+  ]
+
   useMemo(async () => {
     const signer: Signer = await getSigner(library);
     const vesting = getVesting(signer);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
-    let stakes01 = await pool1.getStakes(await signer.getAddress());
-    let stakes02 = await pool2.getStakes(await signer.getAddress());
-    let locks = await vesting.getUserClaims(await signer.getAddress());
+    const user_address = await signer.getAddress()
+    let stakes01 = await pool1.getStakes(user_address);
+    let stakes02 = await pool2.getStakes(user_address);
+    let locks = await vesting.getUserClaims(user_address);
+    const nftPoolStakes = await new ApiClient().getStakings(user_address, nft_pools[0].pool_address)
+    console.log(nftPoolStakes)
+    
 
     function diffDays(time: number) {
       let current = Date.now() / 1000;
@@ -122,7 +133,7 @@ export const useVestingPanel = () => {
       };
     });
     let formatLocks = locks.map((s, i) => {
-      let date: Date = new Date(Math.ceil(s.vestingTime.toNumber() * 1000));
+      let date: Date = new Date(Math.ceil(s.vestingTime.toNumber()));
 
       return {
         index: i,
@@ -145,9 +156,30 @@ export const useVestingPanel = () => {
       };
     });
 
+    let formatNftPools = nftPoolStakes.map((item:any, index:number) => {
+
+      return {
+        id: item._id,
+        index: index,
+        icon: "logo_small",
+        type: "nft",
+        weight: "N/A",
+        pool: item.pool,
+        reward: "SMCW",
+        action: "Unstake",
+        state: "Unlocked",
+        poolInstance: vesting,
+        isClaimed: item.isClaimed,
+        amount: item.amount,
+        unlocksIn: 0,
+        timestamp: moment(item.timestamp).utc().format("MM/DD/YYYY HH:mm"),
+        percentage: -1
+      }
+    })
+
     setInGameLocker([formatLocks]);
     setAllLocked(locks);
-    setAllStakes([...stakes1, ...stakes2, ...formatLocks]);
+    setAllStakes([...stakes1, ...stakes2, ...formatLocks, ...formatNftPools]);
   }, [account]);
   return {
     PoolStakes,

@@ -24,6 +24,7 @@ import { useNFTPendings } from "../hooks/usePendings";
 import { Context } from '../contextStore';
 import useCommon from "../hooks/useCommon";
 import Loader from "./Loader";
+import { Link } from "react-router-dom";
 
 export default function IngameStaking1() {
   const stakingType = "smcw";
@@ -35,7 +36,7 @@ export default function IngameStaking1() {
   const [isLoading, setIsLoading] = useState(false);
   const [isApproved, setIsApproved] = useState(null);
   const [{active_tx, allowance}, ACTION] = useContext(Context);
-  const { chainId, active } = useWeb3React();
+  const { chainId, active, account } = useWeb3React();
   const { addCommasToNumber } = useCommon();
 
   const [actionType, setActionType] = useState<any>("default");
@@ -71,6 +72,13 @@ export default function IngameStaking1() {
     setIsLoading(true);
     setActionType('stake');
     setActiveTx('TELEMETRY_STAKE');
+    const reqBody = {
+      staker_address: account || '',
+      pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || "",
+      amount: Number(stakeAmount) || 0,
+      coin_ticker: 'SMCW',
+      pool: 'Hidden data (Random Telemetry)'
+    }
     if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > 60000) {
       toast.error('Max staked amount reached');
       setIsLoading(false);
@@ -80,6 +88,7 @@ export default function IngameStaking1() {
     }
     try {
       await stake(parseEther(stakeAmount).toString());
+      await new ApiClient().postStaking(reqBody)
       ACTION.SET_TX_LOADER(false);
       toast.success(`Stake Amount: ${stakeAmount}`);
       setIsLoading(false);
@@ -194,7 +203,7 @@ export default function IngameStaking1() {
             >
               Stake
             </button>
-            <button
+            {/* <button
               className={`font-semibold py-3 ${
                 type === "unstake"
                   ? "link-active-2"
@@ -203,7 +212,7 @@ export default function IngameStaking1() {
               onClick={() => setType("unstake")}
             >
               Unstake
-            </button>
+            </button> */}
           </div>
           {type === "stake" ? (
             <form
@@ -243,6 +252,7 @@ export default function IngameStaking1() {
               </div>
 
               {isApproved ? (
+                <>
                 <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                   {/* @ts-ignore */}
                   {actionType === 'claim' ? actionMessage['default'] : actionMessage[actionType]}
@@ -250,6 +260,14 @@ export default function IngameStaking1() {
                     (active_tx === 'TELEMETRY_STAKING') ? <Loader /> : <HiOutlineExternalLink />
                   }
                 </Button>
+                <p className="flex items-center text-sm mt-2">
+                  <FiInfo className=" mr-2" /> To unstake your SMCW, find the "Unstake" button on the &nbsp;
+                  
+                  <Link to="/vesting" className="external-link">
+                    Claim / Vesting Panel  <HiOutlineExternalLink />
+                  </Link>
+                </p>
+                </>
               ) : (
                 <Button
                   className={`gradient-1 button-3 mt-2 cursor-pointer z-1 ${
