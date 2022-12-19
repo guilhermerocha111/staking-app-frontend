@@ -22,7 +22,8 @@ export default function App() {
   const {active ,chainId , library, account } = useWeb3React();
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [mintRewards, setMintRewards] = useState<any[]>([]);
-  const [{telemetry_assets, telemetry_rewards_by_tx}, ACTION] = useContext(Context);
+  const [{telemetry_assets, telemetry_rewards_by_tx, allowance}, ACTION] = useContext(Context);
+  const [activeInterval, setActiveInterval] = useState<any>(null)
 
   const modalStyles = 
         {
@@ -80,7 +81,6 @@ export default function App() {
   }, [telemetry_assets])
 
   useEffect(() => {
-    console.log('i fire once');
     getPrice();
   }, [getPrice])
 
@@ -112,7 +112,8 @@ export default function App() {
   }, [account, telemetry_rewards_by_tx])
 
   const checkAndSetAllowances = () => {
-      setInterval(async () => {
+      const interval = setInterval(async () => {
+        console.log('interval')
         const pools = [
           {
             stakingType: 'smcw',
@@ -136,11 +137,11 @@ export default function App() {
         for (let i=0; i<pools.length; i++) {
           const signer = await getSigner(library);
           const token = tokens[pools[i].stakingType](signer);
-          const allowance = await token.allowance(
+          const allowanceToken = await token.allowance(
             await signer.getAddress(),
             pools[i].pool
           );
-          if (allowance.eq(BigNumber.from(0))) {
+          if (allowanceToken.eq(BigNumber.from(0))) {
             // @ts-ignore
             allowances[pools[i].key] = false
           } else {
@@ -148,9 +149,10 @@ export default function App() {
             allowances[pools[i].key] = true
           }
         }
-  
         ACTION.SET_ALLOWANCE(allowances)
       }, 5000)
+
+      setActiveInterval(interval)
   }
 
   useEffect(() => {
@@ -158,6 +160,12 @@ export default function App() {
       checkAndSetAllowances()
     }
   }, [account, library])
+
+  useEffect(() => {
+    if (allowance.smcw_to_nft !== null && allowance.smcw_to_smcw !== null && allowance.lp_to_smcw !== null) {
+      clearInterval(activeInterval)
+    }
+  }, [allowance])
 
   useEffect(() => {
     getLpInfo()

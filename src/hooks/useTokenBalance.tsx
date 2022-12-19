@@ -9,11 +9,13 @@ export const useTokenBalance = (name: string,isLoading:boolean) => {
   const [balance, setBalance] = useState("");
   const { account, library } = useWeb3React();
   useMemo(async () => {
-    const signer:Signer = await getSigner(library);
-    let token: ERC20 = tokens[name](signer);
-    let b = await token.balanceOf(await signer.getAddress())
-    setBalance(ethers.utils.formatUnits(b,"ether"));
-  }, [name,isLoading,account]);
+    if (account) {
+      const signer:Signer = await getSigner(library);
+      let token: ERC20 = tokens[name](signer);
+      let b = await token.balanceOf(await signer.getAddress())
+      setBalance(ethers.utils.formatUnits(b,"ether"));
+    }
+  }, [name, isLoading, account]);
   return balance;
 };
 

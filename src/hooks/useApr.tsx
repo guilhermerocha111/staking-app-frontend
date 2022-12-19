@@ -39,8 +39,37 @@ export const useApr = () => {
     lpInfoProxy = lpInfo
   }
 
+  function apr(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
+    let totalWeightUpdated;
+    formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
+    return parseFloat(
+      formatUnits(
+        tokenPerBlock
+          .mul(TOTAL_BLOCK_PER_YEAR)
+          .mul(Weight)
+          .mul(PERCENT)
+          .div(totalWeightUpdated)
+          .toString(),
+        "ether"
+      )
+    ).toFixed(2);
+  }
+
+  function aprLp(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
+    let totalWeightUpdated;
+    formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
+    return parseFloat(
+      formatUnits(
+        ((Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT)) / (Number(totalWeightUpdated) * lpInfoProxy.lp_price))
+          .toString(),
+        "ether"
+      )
+    ).toFixed(2);
+  }
+
   useMemo(async () => {
-      const signer: Signer = await getSigner(library);
+    if (account) {
+    const signer: Signer = await getSigner(library);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let pool1TokenPerBlock = await pool1.tokenPerBlock();
@@ -52,34 +81,6 @@ export const useApr = () => {
 
     setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
     setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
-
-    function apr(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
-      let totalWeightUpdated;
-      formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
-      return parseFloat(
-        formatUnits(
-          tokenPerBlock
-            .mul(TOTAL_BLOCK_PER_YEAR)
-            .mul(Weight)
-            .mul(PERCENT)
-            .div(totalWeightUpdated)
-            .toString(),
-          "ether"
-        )
-      ).toFixed(2);
-    }
-
-    function aprLp(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
-      let totalWeightUpdated;
-      formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
-      return parseFloat(
-        formatUnits(
-          ((Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT)) / (Number(totalWeightUpdated) * lpInfoProxy.lp_price))
-            .toString(),
-          "ether"
-        )
-      ).toFixed(2);
-    }
 
     ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
 
@@ -98,6 +99,7 @@ export const useApr = () => {
         sixMonth: aprLp(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
         twelveMonth: aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
       });
+    }
   }, [account, lpInfo]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };
 };

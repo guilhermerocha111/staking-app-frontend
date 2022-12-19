@@ -192,7 +192,7 @@ export default function IngameStaking1() {
                   </div>
                 </div>
           )}
-          <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+          {/* <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
             <button
               className={`font-semibold py-3 ${
                 type === "stake"
@@ -203,7 +203,7 @@ export default function IngameStaking1() {
             >
               Stake
             </button>
-            {/* <button
+            <button
               className={`font-semibold py-3 ${
                 type === "unstake"
                   ? "link-active-2"
@@ -212,8 +212,8 @@ export default function IngameStaking1() {
               onClick={() => setType("unstake")}
             >
               Unstake
-            </button> */}
-          </div>
+            </button>
+          </div> */}
           {type === "stake" ? (
             <form
               onSubmit={(e) => handleStake(e)}

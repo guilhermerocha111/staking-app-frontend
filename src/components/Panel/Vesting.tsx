@@ -104,7 +104,7 @@ export default function Vesting() {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
         <div>
           <h1 className="section-heading-1">
-            <img src="/images/unlock.png" alt="" /> Vesting Panel
+            <img src="/images/unlock.png" alt="" /> Claim / Vesting Panel
           </h1>
           <p className="flex items-center gap-2 mt-4">
             <button className="tag-1">

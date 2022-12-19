@@ -13,25 +13,27 @@ export const usePendings = () => {
   useMemo( () => {
 
     setInterval(async() => {
-    const signer: Signer = await getSigner(library);
-    const pool1 = getStakingPool01(signer);
-    const pool2 = getStakingPool02(signer);
-    let amount0 = await pool1.pendingRewards(await signer.getAddress());
-    let amount1 = await pool2.pendingRewards(await signer.getAddress());
-    let amountCalculatedSMCW = await pool1.rewardsPerWallet(await signer.getAddress());
-    let amountCalculatedLP = await pool2.rewardsPerWallet(await signer.getAddress());
-    let totalAmount0 = amount0.add(amountCalculatedSMCW)
-    let totalAmount1 = amount1.add(amountCalculatedLP)
-    setsmcwRewards(
-      ToFixed(formatUnits(totalAmount0.toString(),"ether"))
-    );
-    setlpRewards(
-      ToFixed(formatUnits(totalAmount1.toString(),"ether"))
-    );
-    setTotalRewards(
-      ToFixed(formatUnits(totalAmount0.add(totalAmount1).toString(),"ether"))
-      )
-
+      if (account) {
+        const signer: Signer = await getSigner(library);
+        const pool1 = getStakingPool01(signer);
+        const pool2 = getStakingPool02(signer);
+        let amount0 = await pool1.pendingRewards(await signer.getAddress());
+        let amount1 = await pool2.pendingRewards(await signer.getAddress());
+        let amountCalculatedSMCW = await pool1.rewardsPerWallet(await signer.getAddress());
+        let amountCalculatedLP = await pool2.rewardsPerWallet(await signer.getAddress());
+        let totalAmount0 = amount0.add(amountCalculatedSMCW)
+        let totalAmount1 = amount1.add(amountCalculatedLP)
+        setsmcwRewards(
+          ToFixed(formatUnits(totalAmount0.toString(),"ether"))
+        );
+        setlpRewards(
+          ToFixed(formatUnits(totalAmount1.toString(),"ether"))
+        );
+        setTotalRewards(
+          ToFixed(formatUnits(totalAmount0.add(totalAmount1).toString(),"ether"))
+        )
+      }
+    
     }, 2000);
   }, [total_rewards,account]);
   return {smcw_Rewards,lp_rewards,total:total_rewards};

@@ -9,7 +9,7 @@ const injected = new InjectedConnector({
 const walletconnect = new WalletConnectConnector({
   qrcode: true,
   bridge: "https://bridge.walletconnect.org",
-  infuraId: '7699868d5e3a43ce83485ebbc121b20f',
+  infuraId: process.env.REACT_APP_INFURA_KEY,
 });
 
 export const connectors = {
