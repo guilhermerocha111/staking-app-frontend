@@ -53,7 +53,7 @@ export const useNFTPendings = (isLoading: boolean) => {
       const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())
       setEstimated(_estimated.toString())
       setPendings(_pendings.toString())
-    }, 2000)
+    }, 30000)
     
   }, [isLoading]);
   return {estimated,pendings,account};

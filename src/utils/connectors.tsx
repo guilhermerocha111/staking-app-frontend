@@ -18,7 +18,8 @@ export const connectors = {
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
-   if (!library) {
+  const connectionType = localStorage.getItem('connector')
+   if (connectionType === 'metamask') {
       return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
    } else {
     return library.getSigner();

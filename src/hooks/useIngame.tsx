@@ -3,6 +3,7 @@ import { BigNumber, Signer, utils } from "ethers";
 import { getIngamePool } from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
+import { getVesting } from "../utils/contracts";
 const { formatUnits } = utils;
 
 
@@ -14,6 +15,17 @@ export const useStake = () => {
     const pool = getIngamePool(signer);
     const tx = await pool.stake(claimAmount);
     await tx.wait()
+  }, []);
+};
+
+export const useVesting = () => {
+  // const { library } = useWeb3React();
+
+  return useCallback(async (library: any) => {
+        const signer: Signer = await getSigner(library);
+        const vesting = getVesting(signer);
+        const tx = await vesting.vest()
+        await tx.wait()
   }, []);
 };
 

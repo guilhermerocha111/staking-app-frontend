@@ -8,7 +8,7 @@ import { useEffect, useState, useContext } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useWeb3React } from "@web3-react/core";
 import { useStaked } from "../../hooks/useStaked";
-import { useVesting } from "../../hooks/useVesting";
+import { useVesting } from "../../hooks/useIngame";
 import { Link, useLocation } from "react-router-dom";
 import { usePendings } from "../../hooks/usePendings";
 import { useTimeDiff } from "../../hooks/useCountdown";
@@ -32,7 +32,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const { locked } = useVestingPanel();
   const lpBalance = useTokenBalance("lp",refresh);
   const smcwBalance = useTokenBalance("smcw",refresh);
-  const { chainId, active, account } = useWeb3React();
+  const { chainId, active, account, library } = useWeb3React();
   const [isInfoOpen, setInfoOpen] = useState(false);
   const [showLocked, setShowLocked] = useState(false);
   const { smcw_Rewards, lp_rewards, total } = usePendings();
@@ -67,11 +67,12 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   const vest = async () => {
     ACTION.SET_TX_LOADER(true);
     try {
-      await vestRewards();
+      await vestRewards(library);
       ACTION.SET_TX_LOADER(false);
       window.location.reload();
     } catch (error: any) {
       ACTION.SET_TX_LOADER(false);
+      console.log(error)
       toast.error('Execution reverted: not enough rewards. (happens when trying to claim “0” pending rewards)');
     }
   };

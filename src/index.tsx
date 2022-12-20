@@ -5,14 +5,14 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Web3ReactProvider } from '@web3-react/core'
 import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from "@ethersproject/providers";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import {ContextProvider} from "./contextStore";
 // import reportWebVitals from './reportWebVitals';
 
 
 
-const getLibrary = (provider:ExternalProvider | JsonRpcFetchFunc) => {
-  const library = new ethers.providers.Web3Provider(provider);
+const getLibrary = (provider:ExternalProvider | JsonRpcFetchFunc | any) => {
+  const library = new Web3Provider(provider);
   library.pollingInterval = 8000; // frequency provider is polling
   return library;
 };

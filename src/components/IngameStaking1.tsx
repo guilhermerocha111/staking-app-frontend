@@ -261,11 +261,11 @@ export default function IngameStaking1() {
                   }
                 </Button>
                 <p className="flex items-center text-sm mt-2">
-                  <FiInfo className=" mr-2" /> To unstake your SMCW, find the "Unstake" button on the &nbsp;
-                  
-                  <Link to="/vesting" className="external-link">
+                  <FiInfo className=" mr-2" /> <span>To unstake your SMCW, find the "Unstake" button on the &nbsp; <Link to="/vesting" className="external-link">
                     Claim / Vesting Panel  <HiOutlineExternalLink />
-                  </Link>
+                  </Link></span>
+                  
+                  
                 </p>
                 </>
               ) : (

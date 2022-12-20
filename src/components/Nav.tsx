@@ -54,10 +54,9 @@ export default function Nav() {
 
 
   const connect = async (type: string | null, reload: boolean = true) => {
-        await switchNetwork()
+        await switchNetwork();
         switch (type) {
           case "metamask":
-            console.log(await connectors.injected.getAccount())
             await activate(connectors.injected);
             localStorage.setItem("isConnected", "true");
             localStorage.setItem("connector", "metamask");
@@ -81,10 +80,11 @@ export default function Nav() {
 
   const { addCommasToNumber } = useCommon();
 
-  const disconnect = () => {
-    deactivate();
+  const disconnect = async () => {
+    await deactivate();
     localStorage.removeItem("isConnected");
     localStorage.removeItem("connector");
+    localStorage.removeItem("walletconnect");
     window.location.reload();
   };
 
