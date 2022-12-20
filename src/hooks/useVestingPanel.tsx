@@ -134,7 +134,7 @@ export const useVestingPanel = () => {
       };
     });
     let formatLocks = locks.map((s, i) => {
-      let date: Date = new Date(Math.ceil(s.vestingTime.toNumber()));
+      let date: Date = new Date(Math.ceil(s.vestingTime.toNumber() * 1000));
 
       return {
         index: i,

@@ -145,6 +145,7 @@ export default function IngameStaking1() {
       setIsLoading(false);
       setActionType('default');
       setActiveTx('');
+      setClaimAmount("0");
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
@@ -152,6 +153,7 @@ export default function IngameStaking1() {
       toast.error("Something went wrong");
       setActionType('default');
       setActiveTx('');
+      setClaimAmount("0");
     }
   };
 
