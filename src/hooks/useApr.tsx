@@ -57,13 +57,10 @@ export const useApr = () => {
 
   function aprLp(Weight: BigNumber, totalWeight: BigNumber,tokenPerBlock:BigNumber) {
     let totalWeightUpdated;
+    console.log(formatUnits(totalWeight, "ether"))
     formatUnits(totalWeight, "ether") === "0.0" ? totalWeightUpdated = BigNumber.from("1000000000000000000000") : totalWeightUpdated = totalWeight
     return parseFloat(
-      formatUnits(
-        ((Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight) * Number(PERCENT)) / (Number(totalWeightUpdated) * lpInfoProxy.lp_price))
-          .toString(),
-        "ether"
-      )
+        String((Number(tokenPerBlock) * lpInfoProxy.smcw_price * Number(TOTAL_BLOCK_PER_YEAR) * Number(Weight)) * Number(PERCENT) / (Number(totalWeightUpdated) * lpInfoProxy.lp_price)/ Math.pow(10, 18))
     ).toFixed(2);
   }
 
@@ -78,11 +75,9 @@ export const useApr = () => {
     // let amount1 = await pool2.getCurrentStaked(await signer.getAddress());
     let pool1Info = await pool1.poolInfo();
     let pool2Info = await pool2.poolInfo();
-
     setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
     setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(365).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
 
-    ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     // if (!amount0.isZero())
@@ -99,6 +94,8 @@ export const useApr = () => {
         sixMonth: aprLp(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
         twelveMonth: aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
       });
+
+      ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
     }
   }, [account, lpInfo]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };

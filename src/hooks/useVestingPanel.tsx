@@ -135,7 +135,7 @@ export const useVestingPanel = () => {
     });
     let formatLocks = locks.map((s, i) => {
       let date: Date = new Date(Math.ceil(s.vestingTime.toNumber() * 1000));
-
+      console.log(s.amount)
       return {
         index: i,
         icon: "coin",
