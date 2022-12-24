@@ -3,7 +3,7 @@ import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 import { ethers, Signer } from "ethers";
 
 const injected = new InjectedConnector({
-  supportedChainIds: [5],
+  supportedChainIds: [Number(process.env.REACT_APP_DEFAULT_CHAIN_ID)],
 });
 
 const walletconnect = new WalletConnectConnector({
@@ -18,6 +18,7 @@ export const connectors = {
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
+  console.log('getSigner')
   const connectionType = localStorage.getItem('connector')
    if (connectionType === 'metamask') {
       return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
@@ -41,12 +42,12 @@ interface Chains {
   }
 }
 export const chains:Chains = {
-  "0x61": {
-    chainId: "0x61",
-    rpcUrls: [`https://data-seed-prebsc-1-s1.binance.org:8545`],
-    chainName: "Binance Smart Chain Testnet",
-    nativeCurrency: { name: "tBNB", decimals: 18, symbol: "tBNB" },
-    blockExplorerUrls: ["https://testnet.bscscan.com"],
+  "0x38": {
+    chainId: "0x38",
+    rpcUrls: [`https://bsc-dataseed1.binance.org/`],
+    chainName: "Binance Smart Chain",
+    nativeCurrency: { name: "BNB", decimals: 18, symbol: "BNB" },
+    blockExplorerUrls: ["https://bscscan.com"],
   },
   "0x5": {
     chainId: "0x5",

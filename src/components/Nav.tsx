@@ -25,7 +25,7 @@ window.Buffer = Buffer;
 
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [defaultChainId] = useState("0x5");
+  // const [defaultChainId] = useState("0x5");
   const { activate, deactivate, active, library, connector, error } = useWeb3React();
   const [{tx_loader, tokenInfo, max_apr}] = useContext(Context);
 
@@ -94,7 +94,7 @@ export default function Nav() {
     try {
       await provider.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: defaultChainId }],
+        params: [{ chainId: DEFAULT_CHAINID }],
       });
     } catch (switchError: any) {
       // 4902 error code indicates the chain is missing on the wallet
@@ -102,7 +102,7 @@ export default function Nav() {
         try {
           await provider.request({
             method: "wallet_addEthereumChain",
-            params: [chains[defaultChainId]],
+            params: [chains[DEFAULT_CHAINID]],
           });
         } catch (error) {
           console.error(error);
@@ -195,14 +195,14 @@ export default function Nav() {
             </Button>
           )}
 
-          {defaultChainId != DEFAULT_CHAINID && (
+          {/* {defaultChainId != DEFAULT_CHAINID && (
             <Button
               className="button-1 !rounded-md"
               onClick={() => switchNetwork()}
             >
               Switch Network
             </Button>
-          )}
+          )} */}
 
           <p className="ml-4 flex items-center gap-3">
             <a

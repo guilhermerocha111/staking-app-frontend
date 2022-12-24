@@ -84,6 +84,12 @@ export default function App() {
     getPrice();
   }, [getPrice])
 
+  useEffect(() => {
+    if (library) {
+      library.pollingInterval = 300000;
+    }
+  }, [library])
+
   const parseRewards = async () => {
     const response = telemetry_rewards_by_tx
       console.log(response)
