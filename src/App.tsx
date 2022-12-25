@@ -86,7 +86,7 @@ export default function App() {
 
   useEffect(() => {
     if (library) {
-      library.pollingInterval = 300000;
+      library.pollingInterval = 30000;
     }
   }, [library])
 

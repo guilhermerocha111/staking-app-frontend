@@ -12,9 +12,11 @@ import {ContextProvider} from "./contextStore";
 
 
 const getLibrary = (provider:ExternalProvider | JsonRpcFetchFunc | any) => {
+  provider.pollingInterval = 30000;
   const library = new Web3Provider(provider);
+  provider.pollingInterval = 30000;
   console.log('getLibrary')
-  library.pollingInterval = 300000; // frequency provider is polling
+  library.pollingInterval = 30000; // frequency provider is polling
   return library;
 };
 

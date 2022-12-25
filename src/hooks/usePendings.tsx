@@ -10,9 +10,9 @@ export const usePendings = () => {
   const [total_rewards, setTotalRewards] = useState("0");
   const [smcw_Rewards, setsmcwRewards] = useState("0");
 
-  useMemo( () => {
+  useMemo( async () => {
 
-    setInterval(async() => {
+    // setInterval(async() => {
       if (account) {
         const signer: Signer = await getSigner(library);
         const pool1 = getStakingPool01(signer);
@@ -34,7 +34,7 @@ export const usePendings = () => {
         )
       }
     
-    }, 2000);
+    // }, 2000);
   }, [total_rewards,account]);
   return {smcw_Rewards,lp_rewards,total:total_rewards};
 };
