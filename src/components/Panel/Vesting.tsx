@@ -2,7 +2,7 @@ import Card from "../Card";
 import Button from "../Button";
 // import Select from "../Select";
 import Overlay from "../Overlay";
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 // import { parseEther } from "ethers/lib/utils";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useVestingPanel } from "../../hooks/useVestingPanel";
@@ -19,6 +19,8 @@ import {
 } from "../../hooks/useIngame";
 import { parseEther } from "ethers/lib/utils";
 import ApiClient from '../../api/ApiClient';
+import Pagination from '../Pagination/Pagination';
+
 
 interface VestingTypes {
   icon: string;
@@ -45,10 +47,24 @@ export default function Vesting() {
   const { addCommasToNumber } = useCommon();
   const { account, active } = useWeb3React();
   const unstake = useUnstake();
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [unstakingIndex, setUnstakingIndex] = useState<number|null>(null);
   const [claimingIndex, setClaimingIndex] = useState<number|null>(null);
   const [nftIndex, setNftIndex] = useState<number|null>(null);
+  let PageSize = 15;
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return PoolStakes.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (PoolStakes.length > 0) {
+      setCurrentPage(1)
+    }
+  }, [PoolStakes])
 
   const handleClaim = async (
     type: string,
@@ -165,7 +181,7 @@ export default function Vesting() {
               </tr>
             </thead>
             <tbody className="text-base">
-              {PoolStakes.map((item, index) => (
+              {currentTableData.map((item, index) => (
                 <tr key={index} style={{minHeight: '48px'}}>
                   <td title={item.pool}>
                     <img src={`/images/${item.icon}.png`} alt="" />
@@ -235,6 +251,15 @@ export default function Vesting() {
               ))}
             </tbody>
           </table>
+          <div style={{position: 'absolute', bottom: '10px'}}>
+            <Pagination
+              className="pagination-bar"
+              currentPage={currentPage}
+              totalCount={PoolStakes.length}
+              pageSize={PageSize}
+              onPageChange={(page:any) => setCurrentPage(page)}
+            />
+          </div>
         </Card>
       </div>
     </section>

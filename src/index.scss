@@ -320,6 +320,15 @@ svg{
   @apply relative bg-design-background2 text-white border border-design-darkBlue lg:shadow-lg rounded-lg p-5;
 }
 
+.card-1rewards{
+  @apply relative bg-design-background2 text-white border border-design-darkBlue lg:shadow-lg rounded-t-lg p-5;
+
+}
+
+.card-pagination {
+  @apply bg-design-background2 text-white border border-design-darkBlue
+}
+
 .tableHeader {
   @apply relative bg-design-background2;
 

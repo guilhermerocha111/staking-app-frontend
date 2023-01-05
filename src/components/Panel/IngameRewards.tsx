@@ -1,11 +1,12 @@
 import Card from "../Card";
 import Button from "../Button";
 import Overlay from "../Overlay";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { Context } from '../../contextStore';
 import { useWeb3React } from "@web3-react/core";
 import ApiClient from "../../api/ApiClient";
 import moment from "moment";
+import Pagination from '../Pagination/Pagination';
 
 interface rewardItem {
   asset_id: string;
@@ -18,8 +19,11 @@ export default function IngameRewards() {
 //   const [filter, setFilter] = useState<string>("");
 //   const [sort, setSort] = useState<string>("");
   const [{telemetry_rewards, telemetry_assets}, ACTION] = useContext(Context);
-  const [telemetryRewards, setTelemetryRewards] = useState({})
+  const [telemetryRewards, setTelemetryRewards] = useState([])
   const [showCollapsed, setCollapsed] = useState<any>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  let PageSize = 10;
 
   const { account, active } = useWeb3React();
 
@@ -29,6 +33,18 @@ export default function IngameRewards() {
         ACTION.SET_TELEMETRY_REWARDS(response)
       }
   }
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return telemetryRewards.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (telemetryRewards.length > 0) {
+      setCurrentPage(1)
+    }
+  }, [telemetryRewards])
 
   const copyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
@@ -42,22 +58,39 @@ export default function IngameRewards() {
 
   useEffect(() => {
     if (telemetry_rewards) {
-      const groupByDate = {}
-      console.log(telemetry_rewards)
-      telemetry_rewards.forEach((reward: rewardItem) => {
-          let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
-          // @ts-ignore
-          if (groupByDate[key] === undefined) {
-            // @ts-ignore
-            groupByDate[key] = [ reward ]
-          } else {
-            // @ts-ignore
-            groupByDate[key] = [ ...groupByDate[key], reward ]
-          }
+      // const groupByDate = {}
+      // telemetry_rewards.forEach((reward: rewardItem) => {
+      //     let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
+      //     // @ts-ignore
+      //     if (groupByDate[key] === undefined) {
+      //       // @ts-ignore
+      //       groupByDate[key] = [ reward ]
+      //     } else {
+      //       // @ts-ignore
+      //       groupByDate[key] = [ ...groupByDate[key], reward ]
+      //     }
           
-          setTelemetryRewards(groupByDate)
+      //     setTelemetryRewards(groupByDate)
+      // })
+
+      const groupByDate2:any = []
+
+      telemetry_rewards.forEach((reward: rewardItem) => {
+        let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
+
+        const dataMock = {
+          timestamp: key,
+          items: [ reward]
+        }
+
+        if (groupByDate2.filter((item:any) => item.timestamp === key).length) {
+          let itemIndex = groupByDate2.findIndex((groupItem:any) => groupItem.timestamp === key);
+          groupByDate2[itemIndex].items.push(reward)
+        } else {
+          groupByDate2.push(dataMock);
+        }
       })
-      console.log(groupByDate)
+      setTelemetryRewards(groupByDate2)
     }
     
 
@@ -73,7 +106,7 @@ export default function IngameRewards() {
 
   const renderContent = () => {
       const contextJSX = []
-      for (let group in telemetryRewards) {
+      for (let group in currentTableData) {
         contextJSX.push((
           <>
           <tr>
@@ -89,23 +122,23 @@ export default function IngameRewards() {
               <td>
                   
                   {// @ts-ignore
-                    telemetryRewards[group].length
+                    currentTableData[group].items.length
                   } items
               </td>
               <td>
                 {// @ts-ignore
-                `${telemetryRewards[group][0].claim_address?.substr(0, 6)}...${telemetryRewards[group][0].claim_address?.substr(-4)}`}
+                `${currentTableData[group].items[0].claim_address?.substr(0, 6)}...${currentTableData[group].items[0].claim_address?.substr(-4)}`}
                 {/* @ts-ignore */}
-                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].claim_address)} />
+                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].claim_address)} />
               </td>
               <td>
                 {// @ts-ignore
-                `${telemetryRewards[group][0].reciever_address?.substr(0, 6)}...${telemetryRewards[group][0].reciever_address?.substr(-4)}`}
+                `${currentTableData[group].items[0].reciever_address?.substr(0, 6)}...${currentTableData[group].items[0].reciever_address?.substr(-4)}`}
                 {/* @ts-ignore */}
-                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(telemetryRewards[group][0].reciever_address)} />
+                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].reciever_address)} />
               </td>
-              
-              <td>{moment(group.replaceAll('_', ' ')).utc().format("MM/DD/YYYY HH:mm")} UTC {}</td>
+              {/* @ts-ignore */}
+              <td>{moment(currentTableData[group].timestamp.replaceAll('_', ' ')).utc().format("MM/DD/YYYY HH:mm")} UTC {}</td>
               <td>
                   <Button className="gradient-2 button-3 border border-design-blue !py-2" onClick={() => handleToggleCollapsed(group)}>{
                     showCollapsed.includes(group) ? 'Hide' : 'Show'
@@ -114,7 +147,7 @@ export default function IngameRewards() {
           </tr>
           <>{showCollapsed.includes(group) ? (
             // @ts-ignore
-            telemetryRewards[group].map((item: any, index: number, array) => (
+            telemetryRewards[group].items.map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
                  
@@ -159,7 +192,7 @@ export default function IngameRewards() {
         </div>
       </div>
       <div className="mt-9 flex-1">
-        <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
+        <Card className="card-1rewards !pb-2 overflow-auto w-full empty-vesting relative" noCard>
         {(!telemetry_rewards.length || !active) && (
             <Overlay>You have not connected your wallet or claimed any rewards yet.</Overlay>
           )}
@@ -185,14 +218,22 @@ export default function IngameRewards() {
             </thead>
             <tbody className="text-base">
               {
-                Object.keys(telemetryRewards).length > 0 && (
+                currentTableData.length > 0 && (
                     renderContent()
                 )
               }
-              
             </tbody>
           </table>
         </Card>
+        <div className="card-pagination rounded-b-lg pt-2 pb-2">
+        <Pagination
+              className="pagination-bar"
+              currentPage={currentPage}
+              totalCount={telemetryRewards.length}
+              pageSize={PageSize}
+              onPageChange={(page:any) => setCurrentPage(page)}
+          />
+        </div>
       </div>
     </section>
   );
