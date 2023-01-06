@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Card from "../Card";
 import Button from "../Button";
 // import Select from "../Select";
@@ -20,7 +21,9 @@ import {
 import { parseEther } from "ethers/lib/utils";
 import ApiClient from '../../api/ApiClient';
 import Pagination from '../Pagination/Pagination';
-
+import moment from 'moment';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 interface VestingTypes {
   icon: string;
@@ -43,6 +46,7 @@ export default function Vesting() {
   // const [sort, setSort] = useState<string>("");
   const { PoolStakes } = useVestingPanel();
   const [, ACTION] = useContext(Context);
+  const [poolStakesData, setPoolStakesData] = useState([]);
   // const navigate = useNavigate();
   const { addCommasToNumber } = useCommon();
   const { account, active } = useWeb3React();
@@ -52,18 +56,35 @@ export default function Vesting() {
   const [unstakingIndex, setUnstakingIndex] = useState<number|null>(null);
   const [claimingIndex, setClaimingIndex] = useState<number|null>(null);
   const [nftIndex, setNftIndex] = useState<number|null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showFilterContent, setShowFilterContent] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [minDateTimestamp, setMinDateTimestamp] = useState(0);
+  const [maxDateTimestamp, setMaxDateTimestamp] = useState(0);
+
+  const [activeFilters, setActiveFilters] = useState({
+    timestamp: [startDate, endDate],
+    filters: []
+  })
+
   let PageSize = 15;
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return PoolStakes.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+    return poolStakesData.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, poolStakesData, activeFilters]);
 
   useEffect(() => {
     if (PoolStakes.length > 0) {
       setCurrentPage(1)
     }
+  }, [PoolStakes]);
+
+  useEffect(() => {
+    setPoolStakesData(PoolStakes)
   }, [PoolStakes])
 
   const handleClaim = async (
@@ -87,7 +108,6 @@ export default function Vesting() {
       } else if (type == 'nft') {
         setNftIndex(index);
         await unstake(parseEther(String(unstakeAmount)).toString());
-        // @ts-ignore
         await new ApiClient().setStakingClaimed(id);
       }
       window.location.reload();
@@ -115,10 +135,113 @@ export default function Vesting() {
     }
   }
 
+  useEffect(() => {
+    if (PoolStakes) {
+      let minDate = 100000000000000000;
+      let maxDate = 0;
+
+      PoolStakes.forEach((reward: rewardItem) => {
+        let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
+        if (new Date(reward.timestamp).getTime() < minDate) {
+          minDate = new Date(reward.timestamp).getTime();
+        }
+
+        if (new Date(reward.timestamp).getTime() > maxDate) {
+          maxDate = new Date(reward.timestamp).getTime();
+        }
+      })
+      setMinDateTimestamp(minDate);
+      setMaxDateTimestamp(maxDate);
+    }
+    
+    clearFilters();
+  }, [PoolStakes])
+
+  const handleChangeFilters = (filterType: string, filterValue: string) => {
+    let filterKey = `${filterType}_${filterValue}`
+    if (activeFilters.filters.includes(filterKey)) {
+      let filteredRow = activeFilters.filters.filter(e => e !== filterKey)
+      setActiveFilters({
+        ...activeFilters,
+        filters: filteredRow
+      })
+    } else {
+      setActiveFilters({
+        ...activeFilters,
+        filters: [...activeFilters.filters, filterKey]
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (activeFilters.filters.length > 0) {
+      let allData = [];
+      for (let i = 0; i < activeFilters.filters.length; i++) {
+        let filteredGroup = PoolStakes.filter(e => e.filterType.includes(activeFilters.filters[i]))
+        let filteredByDate = filteredGroup.filter(item => {
+          let date = new Date(item.timestamp)
+          return (date >= startDate && date <= endDate);
+        })
+        allData = [...new Set([...allData, ...filteredByDate])]
+      }
+      setPoolStakesData(allData)
+    } else {
+      setPoolStakesData(PoolStakes)
+    }
+      
+  }, [activeFilters]);
+
+  useEffect(() => {
+    if (minDateTimestamp && maxDateTimestamp) {
+      if (activeFilters.filters.length === 0) {
+        let filteredByDate = PoolStakes.filter(item => {
+          let date = new Date(item.timestamp)
+          return (date >= startDate && date <= endDate);
+        })
+  
+        setPoolStakesData(filteredByDate)
+      }
+    }
+  }, [startDate, endDate])
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  }
+
+  const handleShowFilterContent = (value:string) => {
+    if (!showFilterContent.includes(value)) {
+      setShowFilterContent([...showFilterContent, value])
+    } else {
+      setShowFilterContent(showFilterContent.filter((item) => item !== value))
+    }
+  }
+
+
+  const onDateChange = (value:any) => {
+    setStartDate(value[0]);
+    setEndDate(value[1]);
+    setShowCalendar(false)
+  }
+
+  const onToggleCalendar = () => {
+    setShowCalendar(!showCalendar)
+  }
+
+  const clearFilters = () => {
+    setStartDate(new Date(minDateTimestamp));
+    setEndDate(new Date(maxDateTimestamp));
+    setActiveFilters({
+      ...activeFilters,
+      filters: []
+    })
+    // setStartDate(new Date(minDateTimestamp))
+    // setEndDate(new Date(maxDateTimestamp))
+  }
+
   return (
     <section className="max-w-screen-2xl mx-auto">
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
-        <div>
+        <div style={{width: '100%'}}>
           <h1 className="section-heading-1">
             <img src="/images/unlock.png" alt="" /> Claim / Vesting Panel
           </h1>
@@ -126,7 +249,145 @@ export default function Vesting() {
             <button className="tag-1">
               BSC <img src="/images/Binance.png" alt="" />
             </button>
-            Unstake your SMCW or LP. View SMCW claimed rewards vesting period
+            <span>Unstake your SMCW or LP. View SMCW claimed rewards vesting period</span>
+            <div className="filterPlaceholder">
+              <span  onClick={() => toggleFilters()}>Filter <div className={showFilters ? "arrowFilter up" : "arrowFilter down"}/></span>
+              {showFilters && (
+                <div className="filterList">
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('timestamp')}>Timestamp <div className={showFilterContent.includes('timestamp') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('timestamp') && (
+                        <div className="filterContent">
+                          <div className="flex relative">
+                            <div className="datePlaceholder" onClick={() => onToggleCalendar()}>
+                              <img src="/images/icons/calendar.svg" />
+                              {moment(startDate).format('MM/DD/YYYY')}
+                              <img src="/images/icons/close.svg" />
+                            </div>
+                            <div className="datePlaceholder"  onClick={() => onToggleCalendar()}>
+                              <img src="/images/icons/calendar.svg" />
+                              {moment(endDate).format('MM/DD/YYYY')}
+                              <img src="/images/icons/close.svg" />
+                            </div>
+                          </div>
+                          {
+                            showCalendar && (
+                              <div style={{position: 'absolute', top: '90px', right: '0'}}>
+                                <Calendar locale="en-US" selectRange onChange={onDateChange} defaultView="month"/>
+                              </div>
+                            )
+                          }
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('pool')}>Pool <div className={showFilterContent.includes('pool') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('pool') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div>
+                              <input type="checkbox" checked={activeFilters.filters.includes('pool_ingame')} onClick={() => handleChangeFilters('pool', 'ingame')}/>
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              INGAME / Hidden Data
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div>
+                              <input type="checkbox" checked={activeFilters.filters.includes('pool_smcw')} onClick={() => handleChangeFilters('pool', 'smcw')}/>
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/coin.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              SMCW
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div>
+                              <input type="checkbox" checked={activeFilters.filters.includes('pool_smcw_lp')} onClick={() => handleChangeFilters('pool', 'smcw_lp')}/>
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/lp.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              SMCW LP
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('status')}>Status <div className={showFilterContent.includes('status') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('status') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('status', 'locked')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('status_locked')} />
+                            </div>
+                            <div className="flexCenter">
+                              Locked
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('status', 'unstake')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('status_unstake')}/>
+                            </div>
+                            <div className="flexCenter">
+                              Unstake
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('status', 'claimed')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('status_claimed')} />
+                            </div>
+                            <div className="flexCenter">
+                              Claimed
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('status', 'claim_now')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('status_claim_now')} />
+                            </div>
+                            <div className="flexCenter">
+                              Claim Now
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('type')}>Type <div className={showFilterContent.includes('type') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('type') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('type', 'stake')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('type_stake')} />
+                            </div>
+                            <div className="flexCenter">
+                              Stake
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}} onClick={() => handleChangeFilters('type', 'claim')}>
+                              <input type="checkbox" checked={activeFilters.filters.includes('type_claim')}/>
+                            </div>
+                            <div className="flexCenter">
+                              Claim
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div className="flex align-center justify-center p-2 pointer" onClick={() => clearFilters()}>Clear</div>
+                </div>
+              )}
+            </div>
           </p>
         </div>
         {/* <div className="flex items-center gap-2 mt-5 lg:mt-0">
@@ -181,7 +442,8 @@ export default function Vesting() {
               </tr>
             </thead>
             <tbody className="text-base">
-              {currentTableData.map((item, index) => (
+              {/* tslint:disable */}
+              {currentTableData.length > 0 && currentTableData.map((item, index) => (
                 <tr key={index} style={{minHeight: '48px'}}>
                   <td title={item.pool}>
                     <img src={`/images/${item.icon}.png`} alt="" />
@@ -255,7 +517,7 @@ export default function Vesting() {
             <Pagination
               className="pagination-bar"
               currentPage={currentPage}
-              totalCount={PoolStakes.length}
+              totalCount={poolStakesData.length}
               pageSize={PageSize}
               onPageChange={(page:any) => setCurrentPage(page)}
             />

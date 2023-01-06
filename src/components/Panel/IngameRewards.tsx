@@ -7,6 +7,8 @@ import { useWeb3React } from "@web3-react/core";
 import ApiClient from "../../api/ApiClient";
 import moment from "moment";
 import Pagination from '../Pagination/Pagination';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 interface rewardItem {
   asset_id: string;
@@ -22,6 +24,14 @@ export default function IngameRewards() {
   const [telemetryRewards, setTelemetryRewards] = useState([])
   const [showCollapsed, setCollapsed] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showFilterContent, setShowFilterContent] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [telemetryRewardsData, setTelemetryRewardsData] = useState([]);
+  const [minDateTimestamp, setMinDateTimestamp] = useState(0);
+  const [maxDateTimestamp, setMaxDateTimestamp] = useState(0);
 
   let PageSize = 10;
 
@@ -38,7 +48,7 @@ export default function IngameRewards() {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return telemetryRewards.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, telemetryRewards]);
 
   useEffect(() => {
     if (telemetryRewards.length > 0) {
@@ -58,39 +68,37 @@ export default function IngameRewards() {
 
   useEffect(() => {
     if (telemetry_rewards) {
-      // const groupByDate = {}
-      // telemetry_rewards.forEach((reward: rewardItem) => {
-      //     let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
-      //     // @ts-ignore
-      //     if (groupByDate[key] === undefined) {
-      //       // @ts-ignore
-      //       groupByDate[key] = [ reward ]
-      //     } else {
-      //       // @ts-ignore
-      //       groupByDate[key] = [ ...groupByDate[key], reward ]
-      //     }
-          
-      //     setTelemetryRewards(groupByDate)
-      // })
 
-      const groupByDate2:any = []
+      const groupByDate:any = [];
+      let minDate = 100000000000000000;
+      let maxDate = 0;
 
       telemetry_rewards.forEach((reward: rewardItem) => {
         let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
+        if (reward.timestamp < minDate) {
+          minDate = reward.timestamp;
+        }
 
+        if (reward.timestamp > maxDate) {
+          maxDate = reward.timestamp
+        }
+        
         const dataMock = {
           timestamp: key,
           items: [ reward]
         }
 
-        if (groupByDate2.filter((item:any) => item.timestamp === key).length) {
-          let itemIndex = groupByDate2.findIndex((groupItem:any) => groupItem.timestamp === key);
-          groupByDate2[itemIndex].items.push(reward)
+        if (groupByDate.filter((item:any) => item.timestamp === key).length) {
+          let itemIndex = groupByDate.findIndex((groupItem:any) => groupItem.timestamp === key);
+          groupByDate[itemIndex].items.push(reward)
         } else {
-          groupByDate2.push(dataMock);
+          groupByDate.push(dataMock);
         }
       })
-      setTelemetryRewards(groupByDate2)
+      setMinDateTimestamp(minDate);
+      setMaxDateTimestamp(maxDate);
+      setTelemetryRewards(groupByDate)
+      setTelemetryRewardsData(groupByDate)
     }
     
 
@@ -102,6 +110,10 @@ export default function IngameRewards() {
     } else {
       setCollapsed([...showCollapsed, group])
     }
+  }
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
   }
 
   const renderContent = () => {
@@ -175,11 +187,43 @@ export default function IngameRewards() {
       return contextJSX.reverse()
   }
 
+  const handleShowFilterContent = (value:string) => {
+    if (!showFilterContent.includes(value)) {
+      setShowFilterContent([...showFilterContent, value])
+    } else {
+      setShowFilterContent(showFilterContent.filter((item) => item !== value))
+    }
+  }
+
+  const onDateChange = (value:any) => {
+    setStartDate(value[0]);
+    setEndDate(value[1]);
+    setShowCalendar(false)
+  }
+
+  useEffect(() => {
+    const filteredTelemetries = telemetryRewardsData.filter(telemetry => {
+      //@ts-ignore
+      let date = new Date(telemetry.timestamp.replaceAll('_', ' '))
+      return (date >= startDate && date <= endDate);
+    })
+    setTelemetryRewards(filteredTelemetries)
+  }, [startDate, endDate])
+  
+  const onToggleCalendar = () => {
+    setShowCalendar(!showCalendar)
+  }
+
+  const clearFilters = () => {
+    setTelemetryRewards(telemetryRewardsData);
+    setStartDate(new Date(minDateTimestamp))
+    setEndDate(new Date(maxDateTimestamp))
+  }
 
   return (
     <section className="max-w-screen-2xl mx-auto mt-8" id="log">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
-        <div>
+        <div style={{width: '100%'}}>
           <h1 className="section-heading-1">
             <img src="/images/icons/blank.svg" alt="" /> Ingame Rewards Log
           </h1>
@@ -187,7 +231,96 @@ export default function IngameRewards() {
             <button className="tag-1">
               Enjin <img src="/images/enjin.png" alt="" />
             </button>
-            View your claimed ingame rewards
+            <span>View your claimed ingame rewards</span>
+            <div className="filterPlaceholder">
+              <span  onClick={() => toggleFilters()}>Filter <div className={showFilters ? "arrowFilter up" : "arrowFilter down"}/></span>
+              {showFilters && (
+                <div className="filterList">
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('timestamp')}>Timestamp <div className={showFilterContent.includes('timestamp') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('timestamp') && (
+                        <div className="filterContent">
+                          <div className="flex relative">
+                            <div className="datePlaceholder" onClick={() => onToggleCalendar()}>
+                              <img src="/images/icons/calendar.svg" />
+                              {moment(startDate).format('MM/DD/YYYY')}
+                              <img src="/images/icons/close.svg" />
+                            </div>
+                            <div className="datePlaceholder"  onClick={() => onToggleCalendar()}>
+                              <img src="/images/icons/calendar.svg" />
+                              {moment(endDate).format('MM/DD/YYYY')}
+                              <img src="/images/icons/close.svg" />
+                            </div>
+                          </div>
+                          {
+                            showCalendar && (
+                              <div style={{position: 'absolute', top: '90px', right: '0'}}>
+                                <Calendar locale="en-US" selectRange onChange={onDateChange} defaultView="month"/>
+                              </div>
+                            )
+                          }
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('pool')}>Pool <div className={showFilterContent.includes('pool') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('pool') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div>
+                              <input type="checkbox" />
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              INGAME / Hidden Data
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('network')}>Network <div className={showFilterContent.includes('network') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('network') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div>
+                              <input type="checkbox" />
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/enjin.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              Enjin JumpNet
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div>
+                    <div className="filterLabel" onClick={() => handleShowFilterContent('type')}>Type <div className={showFilterContent.includes('type') ? "arrowFilter up" : "arrowFilter down"}/></div>
+                    {
+                      showFilterContent.includes('type') && (
+                        <div className="filterContent">
+                          <div className="filterContent__row">
+                            <div style={{marginRight: '8px'}}>
+                              <input type="checkbox" />
+                            </div>
+                            <div className="flexCenter">
+                              FT
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div className="flex align-center justify-center p-2 pointer" onClick={() => clearFilters()}>Clear</div>
+                </div>
+              )}
+            </div>
           </p>
         </div>
       </div>

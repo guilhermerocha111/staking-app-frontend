@@ -55,6 +55,7 @@ body.collapsed {
 .custom-border {
   border: 1px solid #263673 !important;
 }
+
 .navMenu {
   @media (max-width: 768px) {
     flex-direction: column;
@@ -69,6 +70,101 @@ body.collapsed {
   }
   
 }
+
+.arrowFilter {
+  margin-left: 3px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.react-calendar {
+  color: black;
+}
+
+.datePlaceholder {
+  font-weight: 400;
+  color: #333;
+  font-size: 15px;
+  background:#fff;
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: 1px solid #DDDDDD;
+  width: 50%;
+  margin: 8px 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterPlaceholder {
+  position: relative;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-left: auto;
+  border: 1px solid;
+  --tw-border-opacity: 1;
+  border-color: rgb(25 33 67 / var(--tw-border-opacity));
+  border-radius: 8px;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.filterLabel {
+  padding: 4px 8px;
+  background: rgb(25 33 67 / 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  .arrowFilter {
+    margin-left: auto;
+  }
+}
+
+.filterContent {
+  padding: 4px 8px;
+
+  &__row {
+    display: flex;
+  }
+}
+
+.filterList {
+  min-width: 340px;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 100;
+  @apply bg-design-background2 text-white border border-design-darkBlue lg:shadow-lg rounded-lg 
+}
+
 .navLink {
   font-family: "Titillium Web";
   font-size: 14px;
