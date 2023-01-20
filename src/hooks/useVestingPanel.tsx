@@ -96,7 +96,7 @@ export const useVestingPanel = () => {
         reward: "SMCW",
         action: "Unstake",
         state: "Locked",
-        filterType: ['pool_smcw', 'type_stake', s.withdrawed ? "status_claimed" : "status_unstake", s.timestamp.toNumber() > s.stakeUntill.toNumber() ? "status_claim_now" : "status_locked"],
+        filterType: ['pool_smcw', 'type_stake', s.withdrawed && "status_claimed", (new Date().getTime()/1000) > s.stakeUntill.toNumber() && 'status_unstake' , (new Date().getTime()/1000) < s.stakeUntill.toNumber() && 'status_unstake'],
         poolInstance: pool1,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         weight: formatUnits(s.weight, "ether"),
@@ -113,6 +113,7 @@ export const useVestingPanel = () => {
 
     let stakes2 = stakes02.map((s, i) => {
       let date: Date = new Date(Math.ceil(s.timestamp.toNumber() * 1000));
+      console.log(s.timestamp.toNumber(), s.stakeUntill.toNumber())
       return {
         index: i,
         icon: "lp",
@@ -124,7 +125,7 @@ export const useVestingPanel = () => {
         poolInstance: pool2,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         weight: formatUnits(s.weight, "ether"),
-        filterType: ['pool_smcw_lp', 'type_stake', s.withdrawed ? "status_claimed" : "status_unstake", s.timestamp.toNumber() > s.stakeUntill.toNumber() ? "status_claim_now" : "status_locked"],
+        filterType: ['pool_smcw_lp', 'type_stake', s.withdrawed && "status_claimed", (new Date().getTime()/1000) > s.stakeUntill.toNumber() && 'status_unstake' , (new Date().getTime()/1000) < s.stakeUntill.toNumber() && 'status_unstake'],
         isClaimed: s.withdrawed,
         stakeFor: s.stakeFor,
         unlocksIn: countdown(s.stakeUntill.toNumber()),
@@ -148,7 +149,7 @@ export const useVestingPanel = () => {
         action: "Claim NOW",
         state: "Vesting",
         poolInstance: vesting,
-        filterType: ['pool_smcw', 'type_claim', ],
+        filterType: ['pool_smcw', 'type_claim', s.isClaimed && "status_claimed", (s.isClaimed === false ?? (new Date().getTime()/1000) > s.vestingDuration.toNumber()) && "status_claim_now"],
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         unlocksIn: countdown(s.vestingDuration.toNumber()),
@@ -165,7 +166,7 @@ export const useVestingPanel = () => {
       return {
         id: item._id,
         index: index,
-        icon: "logo_small",
+        icon: "telemetry1",
         type: "nft",
         weight: "N/A",
         pool: item.pool,
@@ -181,10 +182,12 @@ export const useVestingPanel = () => {
         percentage: -1
       }
     })
-
+    let allData = [...stakes1, ...stakes2, ...formatLocks, ...formatNftPools]
+    let allDataSorted = allData.sort(function(a,b) {return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()})
     setInGameLocker([formatLocks]);
     setAllLocked(locks);
-    setAllStakes([...stakes1, ...stakes2, ...formatLocks, ...formatNftPools]);
+    
+    setAllStakes(allDataSorted);
   }
   }, [account]);
   return {

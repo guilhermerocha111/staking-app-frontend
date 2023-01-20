@@ -172,7 +172,7 @@ export default function Nav() {
               onClick={() => connect("metamask")}
             >
               <img src="/images/Metamask.png" alt="" />
-              Connect to Metamask
+              Connect to MetaMask
             </Button>
           )}
 
@@ -370,7 +370,7 @@ export default function Nav() {
                     onClick={() => connect("metamask")}
                   >
                     <img src="/images/Metamask.png" alt="" />
-                    Connect to Metamask
+                    Connect to MetaMask
                   </Button>
               )}
               

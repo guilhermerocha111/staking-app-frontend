@@ -157,7 +157,7 @@ export default function IngameRewards() {
                   }</Button>
               </td>
           </tr>
-          <>{showCollapsed.includes(group) ? (
+          <tbody style={{maxHeight: '180px', overflow: 'auto', display: 'block'}}>{showCollapsed.includes(group) ? (
             // @ts-ignore
             telemetryRewards[group].items.map((item: any, index: number, array) => (
               <tr key={index}>
@@ -180,7 +180,8 @@ export default function IngameRewards() {
                 </td>
               </tr>
             ))
-          ) : null}</></>
+          ) : null}</tbody>
+          </>
         ))
       }
 
@@ -232,7 +233,8 @@ export default function IngameRewards() {
               Enjin <img src="/images/enjin.png" alt="" />
             </button>
             <span>View your claimed ingame rewards</span>
-            <div className="filterPlaceholder">
+            {telemetry_rewards.length > 0 && (
+              <div className="filterPlaceholder">
               <span  onClick={() => toggleFilters()}>Filter <div className={showFilters ? "arrowFilter up" : "arrowFilter down"}/></span>
               {showFilters && (
                 <div className="filterList">
@@ -321,6 +323,7 @@ export default function IngameRewards() {
                 </div>
               )}
             </div>
+            )}
           </p>
         </div>
       </div>
@@ -358,15 +361,17 @@ export default function IngameRewards() {
             </tbody>
           </table>
         </Card>
-        <div className="card-pagination rounded-b-lg pt-2 pb-2">
-        <Pagination
-              className="pagination-bar"
-              currentPage={currentPage}
-              totalCount={telemetryRewards.length}
-              pageSize={PageSize}
-              onPageChange={(page:any) => setCurrentPage(page)}
-          />
-        </div>
+        {telemetry_rewards.length > 0 && (
+          <div className="card-pagination rounded-b-lg pt-2 pb-2">
+          <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={telemetryRewards.length}
+                pageSize={PageSize}
+                onPageChange={(page:any) => setCurrentPage(page)}
+            />
+          </div>
+        )}
       </div>
     </section>
   );

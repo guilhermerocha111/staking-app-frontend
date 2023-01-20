@@ -271,7 +271,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
         {/* SMCW Info */}
 
-        <Card className="flex-1 custom-border" styles={{height: isInfoOpen ? 'auto' : 'fit-content', minHeight: '280px'}}>
+        <Card className="flex-1 custom-border" styles={{height: isInfoOpen ? 'auto' : 'fit-content', minHeight: '280px', display: 'flex', flexDirection: 'column'}}>
           <h3 className="card-heading-1">SMCW Info</h3>
           <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
               <p className="tag-1">
@@ -394,6 +394,9 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             className="overflow-hidden"
             style={{
               maxHeight: isInfoOpen ? "2000px" : "0px",
+              display: 'flex',
+              height: '100%',
+              flexDirection: 'column',
             }}
           >
             <div className="mt-8 grid grid-cols-1 gap-3">
@@ -506,7 +509,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
             </div>
             {/* Buy */}
-            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-[2.25rem]">
+            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-[2.25rem]" style={{marginTop: 'auto', marginBottom: '16px'}}>
               <div className="mb-4 lg:mb-0">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Buy SMCW
@@ -589,7 +592,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           {isInfoOpen && (
               <Button
                 onClick={() => setInfoOpen(!isInfoOpen)}
-                className="gradient-5 button-3 mt-6"
+                className="gradient-5 button-3 mt-[auto]"
               >
                 <FiChevronUp />
               </Button>

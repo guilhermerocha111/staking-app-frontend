@@ -135,28 +135,6 @@ export default function Vesting() {
     }
   }
 
-  useEffect(() => {
-    if (PoolStakes) {
-      let minDate = 100000000000000000;
-      let maxDate = 0;
-
-      PoolStakes.forEach((reward: rewardItem) => {
-        let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
-        if (new Date(reward.timestamp).getTime() < minDate) {
-          minDate = new Date(reward.timestamp).getTime();
-        }
-
-        if (new Date(reward.timestamp).getTime() > maxDate) {
-          maxDate = new Date(reward.timestamp).getTime();
-        }
-      })
-      setMinDateTimestamp(minDate);
-      setMaxDateTimestamp(maxDate);
-    }
-    
-    clearFilters();
-  }, [PoolStakes])
-
   const handleChangeFilters = (filterType: string, filterValue: string) => {
     let filterKey = `${filterType}_${filterValue}`
     if (activeFilters.filters.includes(filterKey)) {
@@ -228,15 +206,38 @@ export default function Vesting() {
   }
 
   const clearFilters = () => {
-    setStartDate(new Date(minDateTimestamp));
-    setEndDate(new Date(maxDateTimestamp));
+    if (PoolStakes) {
+      let minDate = 100000000000000000;
+    let maxDate = 0;
+
+    PoolStakes.forEach((reward: rewardItem) => {
+      let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
+      if (new Date(reward.timestamp).getTime() < minDate) {
+        minDate = new Date(reward.timestamp).getTime();
+      }
+
+      if (new Date(reward.timestamp).getTime() > maxDate) {
+        maxDate = new Date(reward.timestamp).getTime();
+      }
+    })
+    setMinDateTimestamp(minDate);
+    setMaxDateTimestamp(maxDate);
+    setStartDate(new Date(minDate));
+    setEndDate(new Date(maxDate));
     setActiveFilters({
       ...activeFilters,
       filters: []
     })
+    }
     // setStartDate(new Date(minDateTimestamp))
     // setEndDate(new Date(maxDateTimestamp))
   }
+
+  useEffect(() => {
+    if (PoolStakes.length) {
+      clearFilters();
+    }
+  }, [PoolStakes.length])
 
   return (
     <section className="max-w-screen-2xl mx-auto">
@@ -250,7 +251,8 @@ export default function Vesting() {
               BSC <img src="/images/Binance.png" alt="" />
             </button>
             <span>Unstake your SMCW or LP. View SMCW claimed rewards vesting period</span>
-            <div className="filterPlaceholder">
+            {PoolStakes.length > 0 && (
+              <div className="filterPlaceholder">
               <span  onClick={() => toggleFilters()}>Filter <div className={showFilters ? "arrowFilter up" : "arrowFilter down"}/></span>
               {showFilters && (
                 <div className="filterList">
@@ -388,6 +390,7 @@ export default function Vesting() {
                 </div>
               )}
             </div>
+            ) }
           </p>
         </div>
         {/* <div className="flex items-center gap-2 mt-5 lg:mt-0">
