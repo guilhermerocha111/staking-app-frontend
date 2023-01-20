@@ -20,6 +20,7 @@ import { useTokenBalance } from "../../hooks/useTokenBalance";
 import { Context } from '../../contextStore';
 import useCommon from '../../hooks/useCommon';
 import { HashLink } from 'react-router-hash-link';
+import Loader from '../Loader';
 
 interface RefreshProps {
   refresh: boolean;
@@ -43,6 +44,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
   );
   const { addCommasToNumber } = useCommon();
   const [{max_apr, tokenInfo}, ACTION] = useContext(Context);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -66,12 +68,14 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
 
   const vest = async () => {
     ACTION.SET_TX_LOADER(true);
+    setLoader(true);
     try {
       await vestRewards(library);
       ACTION.SET_TX_LOADER(false);
       window.location.reload();
     } catch (error: any) {
       ACTION.SET_TX_LOADER(false);
+      setLoader(false);
       console.log(error)
       toast.error('Execution reverted: not enough rewards. (happens when trying to claim “0” pending rewards)');
     }
@@ -253,7 +257,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </Button>
             ) : (
               <Button onClick={vest} className="gradient-1 button-3 mt-3">
-                VEST SMCW REWARDS NOW (1 month) <HiOutlineExternalLink />
+                VEST SMCW REWARDS NOW (1 month) {loader ? <Loader /> : <HiOutlineExternalLink />}
               </Button>
             )}
           </div>
