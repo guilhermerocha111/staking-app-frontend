@@ -114,7 +114,7 @@ export default function Nav() {
 
   return (
     <nav className="bg-opacity-20 text-design-white fixed top-0 left-0 w-full blurred-container z-40">
-      <div className="hidden lg:flex bg-design-backgroundBlack text-xs font-semibold py-2 px-4 items-center justify-between gap-4">
+      <div className="hidden lg:flex text-xs font-semibold py-2 px-4 items-center justify-between gap-4 headerBar" >
         <div className="max-w-screen-2xl mx-auto" style={{display: 'flex', width: '100%'}}>
         <div className="flex items-center gap-4" style={{marginRight: 'auto'}}>
           <p className="flex items-center">
@@ -140,9 +140,9 @@ export default function Nav() {
             <img
               src="/images/copy.png"
               alt=""
-              className="h-5 w-5 object-contain object-center mr-1.5"
+              className="h-[15px] w-[12px] object-contain object-center mr-1.5"
             />
-            Copy Contract
+            Contract
           </button>
           {max_apr && (
             <p className="flex items-center">
@@ -159,7 +159,7 @@ export default function Nav() {
         <div className="flex items-center gap-2">
           {!active && (
             <Button
-              className="button-1 !rounded-md"
+              className="button-1 connectBtn"
               onClick={() => connect("walletconnect")}
             >
               <img src="/images/WalletConnect.png" alt="" />
@@ -168,7 +168,7 @@ export default function Nav() {
           )}
           {!active && (
             <Button
-              className="button-1 !rounded-md"
+              className="button-1 connectBtn"
               onClick={() => connect("metamask")}
             >
               <img src="/images/Metamask.png" alt="" />
@@ -179,7 +179,7 @@ export default function Nav() {
 
           {(tx_loader && active) && (
             <div
-              className="button-1 !rounded-md"
+              className="button-1 connectBtn"
             >
               Pending Tx...
             </div>
@@ -251,7 +251,7 @@ export default function Nav() {
         
       </div>
       <div
-        className="bg-design-background4 bg-opacity-80 mx-auto px-4 lg:px-8 lg:hidden"
+        className="bg-design-background4 bg-opacity-80 mx-auto px-4 lg:px-8 lg:hidden navMenuMobile"
       >
         <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
           <a href="/">
@@ -308,7 +308,7 @@ export default function Nav() {
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "linear" }}
             key="mobile-nav"
-            className="fixed top-0 left-0 w-full h-screen bg-design-background py-3 px-4 lg:px-8 flex flex-col justify-between z-50"
+            className="fixed top-0 left-0 w-full h-screen bg-design-background py-3 px-4 lg:px-8 flex flex-col justify-between z-50 burgerMenu"
             style={{
               transition: "none",
             }}
@@ -342,7 +342,30 @@ export default function Nav() {
                 <a href="/">SHOP</a>
               </div> */}
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-3 mb-[auto] mt-[50px]">
+              <Button className="button-1 !px-3 !py-2.5 bgTransparent">
+                <img src="/images/WalletConnect.png" alt="" />
+                WalletConnect
+              </Button>
+              {!active && (
+                  <Button
+                    className="button-1 !px-3 !py-2.5 bgTransparent"
+                    onClick={() => connect("metamask")}
+                  >
+                    <img src="/images/Metamask.png" alt="" />
+                    Connect to MetaMask
+                  </Button>
+              )}
+              
+              {active && (
+                <Button
+                  className="button-1 !px-3 !py-2.5 bgTransparent"
+                  onClick={() => disconnect()}
+                >
+                  <img src="/images/Metamask.png" alt="" />
+                  Disconnect
+                </Button>
+              )}
               <div className="flex justify-center items-center gap-4 mb-4">
                 <a href="/" className=" bg-white rounded-button-1">
                   <FaDiscord className="text-brands-discord" />
@@ -360,32 +383,6 @@ export default function Nav() {
                   <FaTwitch />
                 </a>
               </div>
-              <Button className="button-1 !px-3 !py-2.5">
-                <img src="/images/WalletConnect.png" alt="" />
-                WalletConnect
-              </Button>
-              {!active && (
-                  <Button
-                    className="button-1 !px-3 !py-2.5"
-                    onClick={() => connect("metamask")}
-                  >
-                    <img src="/images/Metamask.png" alt="" />
-                    Connect to MetaMask
-                  </Button>
-              )}
-              
-              {active && (
-                <Button
-                  className="button-1 !px-3 !py-2.5"
-                  onClick={() => disconnect()}
-                >
-                  <img src="/images/Metamask.png" alt="" />
-                  Disconnect
-                </Button>
-              )}
-              <Button className="flex gradient-1 button-3 font-semibold">
-                Play Now
-              </Button>
             </div>
           </motion.div>
         )}

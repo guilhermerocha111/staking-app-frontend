@@ -247,7 +247,7 @@ export default function Vesting() {
             <img src="/images/unlock.png" alt="" /> Claim / Vesting Panel
           </h1>
           <p className="flex items-center gap-2 mt-4">
-            <button className="tag-1">
+            <button className="tag-1 tagBg">
               BSC <img src="/images/Binance.png" alt="" />
             </button>
             <span>Unstake your SMCW or LP. View SMCW claimed rewards vesting period</span>
@@ -433,45 +433,21 @@ export default function Vesting() {
               display: !active ? 'none' : 'grid'
             }}
           >
-            <thead className="grid grid-cols-1">
+            <thead className="grid grid-cols-1 pt-[10px]">
               <tr className="text-left !border-b">
+                <th>Status</th>
+                <th>Unlocks in</th>
                 <th>Pool</th>
                 <th>Type</th>
                 <th>Amount</th>
                 <th>Weight</th>
                 <th>Date</th>
-                <th>Unlocks in</th>
-                <th>Status</th>
               </tr>
             </thead>
             <tbody className="text-base">
               {/* tslint:disable */}
               {currentTableData.length > 0 && currentTableData.map((item, index) => (
                 <tr key={index} style={{minHeight: '48px'}}>
-                  <td title={item.pool}>
-                    <img src={`/images/${item.icon}.png`} alt="" />
-                    <span style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "150px"}}>{item.pool}</span>
-                  </td>
-                  <td>{renderTypeText(item.type)}</td>
-                  <td>{addCommasToNumber(Number(item.amount), 0)}</td>
-                  <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
-                  <td>{item.timestamp} UTC</td>
-                    <td>
-                      {/* {item.unlocksIn.days >= 0 ? `${item.unlocksIn.days} days` : 'Unlocked' } */}
-                      {`${item.unlocksIn.days || item.unlocksIn.hours || item.unlocksIn.minutes || item.unlocksIn.seconds || ''}`}
-                      {`${item.unlocksIn.days > 0 && ' days' || item.unlocksIn.hours > 0 && ' hours' || item.unlocksIn.minutes > 0 && ' mins' || item.unlocksIn.seconds > 0 && ' secs' || 'Unlocked'}`}
-                      {(item.percentage && !item.isClaimed) && (
-                        <div className="progress-wrapper">
-                          <svg
-                            preserveAspectRatio="none"
-                            strokeDasharray={`${item.percentage} 100`}
-                          >
-                            <circle cx="50%" cy="50%" r="50%" />
-                          </svg>
-                          <p>{item.percentage === -1 ? 100 : item.percentage}%</p>
-                        </div>
-                      )}
-                    </td>
                   <td>
                     {
                       !item.isClaimed ? (
@@ -512,13 +488,37 @@ export default function Vesting() {
                       )
                     }
                   </td>
+                  <td>
+                      {/* {item.unlocksIn.days >= 0 ? `${item.unlocksIn.days} days` : 'Unlocked' } */}
+                      {`${item.unlocksIn.days || item.unlocksIn.hours || item.unlocksIn.minutes || item.unlocksIn.seconds || ''}`}
+                      {`${item.unlocksIn.days > 0 && ' days' || item.unlocksIn.hours > 0 && ' hours' || item.unlocksIn.minutes > 0 && ' mins' || item.unlocksIn.seconds > 0 && ' secs' || 'Unlocked'}`}
+                      {(item.percentage && !item.isClaimed) && (
+                        <div className="progress-wrapper">
+                          <svg
+                            preserveAspectRatio="none"
+                            strokeDasharray={`${item.percentage} 100`}
+                          >
+                            <circle cx="50%" cy="50%" r="50%" />
+                          </svg>
+                          <p>{item.percentage === -1 ? 100 : item.percentage}%</p>
+                        </div>
+                      )}
+                    </td>
+                  <td title={item.pool}>
+                    <img src={`/images/${item.icon}.png`} alt="" />
+                    <span style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "150px"}}>{item.pool}</span>
+                  </td>
+                  <td>{renderTypeText(item.type)}</td>
+                  <td>{addCommasToNumber(Number(item.amount), 0)}</td>
+                  <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
+                  <td>{item.timestamp} UTC</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div style={{position: 'absolute', bottom: '10px'}}>
             <Pagination
-              className="pagination-bar"
+              className="pagination-bar transparentWrap"
               currentPage={currentPage}
               totalCount={poolStakesData.length}
               pageSize={PageSize}

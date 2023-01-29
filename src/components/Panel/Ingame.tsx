@@ -8,7 +8,7 @@ export default function Ingame() {
         <img src="/images/logo.png" alt="" /> INGAME
       </h1>
       <p className="flex items-center gap-2 mt-4">
-        <button className="tag-1">
+        <button className="tag-1 tagBg">
           BSC <img src="/images/Binance.png" alt="" />
         </button>
         Stake SMCW and earn ingame rewards

@@ -170,21 +170,21 @@ export default function IngameStaking1() {
       )}
       <div className="flex items-start lg:items-center justify-between gap-1 text-2xl font-semibold sm:flex-col">
         <div className="flex items-center gap-2">
-          <div className="card-icon-2">
+          <div className="card-icon-2 borderPink">
             <img src="/images/icons/game1.png" alt="" />
           </div>
           <h2 className="text-base lg:text-2xl">
             Hidden data <br className="lg:hidden" /> (Random Telemetry)
           </h2>
         </div>
-        <div className="text-xs py-2 px-3 bg-design-darkBlue border border-design-blue rounded-lg leading-5 sm:mt-2 sm:w-full">
+      </div>
+      <div className="mt-[21px] text-xs py-2 px-3 bgTransparent border border-design-blue rounded-lg leading-5 sm:mt-2" style={{width: 'fit-content', color: '#F0EBFF'}}>
           3,000 SMCW = 1/day
-          <br />
-          Max: 20/day
-        </div>
+          
+          <span className="pl-2">Max: 20/day</span>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-4">
-        <div className="relative border border-design-darkBlue rounded-xl overflow-hidden z-1">
+        <div className="borderPink relative border rounded-xl overflow-hidden z-1">
           {(isApproved === false && active) && (
                 <div className="absolute z-10 h-4/6 w-full flex items-start justify-center pt-4">
                   <div className="flex flex-col items-center justify-center">
@@ -362,7 +362,7 @@ export default function IngameStaking1() {
               </p>
           </div>
         )} */}
-        <div className={`card-3 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+        <div className={`bgTransparent card-3 grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
             <h5 className="text-design-grey">Your Pool Staked SMCW</h5>
             <p className="flex items-center gap-2">
@@ -390,8 +390,8 @@ export default function IngameStaking1() {
             <p className="flex items-center gap-2">{estimated} / day</p>
           </div>
         </div>
-        <div className={`relative border border-design-darkBlue rounded-xl overflow-hidden z-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
-          <div className={`flex gap-6 bg-design-darkBlue px-4 pt-1 `}>
+        <div className={`relative borderPink overflow-hidden z-1 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+          <div className={`bgTransparent flex gap-6 px-4 pt-1`}>
               <button
                 className={`font-semibold py-3 link-active-2`}
                 onClick={() => setType("stake")}
@@ -405,6 +405,7 @@ export default function IngameStaking1() {
               <input
                 disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
                 value={enjinAddress}
+                className="pinkInput"
                 onChange={(e) => setEnjinAddress(e.target.value)}
                 type="text"
                 placeholder="Put your Enjin Wallet Address Here. At least 1 Pending Reward is required."
@@ -442,7 +443,12 @@ export default function IngameStaking1() {
                 decimalpoints={0}
                 required
               />
-              {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
+            </form>
+            
+          </div>
+          
+        </div>
+        {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
                 <Button
                   type="submit"
                   disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
@@ -458,12 +464,11 @@ export default function IngameStaking1() {
                   }
                 </Button>
               )}
-               <p className="flex items-center text-md mt-2">
-                  <FiInfo className="text-design-darkBlue2 mr-2" /> *It will take at least 24 hours (usually more) from you stake until you see your first rewards.
-                </p>
-            </form>
-          </div>
-        </div>
+          
+          <p className="flex flex-col text-md mt-2 bgTransparent" style={{padding: '16px 24px'}}>
+              <div className="flex items-center"><FiInfo className="text-design-darkBlue2 mr-2" /> INFO </div>
+               *It will take at least 24 hours (usually more) from you stake until you see your first rewards.
+          </p>
       </div>
     </Card>
   );

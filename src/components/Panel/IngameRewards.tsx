@@ -122,6 +122,11 @@ export default function IngameRewards() {
         contextJSX.push((
           <>
           <tr>
+              <td>
+                  <Button className="gradient-2 button-3 border border-design-blue !py-2 max-w-[144px]" onClick={() => handleToggleCollapsed(group)}>{
+                    showCollapsed.includes(group) ? 'Hide' : 'Show'
+                  }</Button>
+              </td>
               <td style={{fontSize: '14px'}}>
                 <img src="/images/telemetry1.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> INGAME / Hidden Data
               </td>
@@ -151,11 +156,7 @@ export default function IngameRewards() {
               </td>
               {/* @ts-ignore */}
               <td>{moment(currentTableData[group].timestamp.replaceAll('_', ' ')).utc().format("MM/DD/YYYY HH:mm")} UTC {}</td>
-              <td>
-                  <Button className="gradient-2 button-3 border border-design-blue !py-2" onClick={() => handleToggleCollapsed(group)}>{
-                    showCollapsed.includes(group) ? 'Hide' : 'Show'
-                  }</Button>
-              </td>
+              
           </tr>
           <tbody style={{maxHeight: '180px', overflow: 'auto', display: 'block'}}>{showCollapsed.includes(group) ? (
             // @ts-ignore
@@ -168,6 +169,9 @@ export default function IngameRewards() {
                     
                 </td>
                 <td>
+                    
+                </td>
+                <td>
                   FT Reward 
                 </td>
                 <td>
@@ -175,9 +179,7 @@ export default function IngameRewards() {
                     {telemetry_assets[item.asset_id]?.name}
                 </td>
                 <td></td>
-                <td>
-                    
-                </td>
+               
               </tr>
             ))
           ) : null}</tbody>
@@ -229,7 +231,7 @@ export default function IngameRewards() {
             <img src="/images/icons/blank.svg" alt="" /> Ingame Rewards Log
           </h1>
           <p className="flex items-center gap-2 mt-4">
-            <button className="tag-1">
+            <button className="tag-1 tagBg">
               Enjin <img src="/images/enjin.png" alt="" />
             </button>
             <span>View your claimed ingame rewards</span>
@@ -327,8 +329,8 @@ export default function IngameRewards() {
           </p>
         </div>
       </div>
-      <div className="mt-9 flex-1">
-        <Card className="card-1rewards !pb-2 overflow-auto w-full empty-vesting relative" noCard>
+      <div className="mt-9 flex-1 tableBg">
+        <Card className="card-1rewards !pb-2 overflow-auto w-full empty-vesting relative transparentWrap" noCard>
         {(!telemetry_rewards.length || !active) && (
             <Overlay>You have not connected your wallet or claimed any rewards yet.</Overlay>
           )}
@@ -340,8 +342,9 @@ export default function IngameRewards() {
               gridAutoColumns: 'auto'
             }}
           >
-            <thead className="grid grid-cols-1 tableHeader" style={{position: 'sticky', top: '0'}}>
+            <thead className="grid grid-cols-1 tableHeader transparentWrap" style={{position: 'sticky', top: '0'}}>
               <tr className="text-left !border-b">
+                <th>Action</th>
                 <th>Pool</th>
                 <th>Network</th>
                 <th>Type</th>
@@ -349,7 +352,6 @@ export default function IngameRewards() {
                 <th>Claimant Wallet</th>
                 <th>Receiver Wallet</th>
                 <th>Timestamp</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody className="text-base">
@@ -362,7 +364,7 @@ export default function IngameRewards() {
           </table>
         </Card>
         {telemetry_rewards.length > 0 && (
-          <div className="card-pagination rounded-b-lg pt-2 pb-2">
+          <div className="card-pagination rounded-b-lg pt-2 pb-2 transparentWrap">
           <Pagination
                 className="pagination-bar"
                 currentPage={currentPage}

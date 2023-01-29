@@ -29,7 +29,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
         <img src="/images/coin.png" alt="" /> SMCW
       </h1>
       <p className="flex items-center gap-2 mt-4">
-        <button className="tag-1">
+        <button className="tag-1 tagBg">
           BSC <img src="/images/Binance.png" alt="" />
         </button>
         Stake SMCW or LP and earn SMCW rewards
@@ -41,7 +41,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               <p>Not available yet</p>
               <p className="text-design-blue">
                 Please Connect to
-                <span className="tag-1 !inline-flex mx-1 text-white">
+                <span className="tag-1 tagBg !inline-flex mx-1 text-white">
                   BSC <img src="/images/Binance.png" alt="" />
                 </span>
                 Network with your wallet.

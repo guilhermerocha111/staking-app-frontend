@@ -117,7 +117,7 @@ export default function Staking({
             </Overlay>
       )}
       <div className="flex items-center gap-3 text-2xl font-semibold">
-        <div className="card-icon-1">
+        <div className="card-icon-1 bgTransparent">
           {stakingType === "smcw" && <img src="/images/coin.png" alt="" />}
           {stakingType === "lp" && <img src="/images/lp.png" alt="" />}
         </div>
@@ -138,8 +138,8 @@ export default function Staking({
             <h3>Stake Amount</h3>
             <p className="text-sm flex items-center text-design-grey">
               Wallet Balance:
-              {stakingType === "smcw" && <img src="/images/coin.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
-              {stakingType === "lp" && <img src="/images/lp.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1"/>}
+              {stakingType === "smcw" && <img src="/images/coin.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1 z-1"/>}
+              {stakingType === "lp" && <img src="/images/lp.png" alt="" className="w-4 h-4 object-contain object-center ml-2 mr-1 z-1"/>}
               <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
             </p>
           </div>
@@ -194,28 +194,28 @@ export default function Staking({
           <div className={`flex items-center gap-2 mt-2 flex-wrap ${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
             <button
               type="button"
-              className="tag-2"
+              className="tag-2 ovverideBgAndBorder"
               onClick={() => onPercentage("25")}
             >
               25%
             </button>
             <button
               type="button"
-              className="tag-2"
+              className="tag-2 ovverideBgAndBorder"
               onClick={() => onPercentage("50")}
             >
               50%
             </button>
             <button
               type="button"
-              className="tag-2"
+              className="tag-2 ovverideBgAndBorder"
               onClick={() => onPercentage("75")}
             >
               75%
             </button>
             <button
               type="button"
-              className="tag-2"
+              className="tag-2 ovverideBgAndBorder"
               onClick={() => onPercentage("100")}
             >
               100%
@@ -263,8 +263,10 @@ export default function Staking({
             that you can start staking
           </p>
         )}
-        <div className="gradient-2 button-3 border border-design-blue mt-2">
-          Estimated Daily Rewards: <img src="/images/coin.png" alt="" /> {addCommasToNumber(Number(avarage), 2)}
+        <div className="gradient-orange p-px mt-2">
+          <div className="gradient-2 button-3 border border-design-blue estimatedRew">
+            Estimated Daily Rewards: <img src="/images/coin.png" alt="" /> {addCommasToNumber(Number(avarage), 2)}
+          </div>
         </div>
         <div className="w-full mt-4 overflow-x-auto overflow-y-hidden">
           <div
@@ -272,7 +274,7 @@ export default function Staking({
               minWidth: "500px",
             }}
           >
-            <h4 className="text-design-darkBlue2 text-sm">
+            <h4 className="text-design-darkBlue2 text-sm" style={{color: '#A9A7BB'}}>
               Estimated rewards*
             </h4>
             <table className="mt-1.5 grid grid-cols-1 rewards-table">
@@ -312,7 +314,7 @@ export default function Staking({
             </p> */}
           </div>
         </div>
-        <div className="card-2 mt-6">
+        <div className="card-2 mt-6 bgTransparent">
           <p className="text-sm">
             Stake as many times as you like <br /> You can unstake or withdraw
             rewards at any time (after vesting period ends) at{" "}

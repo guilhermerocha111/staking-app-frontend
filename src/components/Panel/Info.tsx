@@ -91,7 +91,6 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             <HashLink
               to="/rewards"
               className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
-              style={{backgroundColor: '#15244C', border: '1px solid #2966F5'}}
             >
               <img src="/images/icons/smcwlogo.svg" /> INGAME REWARDS LOG
             </HashLink>
@@ -100,7 +99,6 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             <Link
               to="/vesting"
               className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
-              style={{backgroundColor: '#351741', border: '1px solid #F514B2'}}
             >
               <img src="/images/icons/smcwtoken.svg" />
               CLAIM / VESTING PANEL
@@ -171,8 +169,8 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             }}
           >
         {/* SMCW Rewards */}
-            <div className="gradient-orange p-px rounded-2xl lg:rounded-lg mt-4">
-              <div className="bg-design-background5 p-3 rounded-2xl lg:rounded-lg">
+            <div className="gradient-orange p-px mt-4">
+              <div className="bg-design-background5 p-3">
               <h3 className="card-heading-3 !mb-2">
                 <img src="/images/coin.png" alt="" />
                 Rewards
@@ -203,8 +201,8 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
             </div>
             {/* LP Rewards */}
-            <div className="gradient-1 p-px rounded-2xl lg:rounded-lg mt-4">
-              <div className="bg-design-background5 py-3 px-3 rounded-2xl lg:rounded-lg">
+            <div className="gradient-1 p-px mt-4">
+              <div className="bg-design-background5 py-3 px-3">
                 <h3 className="card-heading-3 !mb-2">
                   <img src="/images/lp.png" alt="" />
                   Rewards
@@ -265,7 +263,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             isTotalRewardsOpen && (
               <Button
                 onClick={() => setTotalRewardsOpen(!isTotalRewardsOpen)}
-                className="gradient-5 button-3 mt-3"
+                className="gradient-5 button-3 mt-3 arrowBtn"
               >
                 <FiChevronUp />
               </Button>
@@ -278,7 +276,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         <Card className="flex-1 custom-border" styles={{height: isInfoOpen ? 'auto' : 'fit-content', minHeight: '280px', display: 'flex', flexDirection: 'column'}}>
           <h3 className="card-heading-1">SMCW Info</h3>
           <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
-              <p className="tag-1">
+              <p className="tag-1 tagBg">
                 BSC <img src="/images/Binance.png" alt="" />
               </p>
               <p className="flex items-center w-full max-w-full">
@@ -388,7 +386,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             {!isInfoOpen && (
               <Button
                 onClick={() => setInfoOpen(!isInfoOpen)}
-                className="gradient-2 button-3 mt-[16px]"
+                className="gradient-2 button-3 mt-[16px] collapseBtn"
               >
                 SMCW INFO
                 <FiChevronDown />
@@ -596,7 +594,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           {isInfoOpen && (
               <Button
                 onClick={() => setInfoOpen(!isInfoOpen)}
-                className="gradient-5 button-3 mt-[auto]"
+                className="gradient-5 button-3 mt-[auto] arrowBtn"
               >
                 <FiChevronUp />
               </Button>
@@ -605,7 +603,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
       </div>
       <div className="flex-column">
           <p className="text-design-grey whitespace-nowrap text-[24px] mt-12 mb-4">Staking pools</p>
-          <div className="poolsMenu w-auto inline-flex overflow-auto card-1 !bg-transparent !border-0 lg:!border lg:!bg-design-background2 !rounded-none lg:!rounded-3xl !p-0 lg:!p-1 items-center gap-3 lg:gap-0">
+          <div className="poolsMenu w-auto inline-flex overflow-auto card-1 !bg-transparent !border-0 lg:!border !p-0 lg:!p-1 items-center gap-3 lg:gap-0">
             <Link
               to="/"
               className={
