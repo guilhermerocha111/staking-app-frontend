@@ -26,6 +26,9 @@ import useCommon from "../hooks/useCommon";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
 
+const MIN_STAKE_AMOUNT = 5000;
+const MAX_STAKE_AMOUNT = 100000;
+
 export default function IngameStaking1() {
   const stakingType = "smcw";
   const [enjinAddress, setEnjinAddress] = useState("");
@@ -43,6 +46,7 @@ export default function IngameStaking1() {
 
 
   const setActiveTx = (tx_string: string) => {
+    console.log(tx_string)
     ACTION.SET_ACTIVE_TX(tx_string);
   }
 
@@ -79,7 +83,7 @@ export default function IngameStaking1() {
       coin_ticker: 'SMCW',
       pool: 'Hidden data (Random Telemetry)'
     }
-    if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > 60000) {
+    if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > MAX_STAKE_AMOUNT) {
       toast.error('Max staked amount reached');
       setIsLoading(false);
       setActionType('default');
@@ -179,16 +183,18 @@ export default function IngameStaking1() {
         </div>
       </div>
       <div className="mt-[21px] text-xs py-2 px-3 bgTransparent border border-design-blue rounded-lg leading-5 sm:mt-2" style={{width: 'fit-content', color: '#F0EBFF'}}>
-          3,000 SMCW = 1/day
+          5,000 SMCW = 1/day
           
           <span className="pl-2">Max: 20/day</span>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-4">
         <div className="borderPink relative border rounded-xl overflow-hidden z-1">
           {(isApproved === false && active) && (
-                <div className="absolute z-10 h-4/6 w-full flex items-start justify-center pt-4">
+                <div className="absolute z-10 h-[fit-content] w-full flex items-start justify-center">
                   <div className="flex flex-col items-center justify-center">
-                    <img src="images/icons/locked.svg" alt="" />
+                    <div className="lockBorder">
+                      <img src="images/lock2.png" alt="" />
+                    </div>
                     <p className="text-lg mt-4">Approve your wallet first</p>
                     <p className="text-sm italic">(Click on the “Approve” button below)</p>
                   </div>
@@ -235,31 +241,31 @@ export default function IngameStaking1() {
                   </p>
                 </div>
                 <NumberInput
-                  placeholder="3,000 (min) 60,000 (max)"
+                  placeholder="5,000 (min) 100,000 (max)"
                   value={stakeAmount}
                   setValue={setStakeAmount}
-                  min={3000}
+                  min={MIN_STAKE_AMOUNT}
                   max={
-                    60000 - Number(userInfo.stakedAmount) - Number(userInfo.lastAmount)
+                    MAX_STAKE_AMOUNT - Number(userInfo.stakedAmount) - Number(userInfo.lastAmount)
                   }
-                  step={3000}
-                  roundTo={3000}
+                  step={MIN_STAKE_AMOUNT}
+                  roundTo={MIN_STAKE_AMOUNT}
                   decimalpoints={2}
                   className={'mt-2'}
                   required
                 />
                 <p className="flex items-center text-sm mt-2 text-design-darkBlue2">
-                  <FiInfo className=" mr-2" /> Only multiples of 3,000
+                  <FiInfo className=" mr-2" /> Only multiples of 5,000
                 </p>
               </div>
 
               {isApproved ? (
                 <>
-                <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
+                <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < MIN_STAKE_AMOUNT || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                   {/* @ts-ignore */}
                   {actionType === 'claim' ? actionMessage['default'] : actionMessage[actionType]}
                   {
-                    (active_tx === 'TELEMETRY_STAKING') ? <Loader /> : <HiOutlineExternalLink />
+                    (active_tx === 'TELEMETRY_STAKE') ? <Loader /> : <HiOutlineExternalLink />
                   }
                 </Button>
                 <p className="flex items-center text-sm mt-2">
@@ -316,20 +322,20 @@ export default function IngameStaking1() {
                 </p>
               </div>
               <NumberInput
-                placeholder="3,000 (min) 60,000 (max)"
+                placeholder="5,000 (min) 100,000 (max)"
                 value={unstakeAmount}
                 setValue={setUnstakeAmount}
-                min={3000}
+                min={MIN_STAKE_AMOUNT}
                 max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
-                step={3000}
-                roundTo={3000}
+                step={MIN_STAKE_AMOUNT}
+                roundTo={MIN_STAKE_AMOUNT}
                 decimalpoints={2}
                 required
               />
               <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 3,000
+                <FiInfo className=" mr-2" /> Only multiples of 5,000
               </p>
-              <Button type="submit" className={`gradient-1 button-3 mt-2 ${(Number(unstakeAmount) < 3000 || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
+              <Button type="submit" className={`gradient-1 button-3 mt-2 ${(Number(unstakeAmount) < MIN_STAKE_AMOUNT || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
                 Decrease / Unstake
                 {
                     (active_tx === 'TELEMETRY_UNSTAKE') ? <Loader /> : <HiOutlineExternalLink />

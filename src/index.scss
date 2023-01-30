@@ -102,6 +102,13 @@ body.collapsed {
   background: linear-gradient(0deg, rgba(231, 19, 131, 0.2), rgba(231, 19, 131, 0.2)), #000000;
 }
 
+.lockBorder {
+  margin-top: 5px;
+  border: 6px solid #E71383;
+  padding: 1.2rem;
+  border-radius: 100%;
+}
+
 .navMenu {
   background: rgba(231, 19, 131, 0.2);
   border: 1px solid #E71383;

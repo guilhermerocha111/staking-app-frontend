@@ -128,7 +128,9 @@ export default function Staking({
           {isApproved === false && (
             <div className="absolute z-10 h-5/6 w-full flex items-start justify-center pt-12">
               <div className="flex flex-col items-center justify-center">
-                <img src="images/icons/locked.svg" alt="" />
+                <div className="lockBorder">
+                  <img src="images/lock2.png" alt="" />
+                </div>
                 <p className="text-lg mt-4">Approve your wallet first</p>
                 <p className="text-sm italic">(Click on the “Approve” button below)</p>
               </div>
