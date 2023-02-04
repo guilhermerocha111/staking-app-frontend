@@ -188,7 +188,7 @@ export default function Nav() {
 
           {active && (
             <Button
-              className="button-1 !rounded-md"
+              className="button-1 !rounded-md connectBtn"
               onClick={() => disconnect()}
             >
               Disconnect

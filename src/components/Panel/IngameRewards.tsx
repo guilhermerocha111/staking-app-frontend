@@ -146,13 +146,13 @@ export default function IngameRewards() {
                 {// @ts-ignore
                 `${currentTableData[group].items[0].claim_address?.substr(0, 6)}...${currentTableData[group].items[0].claim_address?.substr(-4)}`}
                 {/* @ts-ignore */}
-                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].claim_address)} />
+                <img src="/images/copy.png" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].claim_address)} />
               </td>
               <td>
                 {// @ts-ignore
                 `${currentTableData[group].items[0].reciever_address?.substr(0, 6)}...${currentTableData[group].items[0].reciever_address?.substr(-4)}`}
                 {/* @ts-ignore */}
-                <img src="/images/icons/copy.svg" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].reciever_address)} />
+                <img src="/images/copy.png" className="cursor-pointer" onClick={() => copyAddress(currentTableData[group].items[0].reciever_address)} />
               </td>
               {/* @ts-ignore */}
               <td>{moment(currentTableData[group].timestamp.replaceAll('_', ' ')).utc().format("MM/DD/YYYY HH:mm")} UTC {}</td>

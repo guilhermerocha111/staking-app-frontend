@@ -191,7 +191,7 @@ export default function IngameStaking1() {
         <div className="borderPink relative border rounded-xl overflow-hidden z-1">
           {(isApproved === false && active) && (
                 <div className="absolute z-10 h-[fit-content] w-full flex items-start justify-center">
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-col items-center justify-center pt-4">
                     <div className="lockBorder">
                       <img src="images/lock2.png" alt="" />
                     </div>
@@ -278,7 +278,7 @@ export default function IngameStaking1() {
                 </>
               ) : (
                 <Button
-                  className={`gradient-1 button-3 mt-2 cursor-pointer z-1 ${
+                  className={`gradient-1 button-3 mt-2 cursor-pointer z-1 mt-12 ${
                     isLoading ? "opacity-50 pointer-events-none" : ""
                   }`}
                   type="button"

@@ -96,7 +96,14 @@ export default function Staking({
       setStakingApproving(false);
       setStakeAmount("0.00");
       setActiveTx('');
-      toast.error(error.reason);
+      let errorMsg = error.reason;
+      if (error.reason.includes('invalid staking period')) {
+        errorMsg = 'Execution reverted: invalid staking period'
+      }
+      if (error.reason.includes('user rejected transaction')) {
+        errorMsg = 'User rejected the transaction'
+      }
+      toast.error(errorMsg);
       setLoading(false);
       ACTION.SET_TX_LOADER(false);
     }

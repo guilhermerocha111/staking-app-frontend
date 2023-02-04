@@ -90,7 +90,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <HashLink
               to="/rewards"
-              className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
+              className={`navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('rewards') ? 'selected' : ''}`}
             >
               <img src="/images/icons/smcwlogo.svg" /> INGAME REWARDS LOG
             </HashLink>
@@ -98,7 +98,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <Link
               to="/vesting"
-              className="navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10"
+              className={`navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('vesting') ? 'selected' : ''}`}
             >
               <img src="/images/icons/smcwtoken.svg" />
               CLAIM / VESTING PANEL
@@ -112,7 +112,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           {(!active || DEFAULT_CHAINID !== toHex(chainId)) && (
             <Overlay>Connect your wallet to access this panel.</Overlay>
           )}
-          <h3 className="card-heading-1">Total SMCW Rewards</h3>
+          <h3 className="card-heading-1">SMCW / LP Rewards</h3>
           {!isTotalRewardsOpen && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-6 mt-6">
                 <div className="balance-item">
@@ -274,20 +274,28 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
         {/* SMCW Info */}
 
         <Card className="flex-1 custom-border" styles={{height: isInfoOpen ? 'auto' : 'fit-content', minHeight: '280px', display: 'flex', flexDirection: 'column'}}>
-          <h3 className="card-heading-1">SMCW Info</h3>
-          <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full">
+          <h3 className="card-heading-1">Info</h3>
+          <div className="flex items-start lg:items-center flex-col lg:flex-row mt-6 gap-4 max-w-full mobileInfo">
               <p className="tag-1 tagBg">
                 BSC <img src="/images/Binance.png" alt="" />
               </p>
               <p className="flex items-center w-full max-w-full">
-                SMCW Contract:
+                Contract:
                 <span
-                  className="inline-block text-design-pink ml-3 truncate"
+                  className="inline-block text-design-pink ml-3 truncate sm:hidden"
                   style={{
                     maxWidth: "68%",
                   }}
                 >
                   {tokenInfo?.platform?.token_address}
+                </span>
+                <span
+                  className="inline-block text-design-pink ml-3 truncate md:hidden lg:hidden"
+                  style={{
+                    maxWidth: "68%",
+                  }}
+                >
+                  {`${tokenInfo?.platform?.token_address.substr(0, 6)}...${tokenInfo?.platform?.token_address.substr(-4)}`}
                 </span>
                 <button
                   className="min-w-fit ml-3"
@@ -298,13 +306,13 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                     toast.success("Copied to clipboard");
                   }}
                 >
-                  <img src="/images/link.png" alt="" />
+                  <img src="/images/copy.png" alt="" />
                 </button>
               </p>
             </div>
             {!isInfoOpen && (
-              <div className="grid grid-cols-1 md:grid-cols-4 mt-6 md:mt-6">
-              <div className="mb-4 lg:mb-0">
+              <div className="grid grid-cols-1 md:grid-cols-4 mt-6 md:mt-6 mobileGrid">
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Buy SMCW
                 </h4>
@@ -332,7 +340,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div className="mb-4 lg:mb-0">
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Price tracking
                 </h4>
@@ -353,7 +361,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div className="mb-4 lg:mb-0">
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Whitepaper
                 </h4>
@@ -367,7 +375,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div>
+              <div className="gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Audit
                 </h4>
@@ -388,7 +396,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 onClick={() => setInfoOpen(!isInfoOpen)}
                 className="gradient-2 button-3 mt-[16px] collapseBtn"
               >
-                SMCW INFO
+                + INFO
                 <FiChevronDown />
               </Button>
             )}
@@ -404,13 +412,13 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
             <div className="mt-8 grid grid-cols-1 gap-3">
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Staked in SMCW Pool</p>
-                <div className="flex items-start lg:items-center">
+                <div className="flex items-start lg:items-center mobFlexEnd">
                   <img
                     src="/images/coin.png"
                     alt=""
                     className="w-5 h-5 object-contain object-center mr-2 mt-0.5 lg:mt-0"
                   />
-                  <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5">
+                  <p className="flex flex-col lg:flex-row items-start lg:items-end leading-5 ">
                     {addCommasToNumber(Number(smcw_staked_total), 4)}
                     <span className="text-design-grey text-xs mt-1 lg:mt-0 lg:ml-2">
                       ${" "}
@@ -424,7 +432,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Staked in Ingame Pools</p>
-                <div className="flex items-start lg:items-center">
+                <div className="flex items-start lg:items-center mobFlexEnd">
                   <img
                     src="/images/coin.png"
                     alt=""
@@ -444,7 +452,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Staked in LP Pools</p>
-                <div className="flex items-start lg:items-center">
+                <div className="flex items-start lg:items-center mobFlexEnd">
                   <img
                     src="/images/lp.png"
                     alt=""
@@ -458,7 +466,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               {max_apr && (
                 <div className="grid grid-cols-2 gap-1">
                   <p className="text-design-grey">Staking APR</p>
-                  <div className="flex items-center">
+                  <div className="flex items-center mobFlexEnd">
                     <img
                       src="/images/coin.png"
                       alt=""
@@ -472,7 +480,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               )}
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Total Supply</p>
-                <div className="flex items-center">
+                <div className="flex items-center mobFlexEnd">
                   <img
                     src="/images/coin.png"
                     alt=""
@@ -485,7 +493,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Circulating Supply</p>
-                <div className="flex items-center">
+                <div className="flex items-center mobFlexEnd">
                   <img
                     src="/images/coin.png"
                     alt=""
@@ -498,7 +506,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
               <div className="grid grid-cols-2 gap-1">
                 <p className="text-design-grey">Max Supply</p>
-                <div className="flex items-center">
+                <div className="flex items-center mobFlexEnd">
                   <img
                     src="/images/coin.png"
                     alt=""
@@ -511,8 +519,8 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </div>
             </div>
             {/* Buy */}
-            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-[2.25rem]" style={{marginTop: 'auto', marginBottom: '16px'}}>
-              <div className="mb-4 lg:mb-0">
+            <div className="grid grid-cols-1 md:grid-cols-4 mt-8 md:mt-[2.25rem] pt-6 mobileGrid" style={{marginTop: 'auto', marginBottom: '16px'}}>
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Buy SMCW
                 </h4>
@@ -540,7 +548,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div className="mb-4 lg:mb-0">
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Price tracking
                 </h4>
@@ -561,7 +569,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div className="mb-4 lg:mb-0">
+              <div className="mb-4 lg:mb-0 gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Whitepaper
                 </h4>
@@ -575,7 +583,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   </a>
                 </div>
               </div>
-              <div>
+              <div className="gridItem">
                 <h4 className="card-heading-4 !border-b-2 !pb-1.5 !mb-3">
                   Audit
                 </h4>

@@ -39,21 +39,26 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
           <Overlay>
             <div className="flex flex-col justify-center items-center gap-4">
               <p>Not available yet</p>
-              <p className="text-design-blue">
+              <p className="">
                 Please Connect to
-                <span className="tag-1 tagBg !inline-flex mx-1 text-white">
+                <span className="tag-1 !inline-flex mx-1 text-white">
                   BSC <img src="/images/Binance.png" alt="" />
                 </span>
-                Network with your wallet.
+                Network through your Connected Wallet.
               </p>
+              <p>
+              
               <a
-                className="text-design-blue flex items-center gap-1"
+                className="flex items-center gap-1"
                 href="https://space-misfits.gitbook.io"
                 target="_blank"
                 rel="noreferrer"
               >
-                Not sure how? Check our guides <HiOutlineExternalLink />
+                Not sure how?
+                <span className="text-design-blue flex items-center">Check our guides <HiOutlineExternalLink /></span> 
               </a>
+              </p>
+              
             </div>
           </Overlay>
         )}

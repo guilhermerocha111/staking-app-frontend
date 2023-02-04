@@ -155,7 +155,14 @@ export default function Vesting() {
     if (activeFilters.filters.length > 0) {
       let allData = [];
       for (let i = 0; i < activeFilters.filters.length; i++) {
-        let filteredGroup = PoolStakes.filter(e => e.filterType.includes(activeFilters.filters[i]))
+        let filteredGroup = PoolStakes.filter(e => {
+          let answers = [];
+          for (let j = 0; j < activeFilters.filters.length; j++) {
+            answers.push(e.filterType.includes(activeFilters.filters[j]))
+          }
+          return answers.includes(false) ? false : true;
+        })
+        console.log(filteredGroup)
         let filteredByDate = filteredGroup.filter(item => {
           let date = new Date(item.timestamp)
           return (date >= startDate && date <= endDate);
@@ -471,7 +478,7 @@ export default function Vesting() {
                             </Button>
                           ) : (
                             <Button
-                              className="button-3 border border-design-pink !bg-design-backgroundPink !py-2 cursor-not-allowed"
+                              className="button-3 border border-design-pink !bg-design-backgroundPink !py-2 cursor-not-allowed actionLocked"
                               disabled
                             >
                               {item.state} <img src="/images/lock.png" alt="" />

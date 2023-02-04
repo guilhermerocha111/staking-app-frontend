@@ -55,7 +55,6 @@ body.collapsed {
   border-radius: 0 !important;
 
   @media (max-width: 768px) {
-    overflow: scroll;
     width: 100%;
   }
 }
@@ -112,7 +111,9 @@ body.collapsed {
 .navMenu {
   background: rgba(231, 19, 131, 0.2);
   border: 1px solid #E71383;
+  padding: 4px;
   @media (max-width: 768px) {
+    padding: 0px;
     width: 100%;
     background: transparent;
     border: none;
@@ -127,7 +128,7 @@ body.collapsed {
 
       a {
         margin: 0;
-        font-size: 12px !important;
+        font-size: 11px !important;
       }
     }
   }
@@ -138,6 +139,41 @@ body.collapsed {
   background: transparent !important;
   margin-left: 0 !important;
   border: 0 !important;
+}
+
+.mobileInfo {
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+}
+
+.mobileGrid {
+  @media (max-width: 768px) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.mobFlexEnd {
+  @media (max-width: 768px) {
+    justify-content: flex-end;
+  }
+}
+
+.gridItem {
+  @media (max-width: 758px) {
+    width: 45%;
+    margin: 0 2%;
+    margin-bottom: 16px;
+  }
+}
+
+.actionLocked {
+  background: #460626 !important;
+  border: 1px solid #5E0835 !important;
 }
 
 .arrowFilter {
@@ -548,10 +584,14 @@ svg{
   @apply text-design-white border-b-2 border-design-pink text-design-pink;
 }
 
+.navLink.selected {
+  background: #E71383 !important;
+  border-radius: 0 !important;
+}
 
 .card-1{
   background: rgba(231, 19, 131, 0.2);
-  border: 1px solid #E71383;
+  border: 1px solid #E71383 !important;
   backdrop-filter: blur(10px);
   @apply relative text-white lg:shadow-lg p-5;
 }
@@ -563,6 +603,7 @@ svg{
 
 .card-pagination {
   border: 0;
+  padding-left: 16px;
   @apply bg-design-background2 text-white
 }
 
