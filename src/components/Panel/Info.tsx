@@ -90,7 +90,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <HashLink
               to="/rewards"
-              className={`navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('rewards') ? 'selected' : ''}`}
+              className={`navLink button-3 mt-3 mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('rewards') ? 'selected' : ''}`}
             >
               <img src="/images/icons/smcwlogo.svg" /> INGAME REWARDS LOG
             </HashLink>
@@ -98,7 +98,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <Link
               to="/vesting"
-              className={`navLink button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('vesting') ? 'selected' : ''}`}
+              className={`navLink button-3 mt-3 mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10 ${window.location.href.includes('vesting') ? 'selected' : ''}`}
             >
               <img src="/images/icons/smcwtoken.svg" />
               CLAIM / VESTING PANEL
@@ -282,7 +282,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               <p className="flex items-center w-full max-w-full">
                 Contract:
                 <span
-                  className="inline-block text-design-pink ml-3 truncate sm:hidden"
+                  className="inline-block text-design-pink ml-3 truncate mobHidden"
                   style={{
                     maxWidth: "68%",
                   }}
@@ -290,7 +290,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                   {tokenInfo?.platform?.token_address}
                 </span>
                 <span
-                  className="inline-block text-design-pink ml-3 truncate md:hidden lg:hidden"
+                  className="inline-block text-design-pink ml-3 truncate desktopHidden"
                   style={{
                     maxWidth: "68%",
                   }}

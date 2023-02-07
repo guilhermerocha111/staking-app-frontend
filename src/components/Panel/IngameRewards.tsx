@@ -32,6 +32,11 @@ export default function IngameRewards() {
   const [telemetryRewardsData, setTelemetryRewardsData] = useState([]);
   const [minDateTimestamp, setMinDateTimestamp] = useState(0);
   const [maxDateTimestamp, setMaxDateTimestamp] = useState(0);
+  const [activeFilters, setActiveFilters] = useState({
+    timestamp: [startDate, endDate],
+    filters: ['']
+  })
+
 
   let PageSize = 10;
 
@@ -223,6 +228,24 @@ export default function IngameRewards() {
     setEndDate(new Date(maxDateTimestamp))
   }
 
+  const handleChangeFilters = (filterType: string, filterValue: string) => {
+    let filterKey = `${filterType}_${filterValue}`;
+    //@ts-ignore
+    if (activeFilters.filters.includes(filterKey)) {
+      let filteredRow = activeFilters.filters.filter(e => e !== filterKey)
+      setActiveFilters({
+        ...activeFilters,
+        filters: filteredRow
+      })
+    } else {
+      setActiveFilters({
+        ...activeFilters,
+        //@ts-ignore
+        filters: [...activeFilters.filters, filterKey]
+      })
+    }
+  }
+
   return (
     <section className="max-w-screen-2xl mx-auto mt-8" id="log">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
@@ -235,7 +258,7 @@ export default function IngameRewards() {
               Enjin <img src="/images/enjin.png" alt="" />
             </button>
             <span>View your claimed ingame rewards</span>
-            {telemetry_rewards.length > 0 && (
+            {(telemetry_rewards.length > 0) && (
               <div className="filterPlaceholder">
               <span  onClick={() => toggleFilters()}>Filter <div className={showFilters ? "arrowFilter up" : "arrowFilter down"}/></span>
               {showFilters && (
@@ -275,7 +298,7 @@ export default function IngameRewards() {
                         <div className="filterContent">
                           <div className="filterContent__row">
                             <div>
-                              <input type="checkbox" />
+                              <input type="checkbox" checked={activeFilters.filters.includes('pool_ingame')} onClick={() => handleChangeFilters('pool', 'ingame')} />
                             </div>
                             <div className="flexCenter">
                               <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
@@ -293,7 +316,7 @@ export default function IngameRewards() {
                         <div className="filterContent">
                           <div className="filterContent__row">
                             <div>
-                              <input type="checkbox" />
+                              <input type="checkbox" checked={activeFilters.filters.includes('network_enjin')} onClick={() => handleChangeFilters('network', 'enjin')} />
                             </div>
                             <div className="flexCenter">
                               <img src="/images/enjin.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
@@ -311,7 +334,7 @@ export default function IngameRewards() {
                         <div className="filterContent">
                           <div className="filterContent__row">
                             <div style={{marginRight: '8px'}}>
-                              <input type="checkbox" />
+                              <input type="checkbox" checked={activeFilters.filters.includes('type_ft')} onClick={() => handleChangeFilters('type', 'ft')} />
                             </div>
                             <div className="flexCenter">
                               FT

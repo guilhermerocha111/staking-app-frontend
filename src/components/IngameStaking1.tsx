@@ -131,6 +131,7 @@ export default function IngameStaking1() {
   };
 
   const handleClaim = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('HANDLE CLAIM')
     e.preventDefault();
     // @note integrate enjin apis and then execute claim transaction
     ACTION.SET_TX_LOADER(true);
@@ -417,7 +418,7 @@ export default function IngameStaking1() {
                 placeholder="Put your Enjin Wallet Address Here. At least 1 Pending Reward is required."
               />
             </div>
-            <form onSubmit={(e) => handleClaim(e)} className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
+            <form className={`${isApproved ? '' : 'blur pointer-events-none select-none'}`}>
               {/* <Select
                 options={[
                   {
@@ -455,6 +456,7 @@ export default function IngameStaking1() {
           
         </div>
         {(active || DEFAULT_CHAINID !== toHex(chainId)) && (
+              <form  onSubmit={(e) => handleClaim(e)}>
                 <Button
                   type="submit"
                   disabled={Number(pendings) + Number(userInfo.userRewards) > 0 ? false :true }
@@ -469,6 +471,7 @@ export default function IngameStaking1() {
                     (active_tx === 'TELEMETRY_CLAIM') ? <Loader /> : <FiDownload />
                   }
                 </Button>
+              </form>
               )}
           
           <p className="flex flex-col text-md mt-2 bgTransparent" style={{padding: '16px 24px'}}>

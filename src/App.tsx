@@ -16,6 +16,8 @@ import IngameRewards from './components/Panel/IngameRewards'
 import { tokens } from "./utils/contracts";
 import { getSigner } from "./utils/connectors";
 import { BigNumber } from "ethers";
+import { HashLink } from 'react-router-hash-link';
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 export default function App() {
   const [refresh,setRefresh] = useState(false);
@@ -226,6 +228,7 @@ export default function App() {
         }}
       />
       <Modal isOpen={showRewardModal} onRequestClose={onCloseModal} style={modalStyles}> 
+          <img className="closeModalBtn" onClick={onCloseModal} src="/images/icons/closeModal.svg" alt="Close" />
           <div className="modal-title"><img src="/images/icons/congrat.svg"/>Congratulations!  Here are your rewards:</div>
           <div className={`rewardsList ${mintRewards.length === 1 ? 'single' : ''}`} style={{justifyContent: mintRewards.length < 3 ? 'flex-start' : 'space-between'}}>
             {mintRewards.length > 0 && mintRewards.map((reward) => 
@@ -240,6 +243,13 @@ export default function App() {
               )
             )}
           </div>
+          <HashLink
+              to="/rewards"
+              className={`navLink popupNavBtn button-3 mt-3 lg:mt-0 lg:ml-3 !w-fit whitespace-nowrap !px-6 z-10`}
+              onClick={onCloseModal}
+            >
+              INGAME REWARDS LOG <HiOutlineExternalLink />
+          </HashLink>
       </Modal>
     </div>
   );

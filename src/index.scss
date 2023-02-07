@@ -289,9 +289,22 @@ input[type=checkbox]:checked {
 
 .filterContent {
   padding: 4px 8px;
+  width: 350px;
 
   &__row {
     display: flex;
+  }
+}
+
+.mobHidden {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.desktopHidden {
+  @media (min-width: 768px) {
+    display: none;
   }
 }
 
@@ -323,8 +336,24 @@ input[type=checkbox]:checked {
 }
 
 .ReactModal__Content {
+  background: #460626 !important;
+  border: 1px solid #5E0835 !important;
+  border-radius: 0 !important;
   margin: auto;
   z-index: 150;
+  display: flex;
+  flex-direction: column;
+  overflow: inherit !important;
+
+  .closeModalBtn {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    z-index: 100;
+    cursor: pointer;
+  }
 
   .modal-title {
     font-weight: 600;
@@ -349,6 +378,14 @@ input[type=checkbox]:checked {
     }
   }
 
+  .popupNavBtn {
+    background: #E71383 !important;
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 0 !important;
+    margin-top: auto !important;
+  }
+
   .telemetryCard {
     margin-top: 36px;
     font-weight: 600;
@@ -364,7 +401,6 @@ input[type=checkbox]:checked {
 
     .rewardQuantity {
       background: linear-gradient(88.04deg, #2966F5 0%, #F514B2 100%);
-      border-radius: 10px;
       padding: 2px 6px 1px;
       font-weight: 600;
       font-size: 12px;
@@ -386,14 +422,16 @@ input[type=checkbox]:checked {
       img {
         width: 84px;
         height: 84px;
-        border-radius: 15px;
+        border-radius: 0;
+        border: 1px solid #F514B2;
       }
     }
 
     img {
       width: 46px;
       height: 46px;
-      border-radius: 11px;
+      border-radius: 0;
+      border: 1px solid #F514B2;
       margin-right: 13px;
     }
   }
@@ -732,7 +770,14 @@ tr {
 }
 
 input, select{
-  @apply w-full h-full bg-design-darkBlue text-white rounded-lg px-4 py-3 outline-none focus:ring-1 focus:ring-design-blue focus:ring-opacity-80;
+  @apply w-full h-full bg-design-darkBlue text-white rounded-lg px-4 py-3 outline-none focus:ring-1 focus:ring-opacity-80;
+}
+
+input:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: #E71383;
 }
 
 select {
