@@ -143,14 +143,16 @@ export default function IngameStaking1() {
         toast.error("Address is not correct");
       }
       const tx = await claim(claimAmount, enjinAddress);
-      const rewardsResponse = await new ApiClient().getRewardsByTxHash(tx.hash)
-      ACTION.SET_REWARDS(rewardsResponse)
-      toast.success(`Claimed successfully`);
-      ACTION.SET_TX_LOADER(false);
-      setIsLoading(false);
-      setActionType('default');
-      setActiveTx('');
-      setClaimAmount("0");
+      setTimeout(async () => {
+        const rewardsResponse = await new ApiClient().getRewardsByTxHash(tx.hash)
+        ACTION.SET_REWARDS(rewardsResponse)
+        toast.success(`Claimed successfully`);
+        ACTION.SET_TX_LOADER(false);
+        setIsLoading(false);
+        setActionType('default');
+        setActiveTx('');
+        setClaimAmount("0");
+      }, 8000)
     } catch (error) {
       console.log(error)
       ACTION.SET_TX_LOADER(false);
