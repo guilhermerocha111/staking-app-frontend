@@ -37,7 +37,6 @@ export default function IngameRewards() {
     filters: ['']
   })
 
-
   let PageSize = 10;
 
   const { account, active } = useWeb3React();
@@ -45,14 +44,14 @@ export default function IngameRewards() {
   const handleGetRewards = async () => {
       if (account) {
         const response = await new ApiClient().getTelemetryRewards(account)
-        ACTION.SET_TELEMETRY_REWARDS(response)
+        ACTION.SET_TELEMETRY_REWARDS(response.sort((a: any, b: any) => b.timestamp - a.timestamp))
       }
   }
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return telemetryRewards.slice(firstPageIndex, lastPageIndex);
+    return telemetryRewards.slice(firstPageIndex, lastPageIndex).reverse();
   }, [currentPage, telemetryRewards]);
 
   useEffect(() => {

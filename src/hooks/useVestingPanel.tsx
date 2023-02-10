@@ -138,6 +138,11 @@ export const useVestingPanel = () => {
     });
     let formatLocks = locks.map((s, i) => {
       let date: Date = new Date(Math.ceil(s.vestingTime.toNumber() * 1000));
+      const percentValue = timePercentage(
+        s.vestingTime.toNumber(),
+        s.vestingDuration.toNumber()
+      )
+      console.log(percentValue)
       console.log(s.amount)
       return {
         index: i,
@@ -149,7 +154,7 @@ export const useVestingPanel = () => {
         action: "Claim NOW",
         state: "Vesting",
         poolInstance: vesting,
-        filterType: ['pool_smcw', 'type_claim', s.isClaimed ? "status_claimed" : '', (s.isClaimed === false ?? (new Date().getTime()/1000) > s.vestingDuration.toNumber()) ? "status_claim_now" : ''],
+        filterType: ['pool_smcw', 'type_claim', s.isClaimed ? "status_claimed" : '', (s.isClaimed === false && (Date.now() / 1000) > s.vestingDuration.toNumber()) ? "status_claim_now" : '', (Date.now() / 1000) < s.vestingDuration.toNumber() ? 'status_locked' : ''],
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         unlocksIn: countdown(s.vestingDuration.toNumber()),
