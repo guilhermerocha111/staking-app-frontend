@@ -41,7 +41,7 @@ export default function SMCW({ refresh, setRefresh }: RefreshProps) {
               <p>Not available yet</p>
               <p className="">
                 Please Connect to
-                <span className="tag-1 !inline-flex mx-1 text-white">
+                <span className="tag-1 !inline-flex mx-1 text-white tagBg">
                   BSC <img src="/images/Binance.png" alt="" />
                 </span>
                 Network through your Connected Wallet.
