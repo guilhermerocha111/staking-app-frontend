@@ -157,9 +157,28 @@ export default function Vesting() {
       for (let i = 0; i < activeFilters.filters.length; i++) {
         let filteredGroup = PoolStakes.filter(e => {
           let answers = [];
+          let answersObj = {
+            pool: [],
+            status: [],
+            type: []
+          };
+          const answerStrings = ['pool', 'status', 'type'];
+
           for (let j = 0; j < activeFilters.filters.length; j++) {
-            answers.push(e.filterType.includes(activeFilters.filters[j]))
+            let prefix = activeFilters.filters[j].split('_')[0];
+            let answer = e.filterType.includes(activeFilters.filters[j]);
+            answersObj[prefix].push(answer)
+            
+            // answersObj[prefix].push(e.filterType.includes(activeFilters.filters[j]))
+            // answers.push(answer)
           }
+          answerStrings.forEach((string) => {
+            console.log(answersObj)
+            if (answersObj[string].length > 0) {
+              return answersObj[string].includes(true) ? answers.push(true) : answers.push(false)
+            }
+            
+          })
           return answers.includes(false) ? false : true;
         })
         console.log(filteredGroup)

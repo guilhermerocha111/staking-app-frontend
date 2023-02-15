@@ -384,7 +384,7 @@ export default function IngameStaking1() {
             </p>
           </div>
           <div className="grid grid-cols-1 gap-1.5 lg:gap-3">
-            <h5 className="text-design-grey">Pending Rewards</h5>
+            <h5 className="text-design-grey">Pending Rewards*</h5>
             <p className="flex items-center gap-2">
               <img
                 src="/images/icons/game1.png"
@@ -479,6 +479,7 @@ export default function IngameStaking1() {
           <p className="flex flex-col text-md mt-2 bgTransparent" style={{padding: '16px 24px'}}>
               <div className="flex items-center"><FiInfo className="text-design-darkBlue2 mr-2" /> INFO </div>
                *It will take at least 24 hours (usually more) from you stake until you see your first rewards.
+               <div style={{paddingTop: '6px'}}>*Pending Rewards refund won't be available if minting services fail, so we recommend testing with a small amount first or claiming rewards in small batches to reduce the risk of loss.</div>
           </p>
       </div>
     </Card>
