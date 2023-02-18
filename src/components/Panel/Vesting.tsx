@@ -447,7 +447,7 @@ export default function Vesting() {
           </button>
         </div> */}
       </div>
-      <div className="mt-9 flex-1">
+      <div className="mt-9 flex-1 relative">
         <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
         {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
@@ -542,7 +542,9 @@ export default function Vesting() {
               ))}
             </tbody>
           </table>
-          <div style={{position: 'absolute', bottom: '10px'}}>
+          
+        </Card>
+        <div style={{position: 'absolute', bottom: '-40px'}}>
             <Pagination
               className="pagination-bar transparentWrap"
               currentPage={currentPage}
@@ -551,7 +553,6 @@ export default function Vesting() {
               onPageChange={(page:any) => setCurrentPage(page)}
             />
           </div>
-        </Card>
       </div>
     </section>
   );
