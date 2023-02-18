@@ -51,6 +51,7 @@ export default function IngameRewards() {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    console.log(telemetryRewards.slice(firstPageIndex, lastPageIndex).reverse())
     return telemetryRewards.slice(firstPageIndex, lastPageIndex).reverse();
   }, [currentPage, telemetryRewards]);
 
@@ -77,6 +78,8 @@ export default function IngameRewards() {
       let minDate = 100000000000000000;
       let maxDate = 0;
 
+      console.log(telemetry_rewards)
+
       telemetry_rewards.forEach((reward: rewardItem) => {
         let key = moment(reward.timestamp).format('llll').replaceAll(' ', '_');
         if (reward.timestamp < minDate) {
@@ -89,7 +92,7 @@ export default function IngameRewards() {
         
         const dataMock = {
           timestamp: key,
-          items: [ reward]
+          items: [ reward ]
         }
 
         if (groupByDate.filter((item:any) => item.timestamp === key).length) {
@@ -164,7 +167,7 @@ export default function IngameRewards() {
           </tr>
           <tbody style={{maxHeight: '180px', overflow: 'auto', display: 'block'}}>{showCollapsed.includes(group) ? (
             // @ts-ignore
-            telemetryRewards[group].items.map((item: any, index: number, array) => (
+            currentTableData[group].items.map((item: any, index: number, array) => (
               <tr key={index}>
                 <td>
                  
