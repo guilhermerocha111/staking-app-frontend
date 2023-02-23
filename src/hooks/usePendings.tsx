@@ -40,14 +40,14 @@ export const usePendings = () => {
 };
 
 
-export const useNFTPendings = (isLoading: boolean) => {
+export const useNFTPendings = (isLoading: boolean, pool_address: string) => {
   const { account, library } = useWeb3React();
   const [estimated, setEstimated] = useState("0");
   const [pendings, setPendings] = useState("0");
   useMemo(async () => {
     setInterval(async() => {
       const signer: Signer = await getSigner(library);
-      const pool = getIngamePool(signer);
+      const pool = getIngamePool(signer, pool_address);
       
       const _pendings = await pool.callStatic.calculateRewards(await signer.getAddress())
       const _estimated = await pool.callStatic.estimatedRewards(await signer.getAddress())

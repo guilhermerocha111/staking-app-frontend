@@ -36,8 +36,8 @@ export const getLP = (singer: Signer): ERC20 => {
 export const getVesting = (singer: Signer): Locker => {
   return Locker__factory.connect(contracts[DEFAULT_CHAINID].vesting, singer);
 };
-export const getIngamePool = (singer: Signer): NFTRewards => {
-  return NFTRewards__factory.connect(contracts[DEFAULT_CHAINID].nftStaking, singer);
+export const getIngamePool = (singer: Signer, contractAddress: string): NFTRewards => {
+  return NFTRewards__factory.connect(contractAddress, singer);
 };
 
 export const tokens: { [key: string]: any } = {

@@ -26,6 +26,9 @@ export const useVestingPanel = () => {
   const nft_pools = [
     {
       pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || ""
+    },
+    {
+      pool_address: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || ""
     }
   ]
 
@@ -84,7 +87,13 @@ export const useVestingPanel = () => {
     let stakes01 = await pool1.getStakes(user_address);
     let stakes02 = await pool2.getStakes(user_address);
     let locks = await vesting.getUserClaims(user_address);
-    const nftPoolStakes = await new ApiClient().getStakings(user_address, nft_pools[0].pool_address)
+    
+    let nftPoolStakes = []
+    for (let i = 0; i < nft_pools.length; i++) {
+      let res = await new ApiClient().getStakings(user_address, nft_pools[i].pool_address)
+      nftPoolStakes.push(...res)
+    }
+    console.log(nftPoolStakes)
 
     let stakes1 = stakes01.map((s, i) => {
       let date: Date = new Date(Math.ceil(s.timestamp.toNumber() * 1000));
@@ -167,7 +176,7 @@ export const useVestingPanel = () => {
     });
 
     let formatNftPools = nftPoolStakes.map((item:any, index:number) => {
-
+      console.log(item)
       return {
         id: item._id,
         index: index,
@@ -178,11 +187,12 @@ export const useVestingPanel = () => {
         reward: "SMCW",
         action: "Unstake",
         state: "Unlocked",
-        filterType: ['pool_ingame', 'type_stake', item.isClaimed ? 'status_claimed' : 'status_unstake'],
+        filterType: [item.pool_address === process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI ? 'pool_ingame' : 'pool_ingame_new', 'type_stake', item.isClaimed ? 'status_claimed' : 'status_unstake'],
         poolInstance: vesting,
         isClaimed: item.isClaimed,
         amount: item.amount,
         unlocksIn: 0,
+        pool_address: item.pool_address || null,
         timestamp: moment(item.timestamp).utc().format("MM/DD/YYYY HH:mm"),
         percentage: -1
       }

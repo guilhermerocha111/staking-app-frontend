@@ -7,12 +7,12 @@ import { getVesting } from "../utils/contracts";
 const { formatUnits } = utils;
 
 
-export const useStake = () => {
+export const useStake = (contractAddress: string) => {
   const { library } = useWeb3React();
 
   return useCallback(async (claimAmount: string) => {
     const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer);
+    const pool = getIngamePool(signer, contractAddress);
     const tx = await pool.stake(claimAmount);
     await tx.wait()
   }, []);
@@ -31,26 +31,26 @@ export const useVesting = () => {
 
 export const useUnstake = () => {
   const { library } = useWeb3React();
-  return useCallback(async (claimAmount: string) => {
+  return useCallback(async (claimAmount: string, contractAddress: string) => {
     const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer);
+    const pool = getIngamePool(signer, contractAddress);
     const tx = await pool.unstake(claimAmount);
     await tx.wait()
   }, []);
 };
 
-export const useClaim = () => {
+export const useClaim = (contractAddress: string) => {
   const { library } = useWeb3React();
   return useCallback(async (claimAmount: string, enjinAddress: string) => {
     const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer);
+    const pool = getIngamePool(signer, contractAddress);
     const tx = await pool.claim(claimAmount, enjinAddress);
     await tx.wait()
     return tx
   }, []);
 };
 
-export const useIngameUserInfo = (refresh: boolean) => {
+export const useIngameUserInfo = (refresh: boolean, contractAddress: string) => {
   const { account, library } = useWeb3React();
   const [userRewards, setRewards] = useState("0");
   const [stakedAmount, setStakedAmount] = useState("0");
@@ -58,7 +58,7 @@ export const useIngameUserInfo = (refresh: boolean) => {
   const [lockedTo, setLockedTo] = useState<number|null>(null);
   useMemo(async () => {
     const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer);
+    const pool = getIngamePool(signer, contractAddress);
     let {amount,rewards, lastStakeAmount, stakeTime} = await pool.poolStakers(await signer.getAddress())
     setRewards(rewards.toString())
     setStakedAmount(String(parseFloat(formatUnits(amount.toString(),"ether"))))

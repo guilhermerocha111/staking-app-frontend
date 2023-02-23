@@ -9,6 +9,7 @@ interface Addresses {
     smcwTosmcw:string,
     lpTosmcw:string,
     nftStaking:string,
+    nftStakingNew?: string,
   }
 }
 export const contracts :Addresses=  {
@@ -20,6 +21,7 @@ export const contracts :Addresses=  {
     smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
     lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
     nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || "",
+    nftStakingNew: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || "",
   },
   // BSC
   "0x36": {

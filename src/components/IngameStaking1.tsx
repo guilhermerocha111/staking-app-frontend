@@ -26,10 +26,7 @@ import useCommon from "../hooks/useCommon";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
 
-const MIN_STAKE_AMOUNT = 5000;
-const MAX_STAKE_AMOUNT = 100000;
-
-export default function IngameStaking1() {
+export default function IngameStaking1({MIN_STAKE_AMOUNT = 5000, MAX_STAKE_AMOUNT = 100000, pool_address = '', pool_label = '', pool_key = ''}) {
   const stakingType = "smcw";
   const [enjinAddress, setEnjinAddress] = useState("");
   const [stakeAmount, setStakeAmount] = useState<string>("");
@@ -56,19 +53,19 @@ export default function IngameStaking1() {
     default: 'Increase / Stake'
   }
 
-  const stake = useStake();
+  const stake = useStake(pool_address);
   const unstake = useUnstake();
-  const claim = useClaim();
+  const claim = useClaim(pool_address);
 
-  const { pendings,estimated } = useNFTPendings(isLoading);
-  const userInfo = useIngameUserInfo(isLoading);
+  const { pendings,estimated } = useNFTPendings(isLoading, pool_address);
+  const userInfo = useIngameUserInfo(isLoading, pool_address);
   const approve = useApprove(stakingType);
   const smcwBalance = useTokenBalance(stakingType,isLoading);
  
 
   useEffect(() => {
-    setIsApproved(allowance.smcw_to_nft)
-  }, [allowance.smcw_to_nft])
+    setIsApproved(allowance[pool_key])
+  }, [allowance[pool_key]])
 
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,10 +75,10 @@ export default function IngameStaking1() {
     setActiveTx('TELEMETRY_STAKE');
     const reqBody = {
       staker_address: account || '',
-      pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || "",
+      pool_address: pool_address,
       amount: Number(stakeAmount) || 0,
       coin_ticker: 'SMCW',
-      pool: 'Hidden data (Random Telemetry)'
+      pool: `Hidden data (Random Telemetry) ${pool_label}`
     }
     if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > MAX_STAKE_AMOUNT) {
       toast.error('Max staked amount reached');
@@ -115,7 +112,7 @@ export default function IngameStaking1() {
     ACTION.SET_TX_LOADER(true);
     setActiveTx('TELEMETRY_UNSTAKE');
     try {
-      await unstake(parseEther(unstakeAmount).toString());
+      // await unstake(parseEther(unstakeAmount).toString());
       ACTION.SET_TX_LOADER(false);
       toast.success(`Unstake Amount: ${unstakeAmount}`);
       setIsLoading(false);
@@ -182,6 +179,7 @@ export default function IngameStaking1() {
           </div>
           <h2 className="text-base lg:text-2xl">
             Hidden data <br className="lg:hidden" /> (Random Telemetry)
+            {pool_label}
           </h2>
         </div>
       </div>
@@ -244,7 +242,7 @@ export default function IngameStaking1() {
                   </p>
                 </div>
                 <NumberInput
-                  placeholder="5,000 (min) 100,000 (max)"
+                  placeholder={`${MIN_STAKE_AMOUNT} (min) ${MAX_STAKE_AMOUNT} (max)`}
                   value={stakeAmount}
                   setValue={setStakeAmount}
                   min={MIN_STAKE_AMOUNT}
@@ -258,7 +256,7 @@ export default function IngameStaking1() {
                   required
                 />
                 <p className="flex items-center text-sm mt-2 text-design-darkBlue2">
-                  <FiInfo className=" mr-2" /> Only multiples of 5,000
+                  <FiInfo className=" mr-2" /> Only multiples of {MIN_STAKE_AMOUNT}
                 </p>
               </div>
 
@@ -288,7 +286,7 @@ export default function IngameStaking1() {
                   onClick={async () => {
                     setIsLoading(true);
                     setActiveTx('TELEMETRY_APPROVE');
-                    await approve(contracts[DEFAULT_CHAINID].nftStaking);
+                    await approve(pool_address);
                     setActiveTx('');
                     setIsLoading(false);
                   }}
@@ -308,50 +306,51 @@ export default function IngameStaking1() {
               )}
             </form>
           ) : (
-            <form
-              onSubmit={(e) => handleUnstake(e)}
-              className={`grid grid-cols-1 gap-2 p-4 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}
-            >
-              <div className="flex items-center justify-between gap-4">
-                <h3>Unstake Amount</h3>
-                <p className="text-sm flex items-center text-design-grey">
-                  Wallet Balance:
-                  <img
-                    src="/images/coin.png"
-                    alt=""
-                    className="w-4 h-4 object-contain object-center ml-2 mr-1"
-                  />
-                  <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
-                </p>
-              </div>
-              <NumberInput
-                placeholder="5,000 (min) 100,000 (max)"
-                value={unstakeAmount}
-                setValue={setUnstakeAmount}
-                min={MIN_STAKE_AMOUNT}
-                max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
-                step={MIN_STAKE_AMOUNT}
-                roundTo={MIN_STAKE_AMOUNT}
-                decimalpoints={2}
-                required
-              />
-              <p className="flex items-center text-sm text-design-darkBlue2">
-                <FiInfo className=" mr-2" /> Only multiples of 5,000
-              </p>
-              <Button type="submit" className={`gradient-1 button-3 mt-2 ${(Number(unstakeAmount) < MIN_STAKE_AMOUNT || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
-                Decrease / Unstake
-                {
-                    (active_tx === 'TELEMETRY_UNSTAKE') ? <Loader /> : <HiOutlineExternalLink />
-                }
-              </Button>
-              {!isApproved && (
-                <p className="flex items-center text-sm mt-4">
-                  <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
-                  for the first time the first transaction is only to approve your
-                  SMCW, after that you can start staking
-                </p>
-              )}
-            </form>
+            <></>
+            // <form
+            //   onSubmit={(e) => handleUnstake(e)}
+            //   className={`grid grid-cols-1 gap-2 p-4 ${isApproved ? '' : 'blur pointer-events-none select-none'}`}
+            // >
+            //   <div className="flex items-center justify-between gap-4">
+            //     <h3>Unstake Amount</h3>
+            //     <p className="text-sm flex items-center text-design-grey">
+            //       Wallet Balance:
+            //       <img
+            //         src="/images/coin.png"
+            //         alt=""
+            //         className="w-4 h-4 object-contain object-center ml-2 mr-1"
+            //       />
+            //       <span className="text-white">{addCommasToNumber(Number(smcwBalance), 0)}</span>
+            //     </p>
+            //   </div>
+            //   <NumberInput
+            //     placeholder="5,000 (min) 100,000 (max)"
+            //     value={unstakeAmount}
+            //     setValue={setUnstakeAmount}
+            //     min={MIN_STAKE_AMOUNT}
+            //     max={Number(userInfo.stakedAmount) + Number(userInfo.lastAmount)}
+            //     step={MIN_STAKE_AMOUNT}
+            //     roundTo={MIN_STAKE_AMOUNT}
+            //     decimalpoints={2}
+            //     required
+            //   />
+            //   <p className="flex items-center text-sm text-design-darkBlue2">
+            //     <FiInfo className=" mr-2" /> Only multiples of 5,000
+            //   </p>
+            //   <Button type="submit" className={`gradient-1 button-3 mt-2 ${(Number(unstakeAmount) < MIN_STAKE_AMOUNT || isLoading)? 'opacity-50 pointer-events-none' : ''}`}>
+            //     Decrease / Unstake
+            //     {
+            //         (active_tx === 'TELEMETRY_UNSTAKE') ? <Loader /> : <HiOutlineExternalLink />
+            //     }
+            //   </Button>
+            //   {!isApproved && (
+            //     <p className="flex items-center text-sm mt-4">
+            //       <FiInfo className="text-design-darkBlue2 mr-2" /> If you Stake
+            //       for the first time the first transaction is only to approve your
+            //       SMCW, after that you can start staking
+            //     </p>
+            //   )}
+            // </form>
           )}
         </div>
         {/* {userInfo.lastAmount && (

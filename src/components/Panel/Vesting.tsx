@@ -92,7 +92,8 @@ export default function Vesting() {
     poolInstance: Locker | MasterChef,
     index: number,
     id?: string,
-    unstakeAmount?: number
+    unstakeAmount?: number,
+    nft_pool_address?: string
   ) => {
     ACTION.SET_TX_LOADER(true);
     try {
@@ -106,8 +107,9 @@ export default function Vesting() {
         let tx = await (poolInstance as Locker).claimVestedTokens(index)
         await tx.wait()
       } else if (type == 'nft') {
+        console.log(nft_pool_address)
         setNftIndex(index);
-        await unstake(parseEther(String(unstakeAmount)).toString());
+        await unstake(parseEther(String(unstakeAmount)).toString(), nft_pool_address);
         await new ApiClient().setStakingClaimed(id);
       }
       window.location.reload();
@@ -326,6 +328,15 @@ export default function Vesting() {
                           </div>
                           <div className="filterContent__row">
                             <div>
+                              <input type="checkbox" checked={activeFilters.filters.includes('pool_ingame_new')} onClick={() => handleChangeFilters('pool', 'ingame_new')}/>
+                            </div>
+                            <div className="flexCenter">
+                              <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
+                              INGAME / Hidden Data [NEW]
+                            </div>
+                          </div>
+                          <div className="filterContent__row">
+                            <div>
                               <input type="checkbox" checked={activeFilters.filters.includes('pool_smcw')} onClick={() => handleChangeFilters('pool', 'smcw')}/>
                             </div>
                             <div className="flexCenter">
@@ -486,7 +497,8 @@ export default function Vesting() {
                                   item.poolInstance,
                                   item.index,
                                   item.id || '',
-                                  item.amount || 0
+                                  item.amount || 0,
+                                  item.pool_address || ''
                                 )
                               }
                               className="gradient-2 button-3 border border-design-blue !py-2"
