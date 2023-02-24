@@ -64,8 +64,10 @@ export default function IngameStaking1({MIN_STAKE_AMOUNT = 5000, MAX_STAKE_AMOUN
  
 
   useEffect(() => {
+    console.log(pool_key)
+    console.log(allowance)
     setIsApproved(allowance[pool_key])
-  }, [allowance[pool_key]])
+  }, [allowance])
 
   const handleStake = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -442,11 +444,11 @@ export default function IngameStaking1({MIN_STAKE_AMOUNT = 5000, MAX_STAKE_AMOUN
 
               <h3 className="mb-1">Claim Amount</h3>
               <NumberInput
-                placeholder="Amount of rewards to claim"
+                placeholder="30 (max) per claim."
                 value={claimAmount}
                 setValue={setClaimAmount}
                 min={1}
-                max={Number(pendings) + Number(userInfo.userRewards)}
+                max={30}
                 step={1}
                 decimalpoints={0}
                 required

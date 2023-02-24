@@ -53,8 +53,8 @@ export const useTimeDiff = (target: BigNumber = BigNumber.from(0)) => {
   useMemo(() => {
     setInterval(() => {
       if(target.eq(0)) return
-      const secondsInWeek = 60 * 60 * 24 * 7 * 1000;
-      let targetDate = target.toNumber() * 1000 + secondsInWeek;
+      const diff = process.env.NODE_ENV !== 'development' ? 60 * 60 * 24 * 7 * 1000 : 60 * 60 * 1000;
+      let targetDate = target.toNumber() * 1000 + diff;
       let nowDate = Date.now();
       let dateDifference = targetDate - nowDate;
 

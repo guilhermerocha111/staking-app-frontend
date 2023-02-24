@@ -120,6 +120,7 @@ export default function App() {
   }, [account, telemetry_rewards_by_tx])
 
   const checkAndSetAllowances = () => {
+    console.log(process.env)
       const interval = setInterval(async () => {
         console.log('interval')
         const pools = [
@@ -163,7 +164,6 @@ export default function App() {
             allowances[pools[i].key] = true
           }
         }
-        console.log(allowances)
         ACTION.SET_ALLOWANCE(allowances)
       }, 5000)
 

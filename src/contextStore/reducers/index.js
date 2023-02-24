@@ -54,7 +54,8 @@ export const initialState = {
     allowance: {
         smcw_to_smcw: null,
         lp_to_smcw: null,
-        smcw_to_nft: null
+        smcw_to_nft: null,
+        smcw_to_nft_new: null
     },
     lpInfo: {
         lp_price: 0,
@@ -98,7 +99,8 @@ export const reducers = {
             allowance: {
                 smcw_to_smcw: allowance.smcw_to_smcw,
                 lp_to_smcw: allowance.lp_to_smcw,
-                smcw_to_nft: allowance.smcw_to_nft
+                smcw_to_nft: allowance.smcw_to_nft,
+                smcw_to_nft_new: allowance.smcw_to_nft_new
             },
         }
     },
