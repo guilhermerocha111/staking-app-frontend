@@ -14,13 +14,13 @@ export default function Ingame() {
         Stake SMCW and earn ingame rewards
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-9">
-        <IngameStaking1
+        {/* <IngameStaking1
           MIN_STAKE_AMOUNT={5000}
           MAX_STAKE_AMOUNT={100000}
           pool_address={process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI}
           pool_key="smcw_to_nft"
           pool_label="[OLD]"
-        />
+        /> */}
 
         <IngameStaking1
           MIN_STAKE_AMOUNT={6000}
