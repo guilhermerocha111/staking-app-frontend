@@ -323,16 +323,7 @@ export default function Vesting() {
                             </div>
                             <div className="flexCenter">
                               <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
-                              INGAME / Hidden Data
-                            </div>
-                          </div>
-                          <div className="filterContent__row">
-                            <div>
-                              <input type="checkbox" checked={activeFilters.filters.includes('pool_ingame_new')} onClick={() => handleChangeFilters('pool', 'ingame_new')}/>
-                            </div>
-                            <div className="flexCenter">
-                              <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
-                              INGAME / Hidden Data [NEW]
+                              Hidden data (Random Telemetry)
                             </div>
                           </div>
                           <div className="filterContent__row">
@@ -459,7 +450,7 @@ export default function Vesting() {
         </div> */}
       </div>
       <div className="mt-9 flex-1 relative">
-        <Card className="card-1 !pb-2 overflow-auto w-full empty-vesting">
+        <Card className={`card-1 !pb-2 overflow-auto w-full empty-vesting ${poolStakesData.length > PageSize ? 'hide-bottom-border' : ''}`}>
         {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
           )}
@@ -547,7 +538,7 @@ export default function Vesting() {
                     <span style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "150px"}}>{item.pool}</span>
                   </td>
                   <td>{renderTypeText(item.type)}</td>
-                  <td>{addCommasToNumber(Number(item.amount), 0)}</td>
+                  <td><img src="/images/coin.png"  style={{width: '16px', height: '16px'}} /> {addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
                 </tr>
@@ -556,7 +547,8 @@ export default function Vesting() {
           </table>
           
         </Card>
-        <div style={{position: 'absolute', bottom: '-40px'}}>
+        {poolStakesData.length > PageSize && (
+          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 0", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
             <Pagination
               className="pagination-bar transparentWrap"
               currentPage={currentPage}
@@ -565,6 +557,7 @@ export default function Vesting() {
               onPageChange={(page:any) => setCurrentPage(page)}
             />
           </div>
+        )}
       </div>
     </section>
   );

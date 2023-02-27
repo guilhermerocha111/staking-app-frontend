@@ -354,8 +354,8 @@ export default function IngameRewards() {
           </p>
         </div>
       </div>
-      <div className="mt-9 flex-1 tableBg relative">
-        <Card className="card-1rewards !pb-2 overflow-auto w-full empty-vesting relative transparentWrap" noCard>
+      <div className={`mt-9 flex-1 tableBg relative`}>
+        <Card className={`card-1rewards !pb-2 overflow-auto w-full empty-vesting relative transparentWrap ${telemetryRewards.length > PageSize ? 'hide-bottom-border' : ''}`} noCard>
         {(!telemetry_rewards.length || !active) && (
             <Overlay>You have not connected your wallet or claimed any rewards yet.</Overlay>
           )}
@@ -388,10 +388,10 @@ export default function IngameRewards() {
             </tbody>
           </table>
         </Card>
-        {telemetry_rewards.length > 0 && (
-          <div className="card-pagination rounded-b-lg pt-2 pb-2 transparentWrap absolute">
+        {telemetryRewards.length > PageSize && (
+          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 0", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
           <Pagination
-                className="pagination-bar"
+                className="pagination-bar transparentWrap"
                 currentPage={currentPage}
                 totalCount={telemetryRewards.length}
                 pageSize={PageSize}

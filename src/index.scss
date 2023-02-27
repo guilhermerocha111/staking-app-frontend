@@ -335,6 +335,14 @@ input[type=checkbox]:checked {
   z-index: 50;
 }
 
+.card-1.hide-bottom-border {
+  border-bottom: 0px solid !important;
+}
+
+.card-1rewards.hide-bottom-border {
+  border-bottom: 0px solid !important;
+}
+
 .ReactModal__Content {
   background: #460626 !important;
   border: 1px solid #5E0835 !important;
@@ -521,7 +529,6 @@ svg{
 
 .tableBg {
   background: rgba(231, 19, 131, 0.2);
-  border: 1px solid #E71383;
 }
 
 .transparentWrap {
@@ -635,7 +642,8 @@ svg{
 }
 
 .card-1rewards{
-  @apply relative bg-design-background2 text-white border border-design-darkBlue lg:shadow-lg rounded-t-lg p-5;
+  border: 1px solid #E71383 !important;
+  @apply relative bg-design-background2 text-white border border-design-darkBlue p-5;
 
 }
 

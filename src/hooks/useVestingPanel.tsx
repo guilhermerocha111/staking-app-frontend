@@ -176,18 +176,17 @@ export const useVestingPanel = () => {
     });
 
     let formatNftPools = nftPoolStakes.map((item:any, index:number) => {
-      console.log(item)
       return {
         id: item._id,
         index: index,
         icon: "telemetry1",
         type: "nft",
         weight: "N/A",
-        pool: item.pool,
+        pool: 'Hidden data (Random Telemetry)',
         reward: "SMCW",
         action: "Unstake",
         state: "Unlocked",
-        filterType: [item.pool_address === process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI ? 'pool_ingame' : 'pool_ingame_new', 'type_stake', item.isClaimed ? 'status_claimed' : 'status_unstake'],
+        filterType: ['pool_ingame', 'type_stake', item.isClaimed ? 'status_claimed' : 'status_unstake'],
         poolInstance: vesting,
         isClaimed: item.isClaimed,
         amount: item.amount,
