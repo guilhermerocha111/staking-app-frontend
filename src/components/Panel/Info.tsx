@@ -85,7 +85,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
     <section className="max-w-screen-2xl mx-auto mt-12">
       {/* Staking Pools */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-        <img src="/images/logo2.png" style={{zIndex: '10'}} className="sm:hidden" />
+        <img src="/images/logo2.svg" style={{zIndex: '10'}} className="sm:hidden" />
         <div className="flex navMenu">
           <div className="text-sm flex flex-col lg:flex-row items-start lg:items-center gap-2 w-full lg:w-auto overflow-hidden">
             <HashLink

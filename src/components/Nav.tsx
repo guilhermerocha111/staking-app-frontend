@@ -256,7 +256,7 @@ export default function Nav() {
         <div className="flex items-center text-sm font-semibold justify-between gap-4 py-3">
           <a href="/">
             <img
-              src="/images/logo2.png"
+              src="/images/logo2.svg"
               alt=""
               className="hidden lg:block h-14"
             />
@@ -317,7 +317,7 @@ export default function Nav() {
               <div className="flex items-center text-sm font-semibold justify-between gap-4 ">
                 <a href="/">
                   <img
-                    src="/images/logo2.png"
+                    src="/images/logo2.svg"
                     alt=""
                     className="hidden lg:block h-14"
                   />
