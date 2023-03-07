@@ -135,7 +135,7 @@ export default function IngameRewards() {
                   }</Button>
               </td>
               <td style={{fontSize: '14px'}}>
-                <img src="/images/telemetry1.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> INGAME / Hidden Data
+                <img src="/images/telemetry1.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> Hidden Data (Random Telemetry)
               </td>
               <td>
                 <img src="/images/enjin.png" style={{width: '16px', height: '16px', borderRadius: '4px'}} /> Enjin JumpNet
@@ -249,7 +249,7 @@ export default function IngameRewards() {
   }
 
   return (
-    <section className="max-w-screen-2xl mx-auto mt-8" id="log">
+    <section className="max-w-screen-2xl mx-auto mt-8 mb-16" id="log">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end">
         <div style={{width: '100%'}}>
           <h1 className="section-heading-1">
@@ -304,7 +304,7 @@ export default function IngameRewards() {
                             </div>
                             <div className="flexCenter">
                               <img src="/images/telemetry1.png"  style={{width: '16px', height: '16px', borderRadius: '4px', margin: "0 8px"}} />
-                              INGAME / Hidden Data
+                              Hidden Data (Random Telemetry)
                             </div>
                           </div>
                         </div>

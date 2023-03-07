@@ -23,8 +23,8 @@ export default function Ingame() {
         /> */}
 
         <IngameStaking1
-          MIN_STAKE_AMOUNT={6000}
-          MAX_STAKE_AMOUNT={120000}
+          MIN_STAKE_AMOUNT={5000}
+          MAX_STAKE_AMOUNT={100000}
           pool_address={process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI}
           pool_key="smcw_to_nft_new"
           pool_label=""

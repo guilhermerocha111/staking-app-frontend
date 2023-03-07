@@ -255,7 +255,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               </Button>
             ) : (
               <Button onClick={vest} className="gradient-1 button-3 mt-3">
-                VEST SMCW REWARDS NOW (1 month) {loader ? <Loader /> : <HiOutlineExternalLink />}
+               {loader ? 'Vesting...' : 'VEST SMCW REWARDS NOW (1 month)'}  {loader ? <Loader /> : <HiOutlineExternalLink />}
               </Button>
             )}
           </div>

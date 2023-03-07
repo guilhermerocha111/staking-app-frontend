@@ -168,10 +168,6 @@ export default function Staking({
             <Select
               options={[
                 {
-                  label: "Stake (lock) for 1 hour",
-                  value: "1",
-                },
-                {
                   label: "Stake (lock) for 30 days",
                   value: "30",
                 },
