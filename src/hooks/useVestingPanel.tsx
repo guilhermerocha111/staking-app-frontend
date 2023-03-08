@@ -78,6 +78,7 @@ export const useVestingPanel = () => {
   }
 
   useMemo(async () => {
+    console.log('USE VESTING PANEL')
     if (account) {
     const signer: Signer = await getSigner(library);
     const vesting = getVesting(signer);
@@ -87,7 +88,7 @@ export const useVestingPanel = () => {
     let stakes01 = await pool1.getStakes(user_address);
     let stakes02 = await pool2.getStakes(user_address);
     let locks = await vesting.getUserClaims(user_address);
-    
+    console.log(stakes01)
     let nftPoolStakes = []
     for (let i = 0; i < nft_pools.length; i++) {
       let res = await new ApiClient().getStakings(user_address, nft_pools[i].pool_address)
@@ -149,12 +150,7 @@ export const useVestingPanel = () => {
     });
     let formatLocks = locks.map((s, i) => {
       let date: Date = new Date(Math.ceil(s.vestingTime.toNumber() * 1000));
-      const percentValue = timePercentage(
-        s.vestingTime.toNumber(),
-        s.vestingDuration.toNumber()
-      )
-      console.log(percentValue)
-      console.log(s.amount)
+
       return {
         index: i,
         icon: "coin",
@@ -199,7 +195,8 @@ export const useVestingPanel = () => {
         percentage: -1
       }
     })
-    let allData = [...stakes1, ...stakes2, ...formatLocks, ...formatLocks, ...formatLocks, ...formatLocks, ...formatNftPools]
+    let allData = [...stakes1, ...stakes2, ...formatLocks, ...formatNftPools]
+
     let allDataSorted = allData.sort(function(a,b) {return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()})
     setInGameLocker([formatLocks]);
     setAllLocked(locks);

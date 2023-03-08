@@ -454,7 +454,8 @@ export default function Vesting() {
         {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
           )}
-          <table
+          {(PoolStakes.length > 0 && (
+            <table
             className="text-sm grid grid-cols-1 vesting-table"
             style={{
               minWidth: "1200px",
@@ -473,7 +474,7 @@ export default function Vesting() {
                 <th>Date</th>
               </tr>
             </thead>
-            <tbody className="text-base mobTableHeight" style={{overflow: 'auto', height: 'inherit'}}>
+            <tbody className="text-base mobTableHeight" style={{overflow: 'auto', height: 'inherit', paddingBottom: '50px'}}>
               {/* tslint:disable */}
               {currentTableData.length > 0 && currentTableData.map((item, index) => (
                 <tr key={index} style={{minHeight: '48px'}}>
@@ -546,6 +547,7 @@ export default function Vesting() {
               ))}
             </tbody>
           </table>
+          ))}
           
         </Card>
         {poolStakesData.length > PageSize && (
