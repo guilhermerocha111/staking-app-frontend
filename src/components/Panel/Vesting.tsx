@@ -450,7 +450,7 @@ export default function Vesting() {
         </div> */}
       </div>
       <div className="mt-9 flex-1 relative">
-        <Card className={`card-1 !pb-2 overflow-auto w-full empty-vesting ${poolStakesData.length > PageSize ? 'hide-bottom-border' : ''}`}>
+        <Card className={`card-1 !pb-2 overflow-hidden w-full empty-vesting ${poolStakesData.length > PageSize ? 'hide-bottom-border' : ''}`}>
         {(PoolStakes.length === 0 || !active) &&(
             <Overlay>You have not connected your wallet or you do not have any vesting/claim period available.</Overlay>
           )}
@@ -458,10 +458,11 @@ export default function Vesting() {
             className="text-sm grid grid-cols-1 vesting-table"
             style={{
               minWidth: "1200px",
-              display: !active ? 'none' : 'grid'
+              display: !active ? 'none' : 'grid',
+              height: 'inherit'
             }}
           >
-            <thead className="grid grid-cols-1 pt-[10px]">
+            <thead className="grid grid-cols-1 pt-[10px]" style={{position: 'sticky', top: '0px', zIndex: '10'}}>
               <tr className="text-left !border-b">
                 <th>Status</th>
                 <th>Unlocks in</th>
@@ -472,7 +473,7 @@ export default function Vesting() {
                 <th>Date</th>
               </tr>
             </thead>
-            <tbody className="text-base">
+            <tbody className="text-base mobTableHeight" style={{overflow: 'auto', height: 'inherit'}}>
               {/* tslint:disable */}
               {currentTableData.length > 0 && currentTableData.map((item, index) => (
                 <tr key={index} style={{minHeight: '48px'}}>
@@ -480,7 +481,7 @@ export default function Vesting() {
                     {
                       !item.isClaimed ? (
                         <>
-                          {(item.percentage >= 100 || item.percentage < 0) ? (
+                          {(!item.locked) ? (
                             <Button
                               onClick={async () =>
                                 await handleClaim(

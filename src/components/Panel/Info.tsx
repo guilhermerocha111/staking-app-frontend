@@ -76,8 +76,12 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
     } catch (error: any) {
       ACTION.SET_TX_LOADER(false);
       setLoader(false);
-      console.log(error)
-      toast.error('Execution reverted: not enough rewards. (happens when trying to claim “0” pending rewards)');
+      console.log(error.message)
+      if (error.message.includes('rejected')) {
+        toast.error('User rejected transaction')
+      } else {
+        toast.error('Execution reverted: not enough rewards. (happens when trying to claim “0” pending rewards)');
+      }
     }
   };
 

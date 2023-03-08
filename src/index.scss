@@ -947,4 +947,16 @@ tr{
   height: 400px;
   padding-top: 0;
   border: 0;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.mobTableHeight {
+  @media (max-width: 767px) {
+    height: 350px !important;
+    margin-top: 10px;
+  }
 }

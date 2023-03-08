@@ -27,9 +27,9 @@ export const useVestingPanel = () => {
     {
       pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || ""
     },
-    {
-      pool_address: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || ""
-    }
+    // {
+    //   pool_address: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || ""
+    // }
   ]
 
 
@@ -105,6 +105,7 @@ export const useVestingPanel = () => {
         reward: "SMCW",
         action: "Unstake",
         state: "Locked",
+        locked: (new Date().getTime()/1000) > s.stakeUntill.toNumber() ? false : true,
         filterType: ['pool_smcw', 'type_stake', s.withdrawed ? "status_claimed" : '', (new Date().getTime()/1000) < s.stakeUntill.toNumber() ? 'status_locked' : '', (new Date().getTime()/1000) > s.stakeUntill.toNumber() ? 'status_unstake' : '' ],
         poolInstance: pool1,
         amount: ToFixed(formatUnits(s.amount, "ether")),
@@ -131,6 +132,7 @@ export const useVestingPanel = () => {
         reward: "SMCW",
         action: "Unstake",
         state: "Locked",
+        locked: (new Date().getTime()/1000) > s.stakeUntill.toNumber() ? false : true,
         poolInstance: pool2,
         amount: ToFixed(formatUnits(s.amount, "ether")),
         weight: formatUnits(s.weight, "ether"),
@@ -163,6 +165,7 @@ export const useVestingPanel = () => {
         action: "Claim NOW",
         state: "Vesting",
         poolInstance: vesting,
+        locked: (Date.now() / 1000) < s.vestingDuration.toNumber() ? true : false,
         filterType: ['pool_smcw', 'type_claim', s.isClaimed ? "status_claimed" : '', (s.isClaimed === false && (Date.now() / 1000) > s.vestingDuration.toNumber()) ? "status_claim_now" : '', (Date.now() / 1000) < s.vestingDuration.toNumber() ? 'status_locked' : ''],
         isClaimed: s.isClaimed,
         amount: ToFixed(formatUnits(s.amount, "ether")),
@@ -196,7 +199,7 @@ export const useVestingPanel = () => {
         percentage: -1
       }
     })
-    let allData = [...stakes1, ...stakes2, ...formatLocks, ...formatNftPools]
+    let allData = [...stakes1, ...stakes2, ...formatLocks, ...formatLocks, ...formatLocks, ...formatLocks, ...formatNftPools]
     let allDataSorted = allData.sort(function(a,b) {return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()})
     setInGameLocker([formatLocks]);
     setAllLocked(locks);

@@ -139,12 +139,11 @@ export default function App() {
             pool: contracts[DEFAULT_CHAINID].nftStaking,
             key: 'smcw_to_nft'
           },
-          {
-            stakingType: 'smcw',
-            pool: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI,
-            key: 'smcw_to_nft_new'
-
-          }
+          // {
+          //   stakingType: 'smcw',
+          //   pool: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI,
+          //   key: 'smcw_to_nft_new'
+          // }
         ]
   
         const allowances = {}
