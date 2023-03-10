@@ -141,7 +141,7 @@ export default function App() {
           },
           // {
           //   stakingType: 'smcw',
-          //   pool: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI,
+          //   pool: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS,
           //   key: 'smcw_to_nft_new'
           // }
         ]

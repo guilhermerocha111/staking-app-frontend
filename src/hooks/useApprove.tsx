@@ -15,13 +15,13 @@ export const useApprove = (name:string) => {
 
   const returnAllowanceString = (to: string) => {
     switch (to) {
-      case process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS_GOERLI:
+      case process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS:
         return 'lp_to_smcw';
-      case process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS_GOERLI:
+      case process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS:
         return 'smcw_to_smcw';
-      case process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI:
+      case process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS:
         return 'smcw_to_nft';
-      // case process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI:
+      // case process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS:
       //   return 'smcw_to_nft_new';
       default:
         return ''

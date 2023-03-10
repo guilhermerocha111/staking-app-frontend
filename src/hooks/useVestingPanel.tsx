@@ -25,10 +25,10 @@ export const useVestingPanel = () => {
 
   const nft_pools = [
     {
-      pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || ""
+      pool_address: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS || ""
     },
     // {
-    //   pool_address: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || ""
+    //   pool_address: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS || ""
     // }
   ]
 

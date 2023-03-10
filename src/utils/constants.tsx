@@ -15,22 +15,22 @@ interface Addresses {
 export const contracts :Addresses=  {
   // Goerli
   "0x5": {
-    smcw: process.env.REACT_APP_SMCW_CONTRACT_ADDRESS_GOERLI || "",
-    lp: process.env.REACT_APP_LP_CONTRACT_ADDRESS_GOERLI || "",
-    vesting: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS_GOERLI || "",
-    smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
-    lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
-    nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || "",
-    // nftStakingNew: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS_GOERLI || "",
+    smcw: process.env.REACT_APP_SMCW_CONTRACT_ADDRESS || "",
+    lp: process.env.REACT_APP_LP_CONTRACT_ADDRESS || "",
+    vesting: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS || "",
+    smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS || "",
+    lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS || "",
+    nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS || "",
+    // nftStakingNew: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS || "",
   },
   // BSC
   "0x36": {
-    smcw: process.env.REACT_APP_SMCW_CONTRACT_ADDRESS_GOERLI || "",
-    lp: process.env.REACT_APP_LP_CONTRACT_ADDRESS_GOERLI || "",
-    vesting: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS_GOERLI || "",
-    smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
-    lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS_GOERLI || "",
-    nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS_GOERLI || "",
+    smcw: process.env.REACT_APP_SMCW_CONTRACT_ADDRESS || "",
+    lp: process.env.REACT_APP_LP_CONTRACT_ADDRESS || "",
+    vesting: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS || "",
+    smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS || "",
+    lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS || "",
+    nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS || "",
   },
 };
 
