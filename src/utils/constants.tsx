@@ -24,7 +24,7 @@ export const contracts :Addresses=  {
     // nftStakingNew: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS || "",
   },
   // BSC
-  "0x36": {
+  "0x38": {
     smcw: process.env.REACT_APP_SMCW_CONTRACT_ADDRESS || "",
     lp: process.env.REACT_APP_LP_CONTRACT_ADDRESS || "",
     vesting: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS || "",
