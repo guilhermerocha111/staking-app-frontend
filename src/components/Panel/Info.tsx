@@ -258,7 +258,7 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
                 {minutes}m {seconds}s (Remaining Time)
               </Button>
             ) : (
-              <Button onClick={vest} className="gradient-1 button-3 mt-3">
+              <Button onClick={vest} className={`gradient-1 button-3 mt-3 ${Number(total) === 0 ? 'disabled' : ''}`}>
                {loader ? 'Vesting...' : 'VEST SMCW REWARDS NOW (1 month)'}  {loader ? <Loader /> : <HiOutlineExternalLink />}
               </Button>
             )}

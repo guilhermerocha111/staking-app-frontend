@@ -540,7 +540,7 @@ export default function Vesting() {
                     <span style={{textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden", width: "150px"}}>{item.pool}</span>
                   </td>
                   <td>{renderTypeText(item.type)}</td>
-                  <td><img src="/images/coin.png"  style={{width: '16px', height: '16px'}} /> {addCommasToNumber(Number(item.amount), 0)}</td>
+                  <td><img src={`/images/${item.pool === 'SMCW LP' ? 'lp' : 'coin'}.png`}  style={{width: '16px', height: '16px'}} /> {addCommasToNumber(Number(item.amount), 0)}</td>
                   <td>{item.type === 'stake' ? formatWeight(item.weight, item.amount) : ''}</td>
                   <td>{item.timestamp} UTC</td>
                 </tr>
@@ -551,7 +551,7 @@ export default function Vesting() {
           
         </Card>
         {poolStakesData.length > PageSize && (
-          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 0", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
+          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 1.25rem", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
             <Pagination
               className="pagination-bar transparentWrap"
               currentPage={currentPage}

@@ -389,7 +389,7 @@ export default function IngameRewards() {
           </table>
         </Card>
         {telemetryRewards.length > PageSize && (
-          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 0", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
+          <div style={{position: 'absolute', bottom: '-43px', padding: "5px 1.25rem", width: '100%', background: 'rgba(231, 19, 131, 0.2)', borderLeft: '1px solid #E71383', borderRight: '1px solid #E71383', borderBottom: '1px solid #E71383', backdropFilter: 'blur(10px)'}}>
           <Pagination
                 className="pagination-bar transparentWrap"
                 currentPage={currentPage}
