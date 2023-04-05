@@ -41,7 +41,7 @@ export const PERCENT = BigNumber.from("100");
 // export const REWARDS_PER_BLOCK = BigNumber.from("0.3475");
 
 // estimated blocks per year
-export const TOTAL_BLOCK_PER_YEAR =BigNumber.from("2370675");
+export const TOTAL_BLOCK_PER_YEAR =BigNumber.from("10260000");
 
 export const DEFAULT_CHAINID = process.env.REACT_APP_DEFAULT_CHAIN_ID || '0x5';
 
