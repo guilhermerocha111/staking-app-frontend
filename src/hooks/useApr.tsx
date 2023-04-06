@@ -75,8 +75,12 @@ export const useApr = () => {
     // let amount1 = await pool2.getCurrentStaked(await signer.getAddress());
     let pool1Info = await pool1.poolInfo();
     let pool2Info = await pool2.poolInfo();
-    setPool1Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(360).mul(pool1TokenPerBlock).toString(),"ether")).toFixed(2))
-    setPool2Average(parseFloat(formatUnits(TOTAL_BLOCK_PER_YEAR.div(360).mul(pool2TokenPerBlock).toString(),"ether")).toFixed(2))
+    let pool1min = (TOTAL_BLOCK_PER_YEAR.div(360).mul(pool1TokenPerBlock)).div(3);
+    let pool1max = (TOTAL_BLOCK_PER_YEAR.div(360).mul(pool1TokenPerBlock)).mul(4);
+    let pool2min = (TOTAL_BLOCK_PER_YEAR.div(360).mul(pool2TokenPerBlock)).div(3);
+    let pool2max = (TOTAL_BLOCK_PER_YEAR.div(360).mul(pool2TokenPerBlock)).mul(4);
+    setPool1Average(parseFloat(formatUnits((pool1min.add(pool1max)).div(2),"ether")).toFixed(2))
+    setPool2Average(parseFloat(formatUnits((pool2min.add(pool2max)).div(2),"ether")).toFixed(2))
 
 
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
