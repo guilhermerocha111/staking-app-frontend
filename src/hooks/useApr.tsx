@@ -86,17 +86,17 @@ export const useApr = () => {
     // apr = ( Token Rewards Per Year / Total Weight of all staked tokens) * Token Weight * 100
     // if (!amount0.isZero())
       setsmcwAPR({
-        oneMonth: apr(parseEther("0.33"), pool1Info.totalWeight,pool1TokenPerBlock),
-        threeMonth: apr(parseEther("1"), pool1Info.totalWeight,pool1TokenPerBlock),
-        sixMonth: apr(parseEther("2"), pool1Info.totalWeight,pool1TokenPerBlock),
-        twelveMonth: apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock),
+        oneMonth: apr(parseEther("0.33"), pool1Info.balance,pool1TokenPerBlock),
+        threeMonth: apr(parseEther("1"), pool1Info.balance,pool1TokenPerBlock),
+        sixMonth: apr(parseEther("2"), pool1Info.balance,pool1TokenPerBlock),
+        twelveMonth: apr(parseEther("4"), pool1Info.balance,pool1TokenPerBlock),
       });
     // if (!amount1.isZero())
       setlpAPR({
-        oneMonth: aprLp(parseEther("0.33"), pool2Info.totalWeight,pool2TokenPerBlock),
-        threeMonth: aprLp(parseEther("1"), pool2Info.totalWeight,pool2TokenPerBlock),
-        sixMonth: aprLp(parseEther("2"), pool2Info.totalWeight,pool2TokenPerBlock),
-        twelveMonth: aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock),
+        oneMonth: aprLp(parseEther("0.33"), pool2Info.balance,pool2TokenPerBlock),
+        threeMonth: aprLp(parseEther("1"), pool2Info.balance,pool2TokenPerBlock),
+        sixMonth: aprLp(parseEther("2"), pool2Info.balance,pool2TokenPerBlock),
+        twelveMonth: aprLp(parseEther("4"), pool2Info.balance,pool2TokenPerBlock),
       });
 
       ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
