@@ -43,8 +43,7 @@ export const PERCENT = BigNumber.from("100");
 // estimated blocks per year
 // export const TOTAL_BLOCK_PER_YEAR =BigNumber.from("10260000");
 
-//goerli
-export const TOTAL_BLOCK_PER_YEAR = process.env.NODE_ENV !== 'development' ? BigNumber.from("10260000") : BigNumber.from("2535120");
+export const TOTAL_BLOCK_PER_YEAR = BigNumber.from(process.env.REACT_APP_BLOCK_PER_YEAR)
 
 export const DEFAULT_CHAINID = process.env.REACT_APP_DEFAULT_CHAIN_ID || '0x5';
 
