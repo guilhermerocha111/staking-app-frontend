@@ -100,7 +100,7 @@ export const useApr = () => {
         twelveMonth: aprLp(parseEther("4"), pool2Info.balance,pool2TokenPerBlock),
       });
 
-      ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.totalWeight,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.totalWeight,pool2TokenPerBlock))]));
+      ACTION.SET_MAX_APR(Math.max(...[Number(apr(parseEther("4"), pool1Info.balance,pool1TokenPerBlock)), Number(aprLp(parseEther("4"), pool2Info.balance,pool2TokenPerBlock))]));
     }
   }, [account, lpInfo]);
   return { swcw: smcw_APR, lp: lp_APR,pool1Avarage,pool2Avarage };
