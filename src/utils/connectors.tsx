@@ -6,11 +6,22 @@ const injected = new InjectedConnector({
   supportedChainIds: [Number(process.env.REACT_APP_DEFAULT_CHAIN_ID)],
 });
 
-const walletconnect = new WalletConnectConnector({
-  qrcode: true,
-  bridge: "https://bridge.walletconnect.org",
-  infuraId: process.env.REACT_APP_INFURA_KEY,
-});
+let walletconnect;
+
+if (process.env.REACT_APP_IS_DEV) {
+  walletconnect = new WalletConnectConnector({
+    qrcode: true,
+    bridge: "https://bridge.walletconnect.org",
+    infuraId: process.env.REACT_APP_INFURA_KEY,
+  });
+} else {
+  walletconnect = new WalletConnectConnector({
+    qrcode: true,
+    bridge: "https://bridge.walletconnect.org",
+    rpc: { 0x38: "https://bsc-dataseed1.binance.org/"}
+  });
+}
+
 
 export const connectors = {
   injected: injected,

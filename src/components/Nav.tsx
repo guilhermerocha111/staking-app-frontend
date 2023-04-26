@@ -54,9 +54,9 @@ export default function Nav() {
 
 
   const connect = async (type: string | null, reload: boolean = true) => {
-        await switchNetwork();
         switch (type) {
           case "metamask":
+            await switchNetwork();
             await activate(connectors.injected);
             localStorage.setItem("isConnected", "true");
             localStorage.setItem("connector", "metamask");
@@ -66,7 +66,9 @@ export default function Nav() {
 
             break;
           case "walletconnect":
+            console.log('start walletconnect')
             await activate(connectors.walletConnect, (error) => {console.log(error)}, true)
+            console.log('finish walletconnect')
             localStorage.setItem("isConnected", "true");
             localStorage.setItem("connector", "walletconnect");
             if (reload) {
