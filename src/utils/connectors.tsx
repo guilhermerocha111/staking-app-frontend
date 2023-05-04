@@ -6,35 +6,40 @@ const injected = new InjectedConnector({
   supportedChainIds: [Number(process.env.REACT_APP_DEFAULT_CHAIN_ID)],
 });
 
-let walletconnect;
+const handleWalletConnect = () => {
+  let walletconnect;
+  if (process.env.REACT_APP_IS_DEV == 'true') {
+    console.log('connector1')
+    walletconnect = new WalletConnectConnector({
+      qrcode: true,
+      bridge: "https://bridge.walletconnect.org",
+      infuraId: process.env.REACT_APP_INFURA_KEY,
+    });
+  } else {
+    walletconnect = new WalletConnectConnector({
+      qrcode: true,
+      chainId: 56,
+      bridge: "https://bridge.walletconnect.org",
+      rpc: { 56: "https://bsc-dataseed.binance.org"}
+    });
+  }
 
-if (process.env.REACT_APP_IS_DEV) {
-  walletconnect = new WalletConnectConnector({
-    qrcode: true,
-    bridge: "https://bridge.walletconnect.org",
-    infuraId: process.env.REACT_APP_INFURA_KEY,
-  });
-} else {
-  walletconnect = new WalletConnectConnector({
-    qrcode: true,
-    bridge: "https://bridge.walletconnect.org",
-    rpc: { 0x38: "https://bsc-dataseed1.binance.org/"}
-  });
+  return walletconnect
 }
+
 
 
 export const connectors = {
   injected: injected,
-  walletConnect: walletconnect,
+  walletConnect: handleWalletConnect(),
 };
 
 export const getSigner = async (library: any): Promise<Signer> => {
-  console.log('getSigner')
   const connectionType = localStorage.getItem('connector')
    if (connectionType === 'metamask') {
       return new ethers.providers.Web3Provider(window.ethereum, 'any').getSigner();
    } else {
-    return library.getSigner();
+    return await library.getSigner();
    }
 };
 

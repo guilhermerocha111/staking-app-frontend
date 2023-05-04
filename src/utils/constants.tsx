@@ -44,9 +44,9 @@ export const PERCENT = BigNumber.from("100");
 // export const TOTAL_BLOCK_PER_YEAR =BigNumber.from("10260000");
 
 export const TOTAL_BLOCK_PER_YEAR = BigNumber.from(process.env.REACT_APP_BLOCK_PER_YEAR)
-
+console.log('REACT_APP_DEFAULT_CHAIN_ID', process.env.REACT_APP_DEFAULT_CHAIN_ID)
 export const DEFAULT_CHAINID = process.env.REACT_APP_DEFAULT_CHAIN_ID || '0x5';
 
 export const toHex = function(chainId:number|undefined):string {
-  return "0x".concat(chainId?.toString(16) || "3")
+  return "0x".concat(chainId?.toString(16) || "38")
 }

@@ -67,6 +67,9 @@ export const useApr = () => {
   useMemo(async () => {
     if (account) {
     const signer: Signer = await getSigner(library);
+    console.log(signer)
+    console.log(await signer.getAddress())
+    console.log(signer)
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     let pool1TokenPerBlock = await pool1.tokenPerBlock();

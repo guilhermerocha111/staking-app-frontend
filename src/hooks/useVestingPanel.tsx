@@ -81,10 +81,14 @@ export const useVestingPanel = () => {
     console.log('USE VESTING PANEL')
     if (account) {
     const signer: Signer = await getSigner(library);
+    console.log(signer)
+    console.log(signer.getAddress())
     const vesting = getVesting(signer);
     const pool1 = getStakingPool01(signer);
     const pool2 = getStakingPool02(signer);
     const user_address = await signer.getAddress()
+    console.log('user_address', user_address)
+    console.log(pool1)
     let stakes01 = await pool1.getStakes(user_address);
     let stakes02 = await pool2.getStakes(user_address);
     let locks = await vesting.getUserClaims(user_address);

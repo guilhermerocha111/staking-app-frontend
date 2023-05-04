@@ -49,13 +49,18 @@ export default function App() {
     return telemetry_assets[id]
   }
 
-  if(active){
-    library.on('chainChanged',async (chainId:string|number)=>{
-      if( chainId != DEFAULT_CHAINID){
-        await switchNetwork()
-      }
-    })
-  }
+
+
+  useEffect(() => {
+    if(active){
+      library.on('chainChanged',async (chainId:string|number)=>{
+        console.log('CHAIN CHANGED', chainId, DEFAULT_CHAINID)
+        if( chainId != DEFAULT_CHAINID) {
+          await switchNetwork()
+        }
+      })
+    }
+  }, [active])
 
   const getTelemetryAssets = async () => {
     const telemetryAssets = await new ApiClient().getTelemetryAssets()
@@ -94,7 +99,6 @@ export default function App() {
 
   const parseRewards = async () => {
     const response = telemetry_rewards_by_tx
-      console.log(response)
       if (response && response.isMint && response.wallet === account) {
         const mintRewards: any[] = []
         response.rewards.forEach((id: string)=> {
@@ -186,8 +190,10 @@ export default function App() {
   }, [])
     
   useEffect(()=>{
+    console.log('chainId', toHex(chainId))
+    console.log('DEFAULT_CHAINID', DEFAULT_CHAINID)
     if(chainId !== undefined && toHex(chainId) !== DEFAULT_CHAINID){
-     switchNetwork().then()
+     switchNetwork()
     }
   },[chainId])
 
