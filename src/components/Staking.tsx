@@ -18,6 +18,9 @@ import { useTokenBalance } from "../hooks/useTokenBalance";
 import { Context } from '../contextStore';
 import Loader from './Loader';
 import Overlay from './Overlay';
+import { tokens } from "../utils/contracts";
+import { getSigner } from "../utils/connectors";
+import { useWeb3React } from "@web3-react/core";
 
 interface StakingProps {
   title: string;
@@ -53,6 +56,8 @@ export default function Staking({
   const [stakeLength, setStakeLength] = useState<string>("30");
   const [stakeUntill, setStakeUntill] = useState<string>("");
   const [stakingApproving, setStakingApproving] = useState<boolean>(false);
+  const [approvedAmount, setApprovedAmount] = useState(1);
+  const [firstLoad, setFirstLoad] = useState(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -67,10 +72,14 @@ export default function Staking({
   }
 
   useEffect(() => {
-    let now = Date.now() + 60 * 60 * 24 * 30 * 1000;
-    setStakeUntill(
-      moment(now).utc().format("dddd, MMMM Do YYYY, h:mm:ss a")
-    );
+    if (firstLoad === false) {
+      setFirstLoad(true)
+      let now = Date.now() + 60 * 60 * 24 * 30 * 1000;
+      setStakeUntill(
+        moment(now).utc().format("dddd, MMMM Do YYYY, h:mm:ss a")
+      );
+    }
+
   }, [isApproved, loading, refresh]);
 
   const stakeInPool = async () => {
@@ -108,6 +117,27 @@ export default function Staking({
       ACTION.SET_TX_LOADER(false);
     }
   };
+
+  const {library } = useWeb3React();
+
+  const checkAllowedBalance = async () => {
+    const signer = await getSigner(library);
+    const token = tokens[stakingType](signer);
+    console.log(token)
+    console.log(signer)
+    const address = await signer.getAddress()
+    console.log(address)
+    const allowanceToken = await token.allowance(
+      address,
+      poolAddress
+    );
+
+    setApprovedAmount(Number(allowanceToken.toString())/ Math.pow(10, 18))
+  }
+
+  useEffect(() => {
+    checkAllowedBalance()
+  }, [stakeAmount])
 
   const onPercentage = (percentage: string) => {
     setStakeAmount(
@@ -190,6 +220,7 @@ export default function Staking({
               ]}
               value={stakeLength}
               onChange={(e) => {
+                console.log('HJANDDSDSD')
                 setStakeLength(e.target.value);
                 let term = Number(e.target.value)
                 let now = Date.now() + 60 * 60 * 24 * term * 1000;
@@ -231,7 +262,7 @@ export default function Staking({
             </button>
             <p className="text-sm ml-1">Stake until {stakeUntill} UTC</p>
           </div>
-          {isApproved ? (
+          {isApproved && (Number(stakeAmount) <= approvedAmount) ? (
             <Button
               onClick={stakeInPool}
               className={`gradient-1 button-3 mt-4 ${Number(stakeAmount.replace('.', '')[0]) >= 1 ? '' : 'opacity-50 pointer-events-none'}`}
@@ -253,6 +284,7 @@ export default function Staking({
                 await approve(poolAddress);
                 setLoading(false);
                 setActiveTx('')
+                setApprovedAmount(1000000)
                 setRefresh(!refresh);
               }}
             >
