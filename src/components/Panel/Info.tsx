@@ -635,6 +635,15 @@ export default function Info({ refresh, setRefresh }: RefreshProps) {
               INGAME
             </Link>
             <Link
+              to="/pledge"
+              className={
+                pathname === "/pledge" ? "button-pools-active" : "button-pools"
+              }
+            >
+              <img src="/images/logo.png" alt="" />
+              PLEDGE
+            </Link>
+            <Link
               to="/"
               className="button-pools opacity-50 pointer-events-none"
             >

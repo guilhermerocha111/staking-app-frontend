@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import SMCW from "./components/Panel/SMCW";
 import { Route, Routes } from "react-router-dom";
 import Ingame from "./components/Panel/Ingame";
+import Pledge from "./components/Panel/Pledge";
 import Vesting from "./components/Panel/Vesting";
 import { useWeb3React } from "@web3-react/core";
 import { contracts, DEFAULT_CHAINID, toHex } from "./utils/constants";
@@ -224,6 +225,7 @@ export default function App() {
         <Route path="/" element={<Home refresh={refresh} setRefresh={setRefresh} />}>
           <Route path="/" element={<SMCW refresh={refresh} setRefresh={setRefresh} />} />
           <Route path="/ingame" element={<Ingame  />} />
+          <Route path="/pledge" element={<Pledge  />} />
           <Route path="/vesting" element={<Vesting/>} />
           <Route path="/rewards" element={<IngameRewards />} />
         </Route>
