@@ -48,6 +48,7 @@
     "zustand": "^4.0.0-rc.1"
   },
   "scripts": {
+    "prepare": "npm i --legacy-peer-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
