@@ -1,6 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 import { BigNumber, Signer, utils } from "ethers";
-import { getIngamePool, getPledgePool } from "../utils/contracts";
+import {
+  getIngamePool,
+  getPledgePool,
+  getPledgePoolContract,
+} from "../utils/contracts";
 import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
 import { getVesting } from "../utils/contracts";
@@ -66,8 +70,9 @@ export const usePledgePoolInfo = () => {
   const [totalStakedAmount, setTotalStakedAmount] = useState("0");
   useMemo(async () => {
     const signer: Signer = await getSigner(library);
-    const pool = getPledgePool(signer);
-    const { balance } = await pool.poolInfo();
+    const pool = getPledgePoolContract(signer);
+    const { balance } = await pool.poolInfo(0);
+    console.log("$$$", balance);
     setTotalStakedAmount(utils.formatEther(balance));
   }, [totalStakedAmount, account]);
   return { totalStakedAmount };
