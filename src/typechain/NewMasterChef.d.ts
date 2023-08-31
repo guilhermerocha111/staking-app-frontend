@@ -47,7 +47,7 @@ interface NewMasterChefInterface extends ethers.utils.Interface {
     "updateTokenPerBlock(uint256)": FunctionFragment;
     "userInfo(uint256, address)": FunctionFragment;
     "vesting()": FunctionFragment;
-    "withdraw(uint256)": FunctionFragment;
+    "withdraw(uint256, uint256)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "claim", values: [BigNumberish]): string;
@@ -430,7 +430,8 @@ export class NewMasterChef extends BaseContract {
     vesting(overrides?: CallOverrides): Promise<[string]>;
 
     withdraw(
-      stakeIndex: BigNumberish,
+      _pid: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -577,7 +578,8 @@ export class NewMasterChef extends BaseContract {
   vesting(overrides?: CallOverrides): Promise<string>;
 
   withdraw(
-    stakeIndex: BigNumberish,
+    _pid: BigNumberish,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -718,7 +720,8 @@ export class NewMasterChef extends BaseContract {
     vesting(overrides?: CallOverrides): Promise<string>;
 
     withdraw(
-      stakeIndex: BigNumberish,
+      _pid: BigNumberish,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -857,7 +860,8 @@ export class NewMasterChef extends BaseContract {
     vesting(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdraw(
-      stakeIndex: BigNumberish,
+      _pid: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -975,7 +979,8 @@ export class NewMasterChef extends BaseContract {
     vesting(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     withdraw(
-      stakeIndex: BigNumberish,
+      _pid: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

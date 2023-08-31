@@ -553,11 +553,8 @@ const _abi = [
   },
   {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "stakeIndex",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "_pid", type: "uint256" },
+      { internalType: "uint256", name: "_amount", type: "uint256" },
     ],
     name: "withdraw",
     outputs: [],

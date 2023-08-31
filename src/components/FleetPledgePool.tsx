@@ -21,6 +21,7 @@ import {
 
 import {
   usePledge,
+  useUnPledge,
   usePledgePoolUserInfo,
   usePledgePoolInfo,
 } from "../hooks/usePledge";
@@ -70,7 +71,7 @@ export default function FleetPledgePool({
     ACTION.SET_ACTIVE_TX(tx_string);
   };
 
-  const actionMessage = {
+  const actionMessage: any = {
     pledge: "Pledge...",
     unpledge: "Unpledge...",
     default: "Increase / Stake",
@@ -78,6 +79,7 @@ export default function FleetPledgePool({
 
   const stake = useStake(pool_address);
   const pledge = usePledge(pool_address);
+  const unpledge = useUnPledge();
   const unstake = useUnstake();
   const claim = useClaim(pool_address);
 
@@ -219,7 +221,7 @@ export default function FleetPledgePool({
       await pledge(parseEther(stakeAmount).toString());
       // await new ApiClient().postPledging(reqBody);
       ACTION.SET_TX_LOADER(false);
-      toast.success(`Stake Amount: ${stakeAmount}`);
+      toast.success(`Pledged Amount: ${stakeAmount}`);
       setIsLoading(false);
       setActionType("default");
       setActiveTx("");
@@ -229,12 +231,26 @@ export default function FleetPledgePool({
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       setActiveTx("");
-      console.log("$$$", err);
     }
   };
 
-  const handleUnPledge = () => {
-    console.log("object");
+  const handleUnPledge = async () => {
+    setIsLoading(true);
+    ACTION.SET_TX_LOADER(true);
+    setActiveTx("TELEMETRY_UNPLEDGE");
+    try {
+      await unpledge(parseEther(stakeAmount).toString());
+      ACTION.SET_TX_LOADER(false);
+      toast.success(`UnPledge Amount: ${stakeAmount}`);
+      setIsLoading(false);
+      setActiveTx("");
+      window.location.reload();
+    } catch (err) {
+      ACTION.SET_TX_LOADER(false);
+      setIsLoading(false);
+      console.log("$$$", err);
+      setActiveTx("");
+    }
   };
 
   return (
@@ -315,27 +331,32 @@ export default function FleetPledgePool({
 
               {isApproved ? (
                 <>
-                  {/* <Button type="submit" className={`gradient-1 button-3 mt-2 cursor-pointer ${(Number(stakeAmount) < MIN_STAKE_AMOUNT || isLoading)? 'opacity-50 pointer-events-none' : ''}`}> */}
-                  {/* @ts-ignore */}
-                  {/* {actionType === 'claim' ? actionMessage['default'] : actionMessage[actionType]}
-                    {
-                      (active_tx === 'TELEMETRY_STAKE') ? <Loader /> : <HiOutlineExternalLink />
-                    } */}
-                  {/* </Button> */}
                   <div className="flex gap-4">
                     <Button
                       type="button"
                       className="gradient-1 button-3 mt-2 cursor-pointer"
                       onClick={handlePledge}
+                      disabled={isLoading}
                     >
-                      Pledge <HiOutlineExternalLink />
+                      {isLoading ? "Pledging..." : "Pledge"}
+                      {active_tx === "TELEMETRY_PLEDGE" ? (
+                        <Loader />
+                      ) : (
+                        <HiOutlineExternalLink />
+                      )}
                     </Button>
                     <Button
                       type="button"
                       className="gradient-1 button-3 mt-2 cursor-pointer"
                       onClick={handleUnPledge}
+                      disabled={isLoading}
                     >
-                      Unpledge <HiOutlineExternalLink />
+                      {isLoading ? "UnPledging..." : "UnPledge"}
+                      {active_tx === "TELEMETRY_UNPLEDGE" ? (
+                        <Loader />
+                      ) : (
+                        <HiOutlineExternalLink />
+                      )}
                     </Button>
                   </div>
                   <p className="flex items-center text-sm mt-2">

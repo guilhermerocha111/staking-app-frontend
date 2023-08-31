@@ -41,6 +41,17 @@ export const useUnstake = () => {
   }, []);
 };
 
+export const useUnPledge = () => {
+  const { library } = useWeb3React();
+
+  return useCallback(async (unPledgedAmount: string) => {
+    const signer: Signer = await getSigner(library);
+    const pool = getPledgePoolContract(signer);
+    const tx = await pool.withdraw(0, unPledgedAmount);
+    await tx.wait();
+  }, []);
+};
+
 export const useClaim = (contractAddress: string) => {
   const { library } = useWeb3React();
   return useCallback(async (claimAmount: string, enjinAddress: string) => {
