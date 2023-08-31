@@ -91,6 +91,21 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "user", type: "address" },
+      { indexed: true, internalType: "uint256", name: "pid", type: "uint256" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -105,16 +120,8 @@ const _abi = [
   },
   {
     inputs: [
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_stakeFor",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "_pid", type: "uint256" },
+      { internalType: "uint256", name: "_amount", type: "uint256" },
     ],
     name: "deposit",
     outputs: [],

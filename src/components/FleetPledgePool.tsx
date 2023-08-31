@@ -19,7 +19,11 @@ import {
   useClaim,
 } from "../hooks/useIngame";
 
-import { usePledgePoolUserInfo, usePledgePoolInfo } from "../hooks/usePledge";
+import {
+  usePledge,
+  usePledgePoolUserInfo,
+  usePledgePoolInfo,
+} from "../hooks/usePledge";
 
 import { useWeb3React } from "@web3-react/core";
 import { parseEther } from "ethers/lib/utils";
@@ -73,6 +77,7 @@ export default function FleetPledgePool({
   };
 
   const stake = useStake(pool_address);
+  const pledge = usePledge(pool_address);
   const unstake = useUnstake();
   const claim = useClaim(pool_address);
 
@@ -84,7 +89,7 @@ export default function FleetPledgePool({
   const smcwBalance = useTokenBalance(stakingType, isLoading);
 
   useEffect(() => {
-    console.log(pool_address);
+    console.log("$$$", pool_address, allowance, allowance[pool_key]);
     setIsApproved(allowance[pool_key]);
   }, [allowance]);
 
@@ -200,29 +205,31 @@ export default function FleetPledgePool({
       coin_ticker: "SMCW",
       pool: `Hidden data (Random Telemetry) ${pool_label}`,
     };
-    console.log("$", userInfo);
-    // if (Number(stakeAmount) + Number(userInfo.stakedAmount) + Number(userInfo.lastAmount) > MAX_STAKE_AMOUNT) {
-    //   toast.error('Max staked amount reached');
-    //   setIsLoading(false);
-    //   setActionType('default');
-    //   setActiveTx('');
-    //   return;
-    // }
+    if (
+      Number(stakeAmount) + Number(userInfo.stakedAmount) >
+      MAX_STAKE_AMOUNT
+    ) {
+      toast.error("Max staked amount reached");
+      setIsLoading(false);
+      setActionType("default");
+      setActiveTx("");
+      return;
+    }
     try {
-      // await stake(parseEther(stakeAmount).toString());
-      // await new ApiClient().postStaking(reqBody)
-      // ACTION.SET_TX_LOADER(false);
-      // toast.success(`Stake Amount: ${stakeAmount}`);
-      // setIsLoading(false);
-      // setActionType('default');
-      // setActiveTx('');
-      // window.location.reload();
+      await pledge(parseEther(stakeAmount).toString());
+      // await new ApiClient().postPledging(reqBody);
+      ACTION.SET_TX_LOADER(false);
+      toast.success(`Stake Amount: ${stakeAmount}`);
+      setIsLoading(false);
+      setActionType("default");
+      setActiveTx("");
+      window.location.reload();
     } catch (err) {
       setActionType("default");
       ACTION.SET_TX_LOADER(false);
       setIsLoading(false);
       setActiveTx("");
-      console.log(err);
+      console.log("$$$", err);
     }
   };
 

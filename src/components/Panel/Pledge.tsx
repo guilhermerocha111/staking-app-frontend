@@ -19,7 +19,7 @@ export default function Pledge() {
           MIN_STAKE_AMOUNT={5000}
           MAX_STAKE_AMOUNT={100000}
           pool_address={contracts[DEFAULT_CHAINID].pledgeStaking}
-          pool_key="smcw_to_nft"
+          pool_key="smcw_to_pledge"
           pool_label="Fleet Pledge Pool"
         />
       </div>

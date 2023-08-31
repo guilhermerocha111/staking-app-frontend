@@ -9,13 +9,13 @@ import { getSigner } from "../utils/connectors";
 import { useWeb3React } from "@web3-react/core";
 import { getVesting } from "../utils/contracts";
 
-export const useStake = (contractAddress: string) => {
+export const usePledge = (contractAddress: string) => {
   const { library } = useWeb3React();
 
   return useCallback(async (claimAmount: string) => {
     const signer: Signer = await getSigner(library);
-    const pool = getIngamePool(signer, contractAddress);
-    const tx = await pool.stake(claimAmount);
+    const pool = getPledgePoolContract(signer);
+    const tx = await pool.deposit(0, claimAmount);
     await tx.wait();
   }, []);
 };
@@ -72,7 +72,6 @@ export const usePledgePoolInfo = () => {
     const signer: Signer = await getSigner(library);
     const pool = getPledgePoolContract(signer);
     const { balance } = await pool.poolInfo(0);
-    console.log("$$$", balance);
     setTotalStakedAmount(utils.formatEther(balance));
   }, [totalStakedAmount, account]);
   return { totalStakedAmount };

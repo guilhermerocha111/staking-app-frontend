@@ -265,8 +265,8 @@ export class NewMasterChef extends BaseContract {
     ): Promise<ContractTransaction>;
 
     deposit(
+      _pid: BigNumberish,
       _amount: BigNumberish,
-      _stakeFor: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -441,8 +441,8 @@ export class NewMasterChef extends BaseContract {
   ): Promise<ContractTransaction>;
 
   deposit(
+    _pid: BigNumberish,
     _amount: BigNumberish,
-    _stakeFor: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -585,8 +585,8 @@ export class NewMasterChef extends BaseContract {
     claim(index: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     deposit(
+      _pid: BigNumberish,
       _amount: BigNumberish,
-      _stakeFor: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -760,8 +760,8 @@ export class NewMasterChef extends BaseContract {
     ): Promise<BigNumber>;
 
     deposit(
+      _pid: BigNumberish,
       _amount: BigNumberish,
-      _stakeFor: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -869,8 +869,8 @@ export class NewMasterChef extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     deposit(
+      _pid: BigNumberish,
       _amount: BigNumberish,
-      _stakeFor: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
