@@ -1,5 +1,7 @@
 import FleetPledgePool from "../FleetPledgePool";
 
+import { contracts, DEFAULT_CHAINID, toHex } from "../../utils/constants";
+
 export default function Pledge() {
   return (
     <section className="max-w-screen-2xl mx-auto">
@@ -16,7 +18,7 @@ export default function Pledge() {
         <FleetPledgePool
           MIN_STAKE_AMOUNT={5000}
           MAX_STAKE_AMOUNT={100000}
-          pool_address={process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS}
+          pool_address={contracts[DEFAULT_CHAINID].pledgeStaking}
           pool_key="smcw_to_nft"
           pool_label="Fleet Pledge Pool"
         />

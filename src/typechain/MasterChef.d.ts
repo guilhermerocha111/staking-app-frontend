@@ -46,7 +46,7 @@ interface MasterChefInterface extends ethers.utils.Interface {
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
     "updateTokenPerBlock(uint256)": FunctionFragment;
-    "userInfo(address)": FunctionFragment;
+    "userInfo(unit256, address)": FunctionFragment;
     "vesting()": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
@@ -419,12 +419,12 @@ export class MasterChef extends BaseContract {
     ): Promise<ContractTransaction>;
 
     userInfo(
-      arg0: string,
+      arg0: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        totalAmount: BigNumber;
-        totalWeight: BigNumber;
+      [BigNumber, BigNumber] & {
+        amount: BigNumber;
         rewardDebt: BigNumber;
       }
     >;
@@ -565,12 +565,12 @@ export class MasterChef extends BaseContract {
   ): Promise<ContractTransaction>;
 
   userInfo(
-    arg0: string,
+    arg0: BigNumberish,
+    arg1: string,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
-      totalAmount: BigNumber;
-      totalWeight: BigNumber;
+    [BigNumber, BigNumber] & {
+      amount: BigNumber;
       rewardDebt: BigNumber;
     }
   >;
@@ -705,12 +705,12 @@ export class MasterChef extends BaseContract {
     ): Promise<void>;
 
     userInfo(
-      arg0: string,
+      arg0: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        totalAmount: BigNumber;
-        totalWeight: BigNumber;
+      [BigNumber, BigNumber] & {
+        amount: BigNumber;
         rewardDebt: BigNumber;
       }
     >;
@@ -848,8 +848,8 @@ export class MasterChef extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    userInfo(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
+    userInfo(arg0: BigNumberish, arg1: string, overrides?: CallOverrides): Promise<BigNumber>;
+1
     vesting(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdraw(
@@ -960,7 +960,8 @@ export class MasterChef extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     userInfo(
-      arg0: string,
+      arg0: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

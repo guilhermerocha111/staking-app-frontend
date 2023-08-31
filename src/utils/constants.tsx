@@ -10,6 +10,7 @@ interface Addresses {
     lpTosmcw:string,
     nftStaking:string,
     nftStakingNew?: string,
+    pledgeStaking: string,
   }
 }
 export const contracts :Addresses=  {
@@ -21,6 +22,7 @@ export const contracts :Addresses=  {
     smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS || "",
     lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS || "",
     nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS || "",
+    pledgeStaking: process.env.REACT_APP_PLEDGE_POOL_CONTRACT_ADDRESS || "",
     // nftStakingNew: process.env.REACT_APP_NFTSTAKING_NEW_CONTRACT_ADDRESS || "",
   },
   // BSC
@@ -31,6 +33,7 @@ export const contracts :Addresses=  {
     smcwTosmcw: process.env.REACT_APP_SMCWTOSMCW_CONTRACT_ADDRESS || "",
     lpTosmcw: process.env.REACT_APP_LPTOSMCW_CONTRACT_ADDRESS || "",
     nftStaking: process.env.REACT_APP_NFTSTAKING_CONTRACT_ADDRESS || "",
+    pledgeStaking: process.env.REACT_APP_PLEDGE_POOL_CONTRACT_ADDRESS_BSC || "",
   },
 };
 
